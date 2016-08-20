@@ -17,13 +17,20 @@ public class PlayerState {
 
     private int workerPool;
 
+    private int maxCivilActions;
+    private int maxMilitaryActions;
+
+
+
 
     private int culturePoints;
     private int sciencePoints;
 
     public PlayerState() {
+        yellowBank = 18;
         happiness = 0;
         workerPool = 1;
+
     }
 
     public int getFoodProduction() {
@@ -46,5 +53,25 @@ public class PlayerState {
 
     public int getHappiness() {
         return happiness;
+    }
+
+    public void changeFood(int delta) {
+
+    }
+
+    public void modifyResourceProduction(int delta) {
+        resourceProduction += delta;
+    }
+
+    public void modifyScienceProduction(int delta) {
+        scienceProduction += delta;
+    }
+
+    public void modifyCultureProduction(int delta) {
+        cultureProduction += delta;
+    }
+
+    public void modifyHappiness(int delta) {
+        happiness += delta;
     }
 }

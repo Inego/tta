@@ -9,6 +9,8 @@ public interface ICard {
 
     int getAge();
 
+    String getName();
 
+    int getQty(int numberOfPlayers);
 
 }

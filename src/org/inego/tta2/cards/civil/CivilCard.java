@@ -8,8 +8,6 @@ import org.inego.tta2.cards.CardType;
  */
 public abstract class CivilCard extends AbstractCard {
 
-    public static final CivilCard AGRICULTURE = new AgricultureCard();
-
     @Override
     public CardType getCardType() {
         return CardType.CIVIL;
