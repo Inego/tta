@@ -1,31 +1,31 @@
-package org.inego.tta2.cards.civil.temple;
+package org.inego.tta2.cards.civil.arena;
 
 /**
  * Created by Inego on 20.08.2016.
  */
-public class OrganizedReligion extends TempleCard {
+public class BreadNCircusesCard extends ArenaCard {
     @Override
     public int getAge() {
-        return 2;
+        return 1;
     }
 
     @Override
     public String getName() {
-        return "Organized Religion";
+        return "Bread & Circuses";
     }
 
     @Override
     public int getQty(int numberOfPlayers) {
-        return 2;
+        return numberOfPlayers == 2 ? 1 : 2;
     }
 
     @Override
     public int getBuildCost() {
-        return 7;
+        return 3;
     }
 
     @Override
     public int getResearchCost() {
-        return 4;
+        return 3;
     }
 }

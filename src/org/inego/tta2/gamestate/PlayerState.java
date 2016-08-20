@@ -74,4 +74,8 @@ public class PlayerState {
     public void modifyHappiness(int delta) {
         happiness += delta;
     }
+
+    public void modifyMilitaryStrength(int delta) {
+        militaryStrength += delta;
+    }
 }
