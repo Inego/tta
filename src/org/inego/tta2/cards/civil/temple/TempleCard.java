@@ -10,7 +10,7 @@ import org.inego.tta2.gamestate.PlayerState;
 public abstract class TempleCard extends BuildingCard {
 
     @Override
-    public CivilCardKind getCivilCardKind() {
+    public CivilCardKind getKind() {
         return CivilCardKind.TEMPLE;
     }
 

@@ -16,7 +16,7 @@ public class JournalismCard extends LibraryCard {
 
     @Override
     public int getQty(int numberOfPlayers) {
-        return numberOfPlayers == 1 ? 1 : 2;
+        return numberOfPlayers == 2 ? 1 : 2;
     }
 
     @Override

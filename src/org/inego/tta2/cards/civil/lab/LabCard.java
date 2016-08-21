@@ -10,7 +10,7 @@ import org.inego.tta2.gamestate.PlayerState;
 public abstract class LabCard extends BuildingCard {
 
     @Override
-    public CivilCardKind getCivilCardKind() {
+    public CivilCardKind getKind() {
         return CivilCardKind.LAB;
     }
 

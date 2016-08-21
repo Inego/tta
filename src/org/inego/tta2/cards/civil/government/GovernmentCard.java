@@ -8,7 +8,7 @@ import org.inego.tta2.cards.civil.CivilCardKind;
  */
 public abstract class GovernmentCard extends CivilCard {
     @Override
-    public CivilCardKind getCivilCardKind() {
+    public CivilCardKind getKind() {
         return CivilCardKind.GOVERNMENT;
     }
 

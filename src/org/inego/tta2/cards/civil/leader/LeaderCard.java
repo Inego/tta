@@ -13,7 +13,7 @@ public abstract class LeaderCard extends CivilCard {
     }
 
     @Override
-    public CivilCardKind getCivilCardKind() {
+    public CivilCardKind getKind() {
         return CivilCardKind.LEADER;
     }
 }

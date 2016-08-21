@@ -1,5 +1,9 @@
 package org.inego.tta2.gamestate;
 
+import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.military.tactic.TacticCard;
+
 /**
  * Created by Inego on 16.08.2016.
  */
@@ -20,6 +24,10 @@ public class PlayerState {
     private int maxCivilActions;
     private int maxMilitaryActions;
 
+    // TACTICS
+    private TacticCard tactic;
+    private int normalArmies;
+    private int obsoleteArmies;
 
 
 
@@ -30,7 +38,7 @@ public class PlayerState {
         yellowBank = 18;
         happiness = 0;
         workerPool = 1;
-
+        tactic = null;
     }
 
     public int getFoodProduction() {
@@ -77,5 +85,48 @@ public class PlayerState {
 
     public void modifyMilitaryStrength(int delta) {
         militaryStrength += delta;
+    }
+
+
+    public int getWorkersOnCard(BuildingCard card)
+    {
+        // TODO
+        return 0;
+    }
+
+    public void formArmies() {
+        if (tactic == null)
+        {
+            normalArmies = 0;
+            obsoleteArmies = 0;
+        }
+        // TODO - calculate normalArmies and obsoleteArmies
+    }
+
+    public int getTacticsBonus() {
+
+        if (tactic == null) return 0;
+
+        int result = normalArmies * tactic.getNormalBonus() + obsoleteArmies * tactic.getObsoleteBonus();
+
+        // Air force bonus
+        if (result > 0)
+        {
+            int remainingAirForce = getWorkersOnCard(Cards.AIR_FORCES);
+            if (remainingAirForce > 0)
+            {
+                // Air force bonus for modern armies
+                int bonusAirForces = Math.min(remainingAirForce, normalArmies);
+                result += bonusAirForces * tactic.getNormalBonus();
+
+                remainingAirForce -= bonusAirForces;
+
+                // Air force bonus for obsolete armies
+                bonusAirForces = Math.min(remainingAirForce, obsoleteArmies);
+                result += bonusAirForces * tactic.getObsoleteBonus();
+            }
+        }
+
+        return result;
     }
 }

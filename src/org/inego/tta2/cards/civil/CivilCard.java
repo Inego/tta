@@ -13,6 +13,6 @@ public abstract class CivilCard extends AbstractCard {
         return CardType.CIVIL;
     }
 
-    public abstract CivilCardKind getCivilCardKind();
+    public abstract CivilCardKind getKind();
 
 }

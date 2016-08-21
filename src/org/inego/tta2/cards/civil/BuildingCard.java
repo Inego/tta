@@ -8,9 +8,9 @@ import org.inego.tta2.gamestate.PlayerState;
  */
 public abstract class BuildingCard extends CivilCard {
 
-    public abstract int getBuildCost();
-
     public abstract int getResearchCost();
+
+    public abstract int getBuildCost();
 
     public abstract void assignWorker(int sign, PlayerState playerState);
 

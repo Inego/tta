@@ -11,4 +11,6 @@ public abstract class MilitaryCard extends AbstractCard {
     public CardType getCardType() {
         return CardType.MILITARY;
     }
+
+    public abstract MilitaryCardKind getKind();
 }

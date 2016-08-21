@@ -1,17 +1,17 @@
-package org.inego.tta2.cards.civil.theater;
+package org.inego.tta2.cards.civil.unit;
 
 /**
  * Created by Inego on 21.08.2016.
  */
-public class DramaCard extends TheaterCard {
+public class RocketsCard extends ArtilleryCard {
     @Override
     public int getAge() {
-        return 1;
+        return 3;
     }
 
     @Override
     public String getName() {
-        return "Drama";
+        return "Rockets";
     }
 
     @Override
@@ -20,12 +20,17 @@ public class DramaCard extends TheaterCard {
     }
 
     @Override
-    public int getBuildCost() {
-        return 4;
+    public int getResearchCost() {
+        return 8;
     }
 
     @Override
-    public int getResearchCost() {
-        return 3;
+    public int getBuildCost() {
+        return 7;
+    }
+
+    @Override
+    protected int getStrength() {
+        return 5;
     }
 }
