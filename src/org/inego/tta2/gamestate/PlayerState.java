@@ -2,6 +2,10 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
+import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
+import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
+import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
 
 /**
@@ -23,16 +27,25 @@ public class PlayerState {
 
     private int maxCivilActions;
     private int maxMilitaryActions;
+    private int additionalMilitaryActions;
+    private int additionalCivilActions;
 
-    // TACTICS
+    // Technologies
+    private MilitaryTechCard militaryTech;
+    private CivilTechCard civilTech;
+    private ColonizationTechCard colonizationTech;
+    private ConstructionTechCard constructionTech;
+
+
+    // Tactics
     private TacticCard tactic;
     private int normalArmies;
     private int obsoleteArmies;
 
-
-
     private int culturePoints;
     private int sciencePoints;
+
+    private int colonizationBonus;
 
     public PlayerState() {
         yellowBank = 18;
@@ -128,5 +141,21 @@ public class PlayerState {
         }
 
         return result;
+    }
+
+    public void modifyAdditionalMilitaryActions(int delta) {
+        additionalMilitaryActions += delta;
+    }
+
+    public void modifyAdditionalCivilActions(int delta) {
+        additionalCivilActions += delta;
+    }
+
+    public void gainBlueTokens(int delta) {
+        blueBank += delta;
+    }
+
+    public void modifyColonizationBonus(int delta) {
+        colonizationBonus += delta;
     }
 }
