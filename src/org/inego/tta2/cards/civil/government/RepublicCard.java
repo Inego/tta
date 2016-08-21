@@ -1,29 +1,27 @@
 package org.inego.tta2.cards.civil.government;
 
-import org.inego.tta2.cards.civil.government.GovernmentCard;
-
 /**
- * Created by Inego on 18.08.2016.
+ * Created by Inego on 21.08.2016.
  */
-public class DespotismCard extends GovernmentCard {
+public class RepublicCard extends GovernmentCard {
     @Override
     public int getAge() {
-        return 0;
+        return 2;
     }
 
     @Override
     public String getName() {
-        return "Despotism";
+        return "Republic";
     }
 
     @Override
     public int getQty(int numberOfPlayers) {
-        return numberOfPlayers;
+        return numberOfPlayers < 4 ? 1 : 2;
     }
 
     @Override
     public int getMaxCivilActions() {
-        return 4;
+        return 7;
     }
 
     @Override
@@ -33,16 +31,16 @@ public class DespotismCard extends GovernmentCard {
 
     @Override
     public int getUrbanBuildingLimit() {
-        return 2;
+        return 3;
     }
 
     @Override
     public int getRevolutionCost() {
-        return 0;
+        return 3;
     }
 
     @Override
     public int getFullCost() {
-        return 0;
+        return 13;
     }
 }

@@ -1,48 +1,53 @@
 package org.inego.tta2.cards.civil.government;
 
-import org.inego.tta2.cards.civil.government.GovernmentCard;
+import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 18.08.2016.
+ * Created by Inego on 21.08.2016.
  */
-public class DespotismCard extends GovernmentCard {
+public class CommunismCard extends GovernmentCard {
     @Override
     public int getAge() {
-        return 0;
+        return 3;
     }
 
     @Override
     public String getName() {
-        return "Despotism";
+        return "Communism";
     }
 
     @Override
     public int getQty(int numberOfPlayers) {
-        return numberOfPlayers;
+        return 1;
     }
 
     @Override
     public int getMaxCivilActions() {
-        return 4;
+        return 7;
     }
 
     @Override
     public int getMaxMilitaryActions() {
-        return 2;
+        return 5;
     }
 
     @Override
     public int getUrbanBuildingLimit() {
-        return 2;
+        return 4;
     }
 
     @Override
     public int getRevolutionCost() {
-        return 0;
+        return 5;
     }
 
     @Override
     public int getFullCost() {
-        return 0;
+        return 19;
+    }
+
+    @Override
+    public void apply(int sign, PlayerState playerState) {
+        playerState.modifyHappiness(-sign);
     }
 }
