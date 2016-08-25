@@ -2,11 +2,18 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
+import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
+
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Inego on 16.08.2016.
@@ -18,6 +25,9 @@ public class PlayerState {
     private int cultureProduction;
     private int scienceProduction;
     private int militaryStrength;
+
+    private Map<HappinessSource, Integer> happinessSources = new HashMap<>();
+
     private int happiness;
 
     private int blueBank;
@@ -30,12 +40,16 @@ public class PlayerState {
     private int additionalMilitaryActions;
     private int additionalCivilActions;
 
+    private GovernmentCard government;
+
     // Technologies
     private MilitaryTechCard militaryTech;
     private CivilTechCard civilTech;
     private ColonizationTechCard colonizationTech;
     private ConstructionTechCard constructionTech;
 
+    // Wonders
+    private Set<WonderCard> wonders;
 
     // Tactics
     private TacticCard tactic;
@@ -46,12 +60,15 @@ public class PlayerState {
     private int sciencePoints;
 
     private int colonizationBonus;
+    private boolean recalcHappiness;
 
     public PlayerState() {
         yellowBank = 18;
-        happiness = 0;
+        recalcHappiness = false;
         workerPool = 1;
         tactic = null;
+        government = Cards.DESPOTISM;
+        wonders = new LinkedHashSet<>();
     }
 
     public int getFoodProduction() {
@@ -73,11 +90,27 @@ public class PlayerState {
     }
 
     public int getHappiness() {
+        if (recalcHappiness)
+            recalculateHappiness();
         return happiness;
     }
 
-    public void changeFood(int delta) {
+    private void recalculateHappiness() {
+        happiness = 0;
+        int modifier = isCardBuilt(Cards.ST_PETERS_BASILICA) ? 1 : 0;
+        int baseValue;
+        for (HappinessSource happinessSource : happinessSources.keySet()) {
+            baseValue = happinessSource.getValue(this);
+            happiness += happinessSource.getValue(this) + (baseValue > 0 ? modifier : 0);
+        }
+        if (happiness < 0)
+            happiness = 0;
+        else if (happiness > 8)
+            happiness = 8;
+    }
 
+    public void changeFood(int delta) {
+        // TODO
     }
 
     public void modifyResourceProduction(int delta) {
@@ -90,10 +123,6 @@ public class PlayerState {
 
     public void modifyCultureProduction(int delta) {
         cultureProduction += delta;
-    }
-
-    public void modifyHappiness(int delta) {
-        happiness += delta;
     }
 
     public void modifyMilitaryStrength(int delta) {
@@ -157,5 +186,52 @@ public class PlayerState {
 
     public void modifyColonizationBonus(int delta) {
         colonizationBonus += delta;
+    }
+
+    public int getCivilHandSize() {
+        return government.getMaxCivilActions() + additionalCivilActions
+                + (wonders.contains(Cards.LIBRARY_OF_ALEXANDRIA) ? 1 : 0);
+    }
+
+    public int getMilitaryHandSize() {
+        return government.getMaxMilitaryActions() + additionalMilitaryActions
+                + (wonders.contains(Cards.LIBRARY_OF_ALEXANDRIA) ? 1 : 0);
+    }
+
+    // Probably this should be refactored to a derived value
+    public int getMilitaryStrength() {
+        int result = militaryStrength;
+        if (wonders.contains(Cards.GREAT_WALL)) {
+            result += getWorkersOnCard(Cards.WARRIORS);
+            result += getWorkersOnCard(Cards.SWORDSMEN);
+            result += getWorkersOnCard(Cards.RIFLEMEN);
+            result += getWorkersOnCard(Cards.MODERN_INFANTRY);
+            result += getWorkersOnCard(Cards.CANNON);
+            result += getWorkersOnCard(Cards.ROCKETS); // :)
+        }
+        return result;
+    }
+
+    public boolean isCardBuilt(WonderCard wonderCard) {
+        return wonders.contains(wonderCard);
+    }
+
+    public void setRecalcHappiness() {
+        recalcHappiness = true;
+    }
+
+    public void modifyHappinessSource(HappinessSource happinessSource, int sign) {
+        Integer current = happinessSources.get(happinessSource);
+        happinessSources.put(happinessSource, current == null ? sign : current + sign);
+        setRecalcHappiness();
+    }
+
+
+    public void addHappinessSource(HappinessSource happinessSource) {
+        modifyHappinessSource(happinessSource, 1);
+    }
+
+    public void removeHappinessSource(HappinessSource happinessSource) {
+        modifyHappinessSource(happinessSource, -1);
     }
 }

@@ -17,6 +17,5 @@ public abstract class TempleCard extends BuildingCard {
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
         playerState.modifyCultureProduction(sign);
-        playerState.modifyHappiness(sign * (getAge() + 1));
     }
 }

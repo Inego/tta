@@ -1,5 +1,8 @@
 package org.inego.tta2.cards.civil.arena;
 
+import org.inego.tta2.gamestate.HappinessSource;
+import org.inego.tta2.gamestate.PlayerState;
+
 /**
  * Created by Inego on 20.08.2016.
  */
@@ -27,5 +30,11 @@ public class BreadNCircusesCard extends ArenaCard {
     @Override
     public int getResearchCost() {
         return 3;
+    }
+
+    @Override
+    public void assignWorker(int sign, PlayerState playerState) {
+        super.assignWorker(sign, playerState);
+        playerState.modifyHappinessSource(HappinessSource.BREAD_CIRCUSES, sign);
     }
 }

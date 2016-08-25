@@ -1,5 +1,6 @@
 package org.inego.tta2.cards.civil.government;
 
+import org.inego.tta2.gamestate.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
@@ -50,6 +51,6 @@ public class TheocracyCard extends GovernmentCard {
     public void apply(int sign, PlayerState playerState) {
         playerState.modifyCultureProduction(sign);
         playerState.modifyMilitaryStrength(sign);
-        playerState.modifyHappiness(sign);
+        playerState.modifyHappinessSource(HappinessSource.THEOCRACY, sign);
     }
 }
