@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.PlayerState;
  * Created by Inego on 21.08.2016.
  */
 public class PyramidsCard extends WonderCard {
-    private static final int[] SIZE = {3, 2, 1};
+    private static final int[] COST = {3, 2, 1};
 
     @Override
     public int getAge() {
@@ -20,7 +20,7 @@ public class PyramidsCard extends WonderCard {
 
     @Override
     public int[] getBuildingCost() {
-        return SIZE;
+        return COST;
     }
 
     @Override

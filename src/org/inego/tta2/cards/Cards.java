@@ -4,10 +4,7 @@ import org.inego.tta2.cards.civil.*;
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.unit.*;
-import org.inego.tta2.cards.civil.wonder.GreatWallCard;
-import org.inego.tta2.cards.civil.wonder.LibraryOfAlexandriaCard;
-import org.inego.tta2.cards.civil.wonder.StPetersBasilicaCard;
-import org.inego.tta2.cards.civil.wonder.WonderCard;
+import org.inego.tta2.cards.civil.wonder.*;
 
 /**
  * Created by Inego on 21.08.2016.
@@ -19,6 +16,8 @@ public class Cards {
     public static final WonderCard GREAT_WALL = new GreatWallCard();
     public static final WonderCard LIBRARY_OF_ALEXANDRIA = new LibraryOfAlexandriaCard();
     public static final WonderCard ST_PETERS_BASILICA = new StPetersBasilicaCard();
+    public static final WonderCard UNIVERSITAS_CAROLINA = new UniversitasCarolinaCard();
+    public static final WonderCard TAJ_MAHAL = new TajMahalCard();
 
     public static final UnitCard WARRIORS = new WarriorsCard();
 

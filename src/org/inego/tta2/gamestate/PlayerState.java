@@ -234,4 +234,9 @@ public class PlayerState {
     public void removeHappinessSource(HappinessSource happinessSource) {
         modifyHappinessSource(happinessSource, -1);
     }
+
+    public boolean wasLeaderReplaced() {
+        // TODO the flag if a leader was replaced this turn
+        return false;
+    }
 }
