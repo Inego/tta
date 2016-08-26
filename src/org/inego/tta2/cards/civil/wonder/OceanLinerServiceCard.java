@@ -1,0 +1,30 @@
+package org.inego.tta2.cards.civil.wonder;
+
+import org.inego.tta2.gamestate.PlayerState;
+
+/**
+ * Created by Inego on 26.08.2016.
+ */
+public class OceanLinerServiceCard extends WonderCard {
+    private static final int[] COST = {4, 2, 2, 4};
+
+    @Override
+    public int getAge() {
+        return 2;
+    }
+
+    @Override
+    public String getName() {
+        return "Ocean Liner Service";
+    }
+
+    @Override
+    public int[] getBuildingCost() {
+        return COST;
+    }
+
+    @Override
+    public void onBuild(PlayerState playerState) {
+        // TODO Ocean liner service free pop special action
+    }
+}

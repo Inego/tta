@@ -18,6 +18,7 @@ public class Cards {
     public static final WonderCard ST_PETERS_BASILICA = new StPetersBasilicaCard();
     public static final WonderCard UNIVERSITAS_CAROLINA = new UniversitasCarolinaCard();
     public static final WonderCard TAJ_MAHAL = new TajMahalCard();
+    public static final WonderCard TRANSCONTINENTAL_RR = new TranscontinentalRailroadCard();
 
     public static final UnitCard WARRIORS = new WarriorsCard();
 

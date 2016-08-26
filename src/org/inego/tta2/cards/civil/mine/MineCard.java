@@ -19,6 +19,6 @@ public abstract class MineCard extends BuildingCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyResourceProduction(sign * getProductionYield());
+        playerState.setRecalcResourceProduction();
     }
 }

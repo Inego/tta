@@ -19,6 +19,8 @@ public class HappinessSource {
     public static final HappinessSource RELIGION = new HappinessSource(1);
     public static final HappinessSource THEOLOGY = new HappinessSource(2);
     public static final HappinessSource ORGANIZED_RELIGION = new HappinessSource(3);
+    public static final HappinessSource EIFFEL_TOWER = new HappinessSource(1);
+    public static final HappinessSource KREMLIN = new HappinessSource(-1);
 
     private int baseValue;
 

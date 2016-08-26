@@ -21,7 +21,6 @@ import java.util.Set;
 public class PlayerState {
 
     private int foodProduction;
-    private int resourceProduction;
     private int cultureProduction;
     private int scienceProduction;
     private int militaryStrength;
@@ -61,10 +60,13 @@ public class PlayerState {
 
     private int colonizationBonus;
     private boolean recalcHappiness;
+    private boolean recalcResourceProduction;
+    private int resourceProduction;
 
     public PlayerState() {
         yellowBank = 18;
         recalcHappiness = false;
+        recalcResourceProduction = false;
         workerPool = 1;
         tactic = null;
         government = Cards.DESPOTISM;
@@ -76,6 +78,8 @@ public class PlayerState {
     }
 
     public int getResourceProduction() {
+        if (recalcResourceProduction)
+            recalculateResourceProduction();
         return resourceProduction;
     }
 
@@ -109,12 +113,16 @@ public class PlayerState {
             happiness = 8;
     }
 
+    private void recalculateResourceProduction() {
+        // TODO calculate resource production
+        // TODO best mine bonus from Transcontinental RR
+    }
+
     public void changeFood(int delta) {
-        // TODO
+        // TODO change food?
     }
 
     public void modifyResourceProduction(int delta) {
-        resourceProduction += delta;
     }
 
     public void modifyScienceProduction(int delta) {
@@ -132,7 +140,7 @@ public class PlayerState {
 
     public int getWorkersOnCard(BuildingCard card)
     {
-        // TODO
+        // TODO get workers on card
         return 0;
     }
 
@@ -142,7 +150,7 @@ public class PlayerState {
             normalArmies = 0;
             obsoleteArmies = 0;
         }
-        // TODO - calculate normalArmies and obsoleteArmies
+        // TODO calculate normalArmies and obsoleteArmies
     }
 
     public int getTacticsBonus() {
@@ -226,7 +234,6 @@ public class PlayerState {
         setRecalcHappiness();
     }
 
-
     public void addHappinessSource(HappinessSource happinessSource) {
         modifyHappinessSource(happinessSource, 1);
     }
@@ -238,5 +245,9 @@ public class PlayerState {
     public boolean wasLeaderReplaced() {
         // TODO the flag if a leader was replaced this turn
         return false;
+    }
+
+    public void setRecalcResourceProduction() {
+        recalcResourceProduction = true;
     }
 }
