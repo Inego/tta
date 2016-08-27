@@ -2,6 +2,7 @@ package org.inego.tta2.cards.civil.government;
 
 import org.inego.tta2.gamestate.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
  * Created by Inego on 21.08.2016.
@@ -49,7 +50,7 @@ public class TheocracyCard extends GovernmentCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.modifyCultureProduction(sign);
+        playerState.modifyCultureProductionSource(sign, CultureProductionSource.THEOCRACY);
         playerState.modifyMilitaryStrength(sign);
         playerState.modifyHappinessSource(HappinessSource.THEOCRACY, sign);
     }

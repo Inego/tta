@@ -2,6 +2,7 @@ package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
  * Created by Inego on 21.08.2016.
@@ -27,7 +28,7 @@ public class HangingGardensCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.modifyCultureProduction(1);
+        playerState.addCultureProductionSource(CultureProductionSource.HANGING_GARDENS);
         playerState.addHappinessSource(HappinessSource.HANGING_GARDENS);
     }
 }

@@ -1,5 +1,8 @@
 package org.inego.tta2.cards.civil.theater;
 
+import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
+
 /**
  * Created by Inego on 21.08.2016.
  */
@@ -27,5 +30,11 @@ public class OperaCard extends TheaterCard {
     @Override
     public int getResearchCost() {
         return 7;
+    }
+
+    @Override
+    public void assignWorker(int sign, PlayerState playerState) {
+        super.assignWorker(sign, playerState);
+        playerState.modifyCultureProductionSource(sign, CultureProductionSource.OPERA);
     }
 }

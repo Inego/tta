@@ -1,6 +1,7 @@
 package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
  * Created by Inego on 21.08.2016.
@@ -25,7 +26,7 @@ public class LibraryOfAlexandriaCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.modifyCultureProduction(1);
+        playerState.addCultureProductionSource(CultureProductionSource.LIBRARY_OF_ALEXANDRIA);
         playerState.modifyScienceProduction(1);
         // Civil & mil. hand size + 1 -- see getHandSize method
     }

@@ -1,9 +1,12 @@
 package org.inego.tta2.cards.civil.library;
 
+import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
+
 /**
  * Created by Inego on 21.08.2016.
  */
-public class Multimedia extends LibraryCard {
+public class MultimediaCard extends LibraryCard {
     @Override
     public int getAge() {
         return 3;
@@ -27,5 +30,11 @@ public class Multimedia extends LibraryCard {
     @Override
     public int getResearchCost() {
         return 9;
+    }
+
+    @Override
+    public void assignWorker(int sign, PlayerState playerState) {
+        super.assignWorker(sign, playerState);
+        playerState.modifyCultureProductionSource(sign, CultureProductionSource.MULTIMEDIA);
     }
 }

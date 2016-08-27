@@ -8,11 +8,6 @@ import org.inego.tta2.cards.civil.CivilCardKind;
  */
 public abstract class LeaderCard extends CivilCard {
     @Override
-    public int getAge() {
-        return 0;
-    }
-
-    @Override
     public CivilCardKind getKind() {
         return CivilCardKind.LEADER;
     }

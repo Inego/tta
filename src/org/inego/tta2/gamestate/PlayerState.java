@@ -9,10 +9,15 @@ import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
+import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
+import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -26,6 +31,7 @@ public class PlayerState {
     private int militaryStrength;
 
     private Map<HappinessSource, Integer> happinessSources = new HashMap<>();
+    private Map<CultureProductionSource, Integer> cultureProductionSources = new HashMap<>();
 
     private int happiness;
 
@@ -62,11 +68,13 @@ public class PlayerState {
     private boolean recalcHappiness;
     private boolean recalcResourceProduction;
     private int resourceProduction;
+    private boolean recalcCultureProduction;
 
     public PlayerState() {
         yellowBank = 18;
         recalcHappiness = false;
         recalcResourceProduction = false;
+        recalcCultureProduction = false;
         workerPool = 1;
         tactic = null;
         government = Cards.DESPOTISM;
@@ -95,17 +103,26 @@ public class PlayerState {
 
     public int getHappiness() {
         if (recalcHappiness)
-            recalculateHappiness();
+            calculateHappiness();
         return happiness;
     }
 
-    private void recalculateHappiness() {
+    private void calculateHappiness() {
         happiness = 0;
-        int modifier = isCardBuilt(Cards.ST_PETERS_BASILICA) ? 1 : 0;
+
+        boolean stPeters = isCardBuilt(Cards.ST_PETERS_BASILICA);
         int baseValue;
-        for (HappinessSource happinessSource : happinessSources.keySet()) {
+
+        for (Entry<HappinessSource, Integer> happinessSourceKV : happinessSources.entrySet()) {
+            Integer qty = happinessSourceKV.getValue();
+            if (qty.equals(0)) continue;
+            HappinessSource happinessSource = happinessSourceKV.getKey();
             baseValue = happinessSource.getValue(this);
-            happiness += happinessSource.getValue(this) + (baseValue > 0 ? modifier : 0);
+
+            if (stPeters && baseValue > 0)
+                baseValue++;
+
+            happiness += qty * baseValue;
         }
         if (happiness < 0)
             happiness = 0;
@@ -129,8 +146,84 @@ public class PlayerState {
         scienceProduction += delta;
     }
 
-    public void modifyCultureProduction(int delta) {
-        cultureProduction += delta;
+    public void setRecalcCultureProduction() {
+        recalcCultureProduction = true;
+    }
+
+    private void calculateCultureProduction() {
+
+        cultureProduction = 0;
+
+        boolean hollywood = isCardBuilt(Cards.HOLLYWOOD);
+        boolean internet = isCardBuilt(Cards.INTERNET);
+
+        for (Entry<CultureProductionSource, Integer> cultureProductionSourceKV : cultureProductionSources.entrySet()) {
+            Integer qty = cultureProductionSourceKV.getValue();
+            if (qty == 0)
+                continue;
+            CultureProductionSource cultureProductionSource = cultureProductionSourceKV.getKey();
+            int baseValue = cultureProductionSource.getValue();
+            int modifier = 0
+                    + (hollywood && (cultureProductionSource instanceof TheaterCultureProductionSource
+                            || cultureProductionSource instanceof LibraryCultureProductionSource) ? 2 * baseValue : 0)
+                    + (internet && cultureProductionSource instanceof BuildingCultureProductionSource ? baseValue : 0);
+            cultureProduction += qty * (baseValue + modifier);
+        }
+
+        if (internet) {
+            // TODO on science building change recalc culture production
+            // TODO on military building change recalc culture production
+            cultureProduction += getBuildingScienceOutput() + getBuildingMilitaryOutput();
+        }
+
+        if (isCardBuilt(Cards.FIRST_SPACE_FLIGHT)) {
+            // TODO FSF - add sum of tech card levels
+            // TODO FSF - on build tech set recalc CProd
+        }
+
+        if (isCardBuilt(Cards.FAST_FOOD_CHAINS)) {
+            cultureProduction += 2 * (getFarms() + getMines()) + getUrbanBuildings() + getMilitaryUnits();
+            // TODO  FFC - recalc CP on modify farm / mine / urban / mil building
+        }
+
+        recalcCultureProduction = false;
+    }
+
+    private int getMilitaryUnits() {
+        // TODO get workers on military cards
+        return 0;
+    }
+
+    private int getUrbanBuildings() {
+        // TODO get workers on urban buildings
+        return 0;
+    }
+
+    private int getMines() {
+        // TODO get workers on mines cards
+        return 0;
+    }
+
+    private int getFarms() {
+        // TODO get workers on farms cards
+        return 0;
+    }
+
+    private int getBuildingMilitaryOutput() {
+        // TODO get military building output
+        return 0;
+    }
+
+    private int getBuildingScienceOutput() {
+        // TODO get building science output
+        return 0;
+    }
+
+    public int getCultureProduction() {
+        if (recalcCultureProduction) {
+            calculateCultureProduction();
+        }
+        return cultureProduction;
     }
 
     public void modifyMilitaryStrength(int delta) {
@@ -249,5 +342,15 @@ public class PlayerState {
 
     public void setRecalcResourceProduction() {
         recalcResourceProduction = true;
+    }
+
+    public void addCultureProductionSource(CultureProductionSource cultureProductionSource) {
+        modifyCultureProductionSource(1, cultureProductionSource);
+    }
+
+    public void modifyCultureProductionSource(int sign, CultureProductionSource cultureProductionSource) {
+        Integer current = cultureProductionSources.get(cultureProductionSource);
+        cultureProductionSources.put(cultureProductionSource, current == null ? sign : current + sign);
+        setRecalcCultureProduction();
     }
 }

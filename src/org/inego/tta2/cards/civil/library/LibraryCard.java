@@ -16,7 +16,7 @@ public abstract class LibraryCard extends BuildingCard{
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyCultureProduction(sign * getAge());
         playerState.modifyScienceProduction(sign * getAge());
+        // Culture production in implementations
     }
 }

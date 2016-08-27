@@ -17,7 +17,6 @@ public abstract class TheaterCard extends BuildingCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyCultureProduction(sign * (getAge() + 1));
         playerState.modifyHappinessSource(HappinessSource.THEATER, sign);
     }
 }

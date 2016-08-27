@@ -3,6 +3,7 @@ package org.inego.tta2.cards.civil.temple;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
  * Created by Inego on 20.08.2016.
@@ -16,6 +17,7 @@ public abstract class TempleCard extends BuildingCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyCultureProduction(sign);
+        playerState.modifyCultureProductionSource(sign, CultureProductionSource.TEMPLE);
+        // Happiness overridden
     }
 }
