@@ -3,6 +3,7 @@ package org.inego.tta2.gamestate;
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
+import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
@@ -24,6 +25,8 @@ import java.util.Set;
  * Created by Inego on 16.08.2016.
  */
 public class PlayerState {
+
+    private GameState gameState;
 
     private int foodProduction;
     private int cultureProduction;
@@ -69,8 +72,13 @@ public class PlayerState {
     private boolean recalcResourceProduction;
     private int resourceProduction;
     private boolean recalcCultureProduction;
+    private LeaderCard leader;
+    private boolean juliusCaesarActionUsed;
 
-    public PlayerState() {
+    public PlayerState(GameState gameState) {
+
+        this.gameState = gameState;
+
         yellowBank = 18;
         recalcHappiness = false;
         recalcResourceProduction = false;
@@ -78,7 +86,12 @@ public class PlayerState {
         workerPool = 1;
         tactic = null;
         government = Cards.DESPOTISM;
+        leader = null;
+
         wonders = new LinkedHashSet<>();
+
+        // Special flags
+        juliusCaesarActionUsed = false;
     }
 
     public int getFoodProduction() {
@@ -352,5 +365,19 @@ public class PlayerState {
         Integer current = cultureProductionSources.get(cultureProductionSource);
         cultureProductionSources.put(cultureProductionSource, current == null ? sign : current + sign);
         setRecalcCultureProduction();
+    }
+
+    public LeaderCard getLeader() {
+        return leader;
+    }
+
+    public boolean isJuliusCaesarSpecialActionAvailable() {
+        return (leader == Cards.JULIUS_CAESAR && !juliusCaesarActionUsed);
+    }
+
+    public void useJuliusCaesarAction() {
+        juliusCaesarActionUsed = true;
+        // Repeat political phase
+        gameState.startPoliticalPhase();
     }
 }

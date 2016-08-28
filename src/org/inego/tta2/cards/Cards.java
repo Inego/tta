@@ -1,8 +1,9 @@
 package org.inego.tta2.cards;
 
-import org.inego.tta2.cards.civil.*;
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
+import org.inego.tta2.cards.civil.leader.JuliusCaesarCard;
+import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.cards.civil.unit.*;
 import org.inego.tta2.cards.civil.wonder.*;
 
@@ -35,4 +36,6 @@ public class Cards {
 
     public static final UnitCard ROCKETS = new RocketsCard();
     public static final UnitCard AIR_FORCES = new AirForcesCard();
+
+    public static final LeaderCard JULIUS_CAESAR = new JuliusCaesarCard();
 }

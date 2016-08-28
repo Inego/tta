@@ -13,7 +13,7 @@ public interface IGameState {
 
     int getCurrentPlayer();
 
-    List<IChoice> getChoices();
+    List<? extends IChoice> getChoices();
 
     int getNumberOfPlayers();
 
