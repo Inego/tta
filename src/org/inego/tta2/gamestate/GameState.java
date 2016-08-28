@@ -28,8 +28,19 @@ public class GameState implements IGameState {
     }
 
     @Override
+    public IGamePoint getPoint() {
+        // TODO get point
+        return null;
+    }
+
     public int getNumberOfPlayers() {
         return numberOfPlayers;
+    }
+
+    @Override
+    public int getCurrentPlayer() {
+        // TODO get current player
+        return 0;
     }
 
 
