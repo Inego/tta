@@ -18,5 +18,5 @@ public abstract class LeaderCard extends CivilCard {
         return 1;
     }
 
-    public abstract void onElect(int sign, PlayerState playerState);
+    public abstract void onElect(int sign, PlayerState playerState, LeaderCard other);
 }

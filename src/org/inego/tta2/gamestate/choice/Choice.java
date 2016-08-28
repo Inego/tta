@@ -12,7 +12,8 @@ public abstract class Choice implements IChoice {
 
     @Override
     public void apply(IGameState gameState) {
-        apply((GameState) gameState);
+        GameState state = (GameState) gameState;
+        apply(state, state.getCurrentPlayerState());
     }
 
     protected abstract void apply(GameState gameState, PlayerState playerState);

@@ -27,8 +27,10 @@ public class GameState implements IGameState {
 
         playerStates = new ArrayList<>(numberOfPlayers);
 
-        for (int i = 0; i < numberOfPlayers; i++) {
-            playerStates.add(new PlayerState(this));
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            PlayerState playerState = new PlayerState(this);
+            playerStates.add(playerState);
+            playerState.setAvailableCivilActions(i);
         }
     }
 
@@ -79,5 +81,9 @@ public class GameState implements IGameState {
     public void startActionPhase() {
         // TODO start action phase
         proceedTo(GamePoint.ACTION_PHASE);
+    }
+
+    public PlayerState getCurrentPlayerState() {
+        return playerStates.get(currentPlayer);
     }
 }

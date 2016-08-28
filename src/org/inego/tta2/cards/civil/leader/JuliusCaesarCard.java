@@ -18,7 +18,7 @@ public class JuliusCaesarCard extends LeaderCard {
 
 
     @Override
-    public void onElect(int sign, PlayerState playerState) {
+    public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         playerState.modifyMilitaryStrength(sign);
         playerState.modifyAdditionalMilitaryActions(sign);
         // Special action - see PoliticalPhaseChoice.apply

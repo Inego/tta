@@ -3,6 +3,7 @@ package org.inego.tta2.gamestate;
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
+import org.inego.tta2.cards.civil.leader.HomerCard;
 import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
@@ -10,6 +11,7 @@ import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
+import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
 import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
@@ -75,6 +77,9 @@ public class PlayerState {
     private LeaderCard leader;
     private boolean juliusCaesarActionUsed;
 
+    private int spentCivilActions;
+    private int availableCivilActions;
+
     public PlayerState(GameState gameState) {
 
         this.gameState = gameState;
@@ -83,6 +88,10 @@ public class PlayerState {
         recalcHappiness = false;
         recalcResourceProduction = false;
         recalcCultureProduction = false;
+
+        availableCivilActions = 0;
+        spentCivilActions = 0;
+
         workerPool = 1;
         tactic = null;
         government = Cards.DESPOTISM;
@@ -379,5 +388,34 @@ public class PlayerState {
         juliusCaesarActionUsed = true;
         // Repeat political phase
         gameState.startPoliticalPhase();
+    }
+
+    public void electLeader(LeaderCard newLeader) {
+
+        if (leader != null) {
+            leader.onElect(-1, this, newLeader);
+
+            if (leader == Cards.HOMER) {
+                gameState.proceedTo(GamePoint.HOMER_REPLACED, HomerCard.ATTACH_HAPPY_FACE, ElectLeaderChoice.GET_BACK_AP);
+            }
+            else {
+                // simply give 1 AP back
+                getBackCivilAP(1);
+            }
+        }
+        newLeader.onElect(1, this, leader);
+        leader = newLeader;
+    }
+
+    public void getBackCivilAP(int i) {
+        int toGetBack = Math.min(spentCivilActions, i);
+        if (toGetBack > 0) {
+
+        }
+
+    }
+
+    public void setAvailableCivilActions(int i) {
+        availableCivilActions = i;
     }
 }
