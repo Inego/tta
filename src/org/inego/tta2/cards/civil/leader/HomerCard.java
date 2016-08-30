@@ -14,7 +14,7 @@ public class HomerCard extends LeaderCard {
     public static final Choice ATTACH_HAPPY_FACE = new Choice() {
         @Override
         protected void apply(GameState gameState, PlayerState playerState) {
-            // TODO attach happy face - another choice
+            playerState.addHappinessSource(HappinessSource.HOMER_EPIC);
         }
     };
 

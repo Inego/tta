@@ -10,6 +10,13 @@ import org.inego.tta2.gamestate.PlayerState;
  */
 public class ElectLeaderChoice extends ActionPhaseChoice {
 
+    public static final Choice GET_BACK_AP = new Choice() {
+        @Override
+        protected void apply(GameState gameState, PlayerState playerState) {
+            playerState.getBackCivilAP(1);
+        }
+    };
+
     private LeaderCard leader;
 
     public ElectLeaderChoice(LeaderCard leader) {

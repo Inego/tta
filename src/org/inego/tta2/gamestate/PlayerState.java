@@ -395,7 +395,7 @@ public class PlayerState {
         if (leader != null) {
             leader.onElect(-1, this, newLeader);
 
-            if (leader == Cards.HOMER) {
+            if (leader == Cards.HOMER && wonders.size() > 0) {
                 gameState.proceedTo(GamePoint.HOMER_REPLACED, HomerCard.ATTACH_HAPPY_FACE, ElectLeaderChoice.GET_BACK_AP);
             }
             else {

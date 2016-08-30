@@ -22,6 +22,7 @@ public class HappinessSource {
     public static final HappinessSource EIFFEL_TOWER = new HappinessSource(1);
     public static final HappinessSource KREMLIN = new HappinessSource(-1);
     public static final HappinessSource HOMER = new HappinessSource(1);
+    public static final HappinessSource HOMER_EPIC = new HappinessSource(1);
 
 
     private int baseValue;
