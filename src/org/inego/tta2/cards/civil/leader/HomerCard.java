@@ -31,5 +31,6 @@ public class HomerCard extends LeaderCard {
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         playerState.modifyHappinessSource(HappinessSource.HOMER, sign);
+        playerState.modifyMilitaryProductionBonus(sign);
     }
 }

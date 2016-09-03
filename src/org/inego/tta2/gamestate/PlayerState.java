@@ -79,10 +79,13 @@ public class PlayerState {
 
     private int spentCivilActions;
     private int availableCivilActions;
+    private int maxMilitaryProductionBonus;
 
     public PlayerState(GameState gameState) {
 
         this.gameState = gameState;
+
+        maxMilitaryProductionBonus = 0;
 
         yellowBank = 18;
         recalcHappiness = false;
@@ -417,5 +420,9 @@ public class PlayerState {
 
     public void setAvailableCivilActions(int i) {
         availableCivilActions = i;
+    }
+
+    public void modifyMilitaryProductionBonus(int delta) {
+        maxMilitaryProductionBonus += delta;
     }
 }

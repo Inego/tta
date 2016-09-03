@@ -26,8 +26,6 @@ public class ElectLeaderChoice extends ActionPhaseChoice {
 
     @Override
     protected void apply(GameState gameState, PlayerState playerState) {
-
         playerState.electLeader(leader);
-
     }
 }
