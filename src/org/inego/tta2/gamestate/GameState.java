@@ -6,6 +6,7 @@ import org.inego.tta2.gamestate.exception.GameStateException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by Inego on 16.08.2016.
@@ -16,20 +17,27 @@ public class GameState implements IGameState {
     private int currentPlayer;
 
     private List<PlayerState> playerStates;
-    private GamePoint gamePoint;
+    private Stack<GamePoint> gamePoints;
     private List<Choice> currentChoices;
 
+    private int currentAge;
+
     public GameState(int numberOfPlayers) {
+
+        gamePoints = new Stack<>();
 
         this.numberOfPlayers = numberOfPlayers;
 
         currentPlayer = 0;
+        currentAge = 0; // A
 
         playerStates = new ArrayList<>(numberOfPlayers);
 
         for (int i = 1; i <= numberOfPlayers; i++) {
             PlayerState playerState = new PlayerState(this);
             playerStates.add(playerState);
+
+            // Age A specific setup
             playerState.setAvailableCivilActions(i);
         }
     }
@@ -40,8 +48,7 @@ public class GameState implements IGameState {
 
     @Override
     public IGamePoint getPoint() {
-        // TODO get point
-        return null;
+        return gamePoint;
     }
 
     public int getNumberOfPlayers() {
@@ -71,6 +78,24 @@ public class GameState implements IGameState {
     public void proceedTo(GamePoint gamePoint, Choice... choices) {
         this.gamePoint = gamePoint;
         currentChoices = Arrays.asList(choices);
+    }
+
+    public void startPlayerTurn() {
+
+        if (currentAge == 0)
+            startActionPhase();
+        else
+            startPoliticalPhase();
+    }
+
+    public void endPlayerTurn() {
+
+        currentPlayer++;
+        if (currentPlayer == numberOfPlayers)
+            currentPlayer = 0;
+
+
+
     }
 
     public void startPoliticalPhase() {

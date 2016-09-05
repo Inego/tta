@@ -14,6 +14,8 @@ public class HomerCard extends LeaderCard {
     public static final Choice ATTACH_HAPPY_FACE = new Choice() {
         @Override
         protected void apply(GameState gameState, PlayerState playerState) {
+            // TODO make a custom (?) happiness source attached to wonder so that it's NOT extendable by StPeters in case the wonder has its own happy faces
+            // TODO select wonder choice
             playerState.addHappinessSource(HappinessSource.HOMER_EPIC);
         }
     };
@@ -31,6 +33,9 @@ public class HomerCard extends LeaderCard {
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         playerState.modifyHappinessSource(HappinessSource.HOMER, sign);
-        playerState.modifyMilitaryProductionBonus(sign);
+
+        // When Homer is gone, his unused military production bonus is gone with him
+        // see https://boardgamegeek.com/article/23613349#23613349
+        playerState.setLeaderMilitaryProductionBonus(sign == 1 ? 1 : 0);
     }
 }

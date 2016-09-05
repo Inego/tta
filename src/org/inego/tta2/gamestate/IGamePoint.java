@@ -5,6 +5,4 @@ package org.inego.tta2.gamestate;
  */
 public interface IGamePoint {
 
-    static final IGamePoint END = new IGamePoint() {};
-
 }
