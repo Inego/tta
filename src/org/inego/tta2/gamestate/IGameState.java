@@ -11,7 +11,7 @@ import java.util.Stack;
 public interface IGameState {
 
     // If the stack is empty, the game is finished
-    Stack<IGamePoint> getPointStack();
+    Stack<? extends IGamePoint> getPointStack();
 
     /**
      * Returns the list of events that have passed since last choice.

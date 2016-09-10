@@ -1,7 +1,6 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.gamestate.choice.Choice;
-import org.inego.tta2.gamestate.exception.GameStateException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,13 +45,19 @@ public class GameState implements IGameState {
         // TODO clone
     }
 
-    @Override
-    public IGamePoint getPoint() {
-        return gamePoint;
-    }
 
     public int getNumberOfPlayers() {
         return numberOfPlayers;
+    }
+
+    @Override
+    public Stack<? extends IGamePoint> getPointStack() {
+        return gamePoints;
+    }
+
+    @Override
+    public List<IGameEvent> getLastEvents() {
+        return null;
     }
 
     @Override
@@ -61,7 +66,7 @@ public class GameState implements IGameState {
     }
 
     @Override
-    public void next(int choiceIdx) throws GameStateException {
+    public void next(int choiceIdx) {
         // TODO GameState.next
     }
 
@@ -71,12 +76,14 @@ public class GameState implements IGameState {
     }
 
     public void proceedTo(GamePoint gamePoint) {
-        this.gamePoint = gamePoint;
+        gamePoints.pop();
+        gamePoints.push(gamePoint);
         currentChoices.clear();
     }
 
     public void proceedTo(GamePoint gamePoint, Choice... choices) {
-        this.gamePoint = gamePoint;
+        gamePoints.pop();
+        gamePoints.push(gamePoint);
         currentChoices = Arrays.asList(choices);
     }
 
