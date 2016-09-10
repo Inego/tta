@@ -31,7 +31,6 @@ public class GameManager implements IGameManager<GameState> {
             List<? extends IChoice> choices = gameState.getChoices();
             if (!choices.isEmpty())
             {
-
                 final int currentPlayer = gameState.getCurrentPlayer();
                 choice = players[currentPlayer].choose(gameState, choices);
             }

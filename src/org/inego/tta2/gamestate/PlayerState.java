@@ -10,12 +10,14 @@ import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
+import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
 import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
 import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
+import org.inego.tta2.gamestate.point.GamePoint;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -81,6 +83,7 @@ public class PlayerState {
     private int availableCivilActions;
     private int militaryProductionBonus;
     private int leaderMilitaryProductionBonus;
+    private int availableMilitaryActions;
 
     public PlayerState(GameState gameState) {
 
@@ -424,11 +427,94 @@ public class PlayerState {
         availableCivilActions = i;
     }
 
+    public void setAvailableMilitaryActions(int value) {
+        availableMilitaryActions = value;
+    }
+
     public void modifyMilitaryProductionBonus(int delta) {
         militaryProductionBonus += delta;
     }
 
     public void setLeaderMilitaryProductionBonus(int value) {
         leaderMilitaryProductionBonus = value;
+    }
+
+
+    public void resolveWar() {
+        // TODO resolve war
+    }
+
+    public void makeCurrentTacticsAvailable() {
+        // TODO make current tactics available
+    }
+
+    public void endTurn() {
+
+        discardExcessMilitaryCards();
+
+        if (!isUprising()) {
+            handleProductionPhase();
+        }
+
+    }
+
+    private void handleProductionPhase() {
+
+        sciencePoints += scienceProduction;
+        culturePoints += cultureProduction;
+
+        handleCorruption();
+
+        produceFood();
+
+        consumeFood();
+
+        produceResources();
+
+        drawMilitaryCards();
+
+    }
+
+    private void drawMilitaryCards() {
+
+        if (gameState.getAge() < 4) {
+
+            int cardsToDraw = Math.min(availableMilitaryActions, 3);
+
+            if (cardsToDraw > 0) {
+                addMilitaryCards(gameState.drawMilitaryCards(cardsToDraw));
+            }
+
+        }
+
+    }
+
+    private void addMilitaryCards(MilitaryCard[] militaryCards) {
+        // TODO add military cards
+    }
+
+    private void produceResources() {
+        // TODO produce resources
+    }
+
+    private void consumeFood() {
+        // TODO consume food
+    }
+
+    private void produceFood() {
+        // TODO produce food
+    }
+
+    private void handleCorruption() {
+        // TODO handle corruption
+    }
+
+    private boolean isUprising() {
+        // TODO uprising determination
+        return false;
+    }
+
+    private void discardExcessMilitaryCards() {
+        // TODO discard excess military cards
     }
 }

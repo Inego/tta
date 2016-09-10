@@ -1,6 +1,9 @@
 package org.inego.tta2.gamestate;
 
+import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.gamestate.choice.Choice;
+import org.inego.tta2.gamestate.point.GamePoint;
+import org.inego.tta2.gamestate.point.IGamePoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +28,8 @@ public class GameState implements IGameState {
 
         gamePoints = new Stack<>();
 
+
+
         this.numberOfPlayers = numberOfPlayers;
 
         currentPlayer = 0;
@@ -38,7 +43,10 @@ public class GameState implements IGameState {
 
             // Age A specific setup
             playerState.setAvailableCivilActions(i);
+            playerState.setAvailableMilitaryActions(0);
         }
+
+        gamePoints.push(GamePoint.START_TURN);
     }
 
     public GameState(GameState source) {
@@ -67,7 +75,12 @@ public class GameState implements IGameState {
 
     @Override
     public void next(int choiceIdx) {
-        // TODO GameState.next
+        if (!currentChoices.isEmpty()) {
+            currentChoices.get(choiceIdx).apply(this);
+            currentChoices.clear();
+        }
+        GamePoint gamePoint = gamePoints.pop();
+        gamePoint.apply(this);
     }
 
     @Override
@@ -76,13 +89,11 @@ public class GameState implements IGameState {
     }
 
     public void proceedTo(GamePoint gamePoint) {
-        gamePoints.pop();
         gamePoints.push(gamePoint);
         currentChoices.clear();
     }
 
     public void proceedTo(GamePoint gamePoint, Choice... choices) {
-        gamePoints.pop();
         gamePoints.push(gamePoint);
         currentChoices = Arrays.asList(choices);
     }
@@ -117,5 +128,20 @@ public class GameState implements IGameState {
 
     public PlayerState getCurrentPlayerState() {
         return playerStates.get(currentPlayer);
+    }
+
+    public int getAge() {
+        return currentAge;
+    }
+
+
+
+    public void replenishCardRow() {
+        // TODO replenish card row
+    }
+
+    public MilitaryCard[] drawMilitaryCards(int cardsToDraw) {
+        // TODO draw military cards p. 6
+        return null;
     }
 }

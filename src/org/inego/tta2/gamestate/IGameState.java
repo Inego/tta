@@ -1,6 +1,7 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.gamestate.exception.GameStateException;
+import org.inego.tta2.gamestate.point.IGamePoint;
 
 import java.util.List;
 import java.util.Stack;

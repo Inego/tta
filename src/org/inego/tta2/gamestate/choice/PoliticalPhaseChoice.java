@@ -1,6 +1,7 @@
 package org.inego.tta2.gamestate.choice;
 
 import org.inego.tta2.gamestate.*;
+import org.inego.tta2.gamestate.point.GamePoint;
 
 /**
  * Created by Inego on 28.08.2016.
