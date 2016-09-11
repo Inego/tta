@@ -2,6 +2,8 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.CivilCard;
+import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.leader.HomerCard;
 import org.inego.tta2.cards.civil.leader.LeaderCard;
@@ -13,6 +15,8 @@ import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
+import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
+import org.inego.tta2.gamestate.choice.action.IncreasePopulationChoice;
 import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
@@ -35,7 +39,9 @@ public class PlayerState {
     private int foodProduction;
     private int cultureProduction;
     private int scienceProduction;
-    private int militaryStrength;
+
+    private int militaryStrength; // Derived
+    private int militaryStrengthBase;
 
     private Map<HappinessSource, Integer> happinessSources = new HashMap<>();
     private Map<CultureProductionSource, Integer> cultureProductionSources = new HashMap<>();
@@ -77,13 +83,17 @@ public class PlayerState {
     private int resourceProduction;
     private boolean recalcCultureProduction;
     private LeaderCard leader;
-    private boolean juliusCaesarActionUsed;
+    private boolean leaderSpecialActionAvailable;
+
+    private int resources;
 
     private int spentCivilActions;
     private int availableCivilActions;
     private int militaryProductionBonus;
     private int leaderMilitaryProductionBonus;
     private int availableMilitaryActions;
+    private boolean recalcMilitary;
+
 
     public PlayerState(GameState gameState) {
 
@@ -91,11 +101,14 @@ public class PlayerState {
 
         militaryProductionBonus = 0;
         leaderMilitaryProductionBonus = 0;
+        militaryStrength = 1; // From 1 warrior
+        militaryStrengthBase = 0;
 
         yellowBank = 18;
         recalcHappiness = false;
         recalcResourceProduction = false;
         recalcCultureProduction = false;
+        recalcMilitary = false;
 
         availableCivilActions = 0;
         spentCivilActions = 0;
@@ -107,8 +120,6 @@ public class PlayerState {
 
         wonders = new LinkedHashSet<>();
 
-        // Special flags
-        juliusCaesarActionUsed = false;
     }
 
     public int getFoodProduction() {
@@ -256,8 +267,8 @@ public class PlayerState {
         return cultureProduction;
     }
 
-    public void modifyMilitaryStrength(int delta) {
-        militaryStrength += delta;
+    public void modifyMilitaryStrengthBase(int delta) {
+        militaryStrengthBase += delta;
     }
 
 
@@ -329,18 +340,33 @@ public class PlayerState {
                 + (wonders.contains(Cards.LIBRARY_OF_ALEXANDRIA) ? 1 : 0);
     }
 
-    // Probably this should be refactored to a derived value
     public int getMilitaryStrength() {
-        int result = militaryStrength;
-        if (wonders.contains(Cards.GREAT_WALL)) {
-            result += getWorkersOnCard(Cards.WARRIORS);
-            result += getWorkersOnCard(Cards.SWORDSMEN);
-            result += getWorkersOnCard(Cards.RIFLEMEN);
-            result += getWorkersOnCard(Cards.MODERN_INFANTRY);
-            result += getWorkersOnCard(Cards.CANNON);
-            result += getWorkersOnCard(Cards.ROCKETS); // :)
+
+        if (recalcMilitary) {
+            calculateMilitaryStrength();
         }
-        return result;
+
+
+        return militaryStrength;
+    }
+
+    private void calculateMilitaryStrength() {
+
+        militaryStrength = militaryStrengthBase;
+
+        if (wonders.contains(Cards.GREAT_WALL)) {
+            militaryStrength += getWorkersOnCard(Cards.WARRIORS);
+            militaryStrength += getWorkersOnCard(Cards.SWORDSMEN);
+            militaryStrength += getWorkersOnCard(Cards.RIFLEMEN);
+            militaryStrength += getWorkersOnCard(Cards.MODERN_INFANTRY);
+            militaryStrength += getWorkersOnCard(Cards.CANNON);
+            militaryStrength += getWorkersOnCard(Cards.ROCKETS); // :)
+        }
+
+        if (leader == Cards.ALEXANDER) {
+            // TODO Alexander - add total number of military units
+        }
+
     }
 
     public boolean isCardBuilt(WonderCard wonderCard) {
@@ -388,12 +414,8 @@ public class PlayerState {
         return leader;
     }
 
-    public boolean isJuliusCaesarSpecialActionAvailable() {
-        return (leader == Cards.JULIUS_CAESAR && !juliusCaesarActionUsed);
-    }
-
     public void useJuliusCaesarAction() {
-        juliusCaesarActionUsed = true;
+        leaderSpecialActionAvailable = false;
         // Repeat political phase
         gameState.startPoliticalPhase();
     }
@@ -403,11 +425,12 @@ public class PlayerState {
         if (leader != null) {
             leader.onElect(-1, this, newLeader);
 
+            // TODO test getting 1 CA back and Homer's choice
             if (leader == Cards.HOMER && wonders.size() > 0) {
                 gameState.proceedTo(GamePoint.HOMER_REPLACED, HomerCard.ATTACH_HAPPY_FACE, ElectLeaderChoice.GET_BACK_AP);
             }
             else {
-                // simply give 1 AP back
+                // simply give 1 CA back
                 getBackCivilAP(1);
             }
         }
@@ -415,17 +438,45 @@ public class PlayerState {
         leader = newLeader;
     }
 
+    public void removeCurrentLeader() {
+        leader.onElect(-1, this, null);
+        leader = null;
+    }
+
     public void getBackCivilAP(int i) {
         int toGetBack = Math.min(spentCivilActions, i);
         if (toGetBack > 0) {
-
+            // TODO get back CA
         }
-
     }
 
-    public void setAvailableCivilActions(int i) {
-        availableCivilActions = i;
+    public void setAvailableCivilActions(int value) {
+        availableCivilActions = value;
     }
+
+    public int getAvailableCivilActions() {
+        // TODO find all usages of reading available civil actions
+        if (leader == Cards.HAMMURABI && leaderSpecialActionAvailable && availableMilitaryActions > 0) {
+            return availableCivilActions + 1;
+        }
+        return availableCivilActions;
+    }
+
+    public void useCivilActions(int value) {
+        // TODO find all usages of spending civil actions
+        availableCivilActions -= value;
+        if (availableCivilActions < 0) {
+            if (leader == Cards.HAMMURABI && leaderSpecialActionAvailable && availableMilitaryActions > 0) {
+                availableCivilActions++;
+                availableMilitaryActions--;
+                leaderSpecialActionAvailable = false;
+            }
+            else {
+                throw new UnsupportedOperationException("Spent more civil actions than available");
+            }
+        }
+    }
+
 
     public void setAvailableMilitaryActions(int value) {
         availableMilitaryActions = value;
@@ -449,13 +500,18 @@ public class PlayerState {
     }
 
     public void endTurn() {
-
         discardExcessMilitaryCards();
-
         if (!isUprising()) {
             handleProductionPhase();
         }
+        drawMilitaryCards();
+        resetActions();
+        gameState.endPlayerTurn();
+    }
 
+    private void resetActions() {
+        availableCivilActions = maxCivilActions;
+        availableMilitaryActions = maxMilitaryActions;
     }
 
     private void handleProductionPhase() {
@@ -471,7 +527,7 @@ public class PlayerState {
 
         produceResources();
 
-        drawMilitaryCards();
+
 
     }
 
@@ -517,4 +573,72 @@ public class PlayerState {
     private void discardExcessMilitaryCards() {
         // TODO discard excess military cards
     }
+
+    public int getPopulationProductionCost() {
+        // TODO pop production cost
+        int result = 2;
+
+        if (leader == Cards.MOSES) {
+            result--;
+        }
+
+        if (result < 0) result = 0;
+
+        return result;
+    }
+
+    public void addActionPhaseChoices() {
+
+        // TODO add action phase choices
+
+        int populationProductionCost = getPopulationProductionCost();
+
+        if (populationProductionCost <= resources) {
+            gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
+        }
+
+        gameState.addChoice(ActionPhaseChoice.PASS);
+
+    }
+
+    public void increasePopulation(int populationProductionCost) {
+        loseResources(populationProductionCost);
+        gainPopulation(1);
+    }
+
+    private void gainPopulation(int value) {
+        workerPool += value;
+    }
+
+    private void loseResources(int value) {
+        // TODO lose resources (refactor + return tokens to the blue bank)
+        resources -= value;
+    }
+
+    public void enableLeaderSpecialAction() {
+        leaderSpecialActionAvailable = true;
+    }
+
+    public boolean isLeaderSpecialActionAvailable() {
+        return leaderSpecialActionAvailable;
+    }
+
+    public void addCardToHand(CivilCard takenCard) {
+        // TODO add card to hand
+
+        if (leader == Cards.ARISTOTLE && takenCard instanceof ITechnologyCard) {
+            sciencePoints++;
+        }
+
+    }
+
+    public void setRecalcMilitaryStrength() {
+        recalcMilitary = true;
+    }
+
+    public void gainYellowTokens(int value) {
+        // TODO gain yellow tokens
+    }
+
+
 }

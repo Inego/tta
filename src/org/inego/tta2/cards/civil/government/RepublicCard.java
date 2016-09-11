@@ -40,7 +40,7 @@ public class RepublicCard extends GovernmentCard {
     }
 
     @Override
-    public int getFullCost() {
+    public int getResearchCost() {
         return 13;
     }
 }

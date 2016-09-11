@@ -28,7 +28,7 @@ public class WarfareCard extends MilitaryTechCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.modifyMilitaryStrength(sign);
+        playerState.modifyMilitaryStrengthBase(sign);
         playerState.modifyAdditionalMilitaryActions(sign);
     }
 }

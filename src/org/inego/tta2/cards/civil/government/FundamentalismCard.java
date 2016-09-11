@@ -42,13 +42,13 @@ public class FundamentalismCard extends GovernmentCard {
     }
 
     @Override
-    public int getFullCost() {
+    public int getResearchCost() {
         return 18;
     }
 
     @Override
     public void apply(int sign, PlayerState playerState) {
         playerState.modifyScienceProduction(-2 * sign);
-        playerState.modifyMilitaryStrength(5 * sign);
+        playerState.modifyMilitaryStrengthBase(5 * sign);
     }
 }

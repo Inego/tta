@@ -26,7 +26,7 @@ public abstract class ColonizationTechCard extends TechnologyCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.modifyMilitaryStrength(sign * getAge());
+        playerState.modifyMilitaryStrengthBase(sign * getAge());
         playerState.modifyColonizationBonus(sign * (getAge() + 1));
     }
 }

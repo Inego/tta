@@ -1,12 +1,23 @@
-package org.inego.tta2.gamestate.choice;
+package org.inego.tta2.gamestate.choice.political;
 
+import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.leader.JuliusCaesarCard;
 import org.inego.tta2.gamestate.*;
+import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.point.GamePoint;
 
 /**
  * Created by Inego on 28.08.2016.
  */
 public abstract class PoliticalPhaseChoice extends Choice {
+
+    public static final PoliticalPhaseChoice PASS = new PoliticalPhaseChoice() {
+
+        @Override
+        protected void apply(GameState gameState, PlayerState playerState) {
+            gameState.proceedTo(GamePoint.ACTION_PHASE);
+        }
+    };
 
     private static final Choice JC_PASS = new Choice() {
         @Override
@@ -24,9 +35,13 @@ public abstract class PoliticalPhaseChoice extends Choice {
 
     @Override
     protected void apply(GameState gameState, PlayerState playerState) {
-        if (playerState.isJuliusCaesarSpecialActionAvailable()) {
-            gameState.proceedTo(GamePoint.USE_JULIUS_CAESAR_ACTION, JC_PASS, JC_USE);
+
+        // TODO Test Julius Caesar special action
+
+        if (playerState.getLeader() == Cards.JULIUS_CAESAR && playerState.isLeaderSpecialActionAvailable()) {
+            gameState.proceedTo(JuliusCaesarCard.POINT, JC_PASS, JC_USE);
         }
+
     }
 
 }

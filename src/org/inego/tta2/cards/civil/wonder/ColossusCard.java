@@ -25,7 +25,7 @@ public class ColossusCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.modifyMilitaryStrength(2);
+        playerState.modifyMilitaryStrengthBase(2);
         playerState.modifyColonizationBonus(1);
     }
 }

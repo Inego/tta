@@ -40,7 +40,7 @@ public class ConstitutionalMonarchy extends GovernmentCard {
     }
 
     @Override
-    public int getFullCost() {
+    public int getResearchCost() {
         return 12;
     }
 }

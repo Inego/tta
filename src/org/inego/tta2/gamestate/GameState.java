@@ -1,5 +1,6 @@
 package org.inego.tta2.gamestate;
 
+import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.point.GamePoint;
@@ -20,15 +21,14 @@ public class GameState implements IGameState {
 
     private List<PlayerState> playerStates;
     private Stack<GamePoint> gamePoints;
-    private List<Choice> currentChoices;
+    private List<Choice> currentChoices = new ArrayList<>();
+    private List<CivilCard> cardRow = new ArrayList<>();
 
     private int currentAge;
 
     public GameState(int numberOfPlayers) {
 
         gamePoints = new Stack<>();
-
-
 
         this.numberOfPlayers = numberOfPlayers;
 
@@ -75,12 +75,15 @@ public class GameState implements IGameState {
 
     @Override
     public void next(int choiceIdx) {
-        if (!currentChoices.isEmpty()) {
-            currentChoices.get(choiceIdx).apply(this);
-            currentChoices.clear();
+        if (currentChoices.isEmpty()) {
+            GamePoint gamePoint = gamePoints.peek();
+            gamePoint.apply(this);
         }
-        GamePoint gamePoint = gamePoints.pop();
-        gamePoint.apply(this);
+        else {
+            Choice choice = currentChoices.get(choiceIdx);
+            currentChoices.clear();
+            choice.apply(this);
+        }
     }
 
     @Override
@@ -89,13 +92,13 @@ public class GameState implements IGameState {
     }
 
     public void proceedTo(GamePoint gamePoint) {
+        gamePoints.pop();
         gamePoints.push(gamePoint);
-        currentChoices.clear();
     }
 
     public void proceedTo(GamePoint gamePoint, Choice... choices) {
-        gamePoints.push(gamePoint);
         currentChoices = Arrays.asList(choices);
+        proceedTo(gamePoint);
     }
 
     public void startPlayerTurn() {
@@ -111,18 +114,14 @@ public class GameState implements IGameState {
         currentPlayer++;
         if (currentPlayer == numberOfPlayers)
             currentPlayer = 0;
-
-
-
+        startPoliticalPhase();
     }
 
     public void startPoliticalPhase() {
-        // TODO start political phase
         proceedTo(GamePoint.POLITICAL_PHASE);
     }
 
     public void startActionPhase() {
-        // TODO start action phase
         proceedTo(GamePoint.ACTION_PHASE);
     }
 
@@ -143,5 +142,17 @@ public class GameState implements IGameState {
     public MilitaryCard[] drawMilitaryCards(int cardsToDraw) {
         // TODO draw military cards p. 6
         return null;
+    }
+
+    public void addChoice(Choice choice) {
+        currentChoices.add(choice);
+    }
+
+    public CivilCard getCardFromRow(int idx) {
+        CivilCard card = cardRow.get(idx);
+        if (card == null)
+            throw new UnsupportedOperationException("Card already taken from specified idx");
+        cardRow.set(idx, null);
+        return card;
     }
 }

@@ -2,7 +2,6 @@ package org.inego.tta2.cards.civil.agriculture;
 
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
-import org.inego.tta2.gamestate.IGameState;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**

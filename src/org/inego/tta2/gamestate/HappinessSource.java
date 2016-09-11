@@ -1,7 +1,5 @@
 package org.inego.tta2.gamestate;
 
-import org.inego.tta2.cards.Cards;
-
 /**
  * Created by Inego on 24.08.2016.
  */

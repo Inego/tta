@@ -1,11 +1,22 @@
 package org.inego.tta2.cards.civil.leader;
 
+import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.point.GamePoint;
 
 /**
  * Created by Inego on 27.08.2016.
  */
 public class JuliusCaesarCard extends LeaderCard {
+
+    public static final GamePoint POINT = new GamePoint() {
+        @Override
+        public void apply(GameState gameState, PlayerState playerState) {
+            // TODO Julius Caesar action
+        }
+    };
+
+
     @Override
     public int getAge() {
         return 0;
@@ -19,8 +30,12 @@ public class JuliusCaesarCard extends LeaderCard {
 
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
-        playerState.modifyMilitaryStrength(sign);
+
+        playerState.modifyMilitaryStrengthBase(sign);
         playerState.modifyAdditionalMilitaryActions(sign);
-        // Special action - see PoliticalPhaseChoice.apply
+
+        if(sign == 1) {
+            playerState.enableLeaderSpecialAction();
+        }
     }
 }

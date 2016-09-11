@@ -43,7 +43,7 @@ public class DemocracyCard extends GovernmentCard {
     }
 
     @Override
-    public int getFullCost() {
+    public int getResearchCost() {
         return 17;
     }
 

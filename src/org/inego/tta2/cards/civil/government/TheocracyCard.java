@@ -44,14 +44,14 @@ public class TheocracyCard extends GovernmentCard {
     }
 
     @Override
-    public int getFullCost() {
+    public int getResearchCost() {
         return 6;
     }
 
     @Override
     public void apply(int sign, PlayerState playerState) {
         playerState.modifyCultureProductionSource(sign, CultureProductionSource.THEOCRACY);
-        playerState.modifyMilitaryStrength(sign);
+        playerState.modifyMilitaryStrengthBase(sign);
         playerState.modifyHappinessSource(HappinessSource.THEOCRACY, sign);
     }
 }

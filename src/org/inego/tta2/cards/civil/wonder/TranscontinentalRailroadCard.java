@@ -25,7 +25,7 @@ public class TranscontinentalRailroadCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.modifyMilitaryStrength(4);
+        playerState.modifyMilitaryStrengthBase(4);
         playerState.setRecalcResourceProduction();
     }
 }

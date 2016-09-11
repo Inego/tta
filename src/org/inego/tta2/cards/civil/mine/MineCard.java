@@ -1,6 +1,5 @@
 package org.inego.tta2.cards.civil.mine;
 
-import org.inego.tta2.cards.CardType;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.PlayerState;

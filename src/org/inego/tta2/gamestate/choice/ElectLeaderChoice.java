@@ -2,8 +2,8 @@ package org.inego.tta2.gamestate.choice;
 
 import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.gamestate.GameState;
-import org.inego.tta2.gamestate.IGameState;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 
 /**
  * Created by Inego on 28.08.2016.

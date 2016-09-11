@@ -16,6 +16,6 @@ public abstract class ArenaCard extends BuildingCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyMilitaryStrength(sign * getAge());
+        playerState.modifyMilitaryStrengthBase(sign * getAge());
     }
 }

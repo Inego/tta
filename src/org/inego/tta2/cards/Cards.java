@@ -2,9 +2,7 @@ package org.inego.tta2.cards;
 
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
-import org.inego.tta2.cards.civil.leader.HomerCard;
-import org.inego.tta2.cards.civil.leader.JuliusCaesarCard;
-import org.inego.tta2.cards.civil.leader.LeaderCard;
+import org.inego.tta2.cards.civil.leader.*;
 import org.inego.tta2.cards.civil.unit.*;
 import org.inego.tta2.cards.civil.wonder.*;
 
@@ -40,4 +38,8 @@ public class Cards {
 
     public static final LeaderCard JULIUS_CAESAR = new JuliusCaesarCard();
     public static final LeaderCard HOMER = new HomerCard();
+    public static final LeaderCard MOSES = new MosesCard();
+    public static final LeaderCard HAMMURABI = new HammurabiCard();
+    public static final LeaderCard ARISTOTLE = new AristotleCard();
+    public static final LeaderCard ALEXANDER = new AlexanderCard();
 }

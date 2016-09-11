@@ -1,6 +1,5 @@
 package org.inego.tta2.player;
 
-import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.IChoice;
 import org.inego.tta2.gamestate.IGameState;
 
