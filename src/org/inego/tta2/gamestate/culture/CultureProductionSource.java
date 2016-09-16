@@ -27,6 +27,8 @@ public abstract class CultureProductionSource {
     public static final WonderCultureProductionSource TAJ_MAHAL = new WonderCultureProductionSource(3);
     public static final WonderCultureProductionSource EIFFEL_TOWER = new WonderCultureProductionSource(4);
 
+    public static final LeaderCultureProductionSource JOAN_OF_ARC = new LeaderCultureProductionSource(1);
+
 
     private int value;
 

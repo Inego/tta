@@ -14,6 +14,8 @@ import org.inego.tta2.cards.civil.theater.OperaCard;
 import org.inego.tta2.cards.civil.theater.TheaterCard;
 import org.inego.tta2.cards.civil.unit.*;
 import org.inego.tta2.cards.civil.wonder.*;
+import org.inego.tta2.cards.military.tactic.FightingBandCard;
+import org.inego.tta2.cards.military.tactic.TacticCard;
 
 /**
  * Created by Inego on 21.08.2016.
@@ -59,5 +61,7 @@ public class Cards {
     public static final LeaderCard ARISTOTLE = new AristotleCard();
     public static final LeaderCard ALEXANDER = new AlexanderCard();
     public static final LeaderCard MICHELANGELO = new MichelangeloCard();
+    public static final LeaderCard JOAN_OF_ARC = new JoanOfArcCard();
 
+    public static final TacticCard FIGHTING_BAND = new FightingBandCard();
 }

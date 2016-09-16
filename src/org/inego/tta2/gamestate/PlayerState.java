@@ -22,6 +22,7 @@ import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
 import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
+import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
@@ -105,8 +106,8 @@ public class PlayerState {
 
         militaryProductionBonus = 0;
         leaderMilitaryProductionBonus = 0;
-        militaryStrength = 1; // From 1 warrior
-        militaryStrengthBase = 0;
+        militaryStrengthBase = 1; // From 1 warrior
+        militaryStrength = 1;
 
         yellowBank = 18;
         recalcHappiness = false;
@@ -268,6 +269,7 @@ public class PlayerState {
 
     public void modifyMilitaryStrengthBase(int delta) {
         militaryStrengthBase += delta;
+        setRecalcMilitaryStrength();
     }
 
 
@@ -365,6 +367,15 @@ public class PlayerState {
         if (leader == Cards.ALEXANDER) {
             // TODO Alexander - add total number of military units
         }
+        else if (leader == Cards.JOAN_OF_ARC) {
+            iterateHappiness((happinessSource, value, qty) -> {
+                if (happinessSource instanceof TempleHappinessSource || happinessSource instanceof GovernmentHappinessSource)
+                    militaryStrength += value * qty;
+            });
+        }
+
+
+
 
     }
 
@@ -381,7 +392,10 @@ public class PlayerState {
         happinessSources.put(happinessSource, current == null ? sign : current + sign);
         setRecalcHappiness();
 
-        if (leader == Cards.MICHELANGELO) setRecalcCultureProduction();
+        if (leader == Cards.MICHELANGELO)
+            setRecalcCultureProduction();
+        else if (leader == Cards.JOAN_OF_ARC)
+            setRecalcMilitaryStrength();
     }
 
     public void addHappinessSource(HappinessSource happinessSource) {
@@ -662,6 +676,15 @@ public class PlayerState {
 
         // TODO build - spend resources
         // TODO build - spend pop
+    }
+
+    public Set<WonderCard> getWonders() {
+        return wonders;
+    }
+
+    public void setMilitaryTactic(TacticCard tactic) {
+        this.tactic = tactic;
+        formArmies();
     }
 
     @FunctionalInterface

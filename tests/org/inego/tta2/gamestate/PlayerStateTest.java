@@ -34,8 +34,20 @@ public class PlayerStateTest {
         assertEquals(7, playerState.getCultureProduction());
 
         playerState.electLeader(Cards.MICHELANGELO);
-        assertEquals(7, playerState.getCultureProduction());
+        assertEquals(11, playerState.getCultureProduction());
 
+    }
+
+    @Test
+    public void testCalculateMilitaryStrength() {
+
+        assertEquals(1, playerState.getMilitaryStrength());
+
+        playerState.build(Cards.WARRIORS);
+        assertEquals(2, playerState.getMilitaryStrength());
+
+        playerState.setMilitaryTactic(Cards.FIGHTING_BAND);
+        assertEquals(3, playerState.getMilitaryStrength());
 
     }
 
