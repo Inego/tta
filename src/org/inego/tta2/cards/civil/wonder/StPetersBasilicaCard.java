@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.wonder;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
-import static org.inego.tta2.gamestate.HappinessSource.ST_PETERS;
+import static org.inego.tta2.gamestate.happiness.WonderHappinessSource.ST_PETERS;
 
 /**
  * Created by Inego on 21.08.2016.

@@ -1,8 +1,8 @@
 package org.inego.tta2.cards.civil.wonder;
 
-import org.inego.tta2.gamestate.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
  * Created by Inego on 26.08.2016.
@@ -28,6 +28,6 @@ public class EiffelTowerCard extends WonderCard {
     @Override
     public void onBuild(PlayerState playerState) {
         playerState.addCultureProductionSource(CultureProductionSource.EIFFEL_TOWER);
-        playerState.addHappinessSource(HappinessSource.EIFFEL_TOWER);
+        playerState.addHappinessSource(WonderHappinessSource.EIFFEL_TOWER);
     }
 }

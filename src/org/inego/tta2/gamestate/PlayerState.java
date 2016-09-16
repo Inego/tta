@@ -11,6 +11,7 @@ import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
+import org.inego.tta2.cards.civil.theater.TheaterCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
@@ -21,6 +22,9 @@ import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
 import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
+import org.inego.tta2.gamestate.happiness.HappinessSource;
+import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
+import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.GamePoint;
 
 import java.util.HashMap;
@@ -150,21 +154,7 @@ public class PlayerState {
 
     private void calculateHappiness() {
         happiness = 0;
-
-        boolean stPeters = isCardBuilt(Cards.ST_PETERS_BASILICA);
-        int baseValue;
-
-        for (Entry<HappinessSource, Integer> happinessSourceKV : happinessSources.entrySet()) {
-            Integer qty = happinessSourceKV.getValue();
-            if (qty.equals(0)) continue;
-            HappinessSource happinessSource = happinessSourceKV.getKey();
-            baseValue = happinessSource.getValue(this);
-
-            if (stPeters && baseValue > 0)
-                baseValue++;
-
-            happiness += qty * baseValue;
-        }
+        iterateHappiness((happinessSource, value, qty) -> { happiness += qty * value; });
         if (happiness < 0)
             happiness = 0;
         else if (happiness > 8)
@@ -195,8 +185,8 @@ public class PlayerState {
 
         cultureProduction = 0;
 
-        boolean hollywood = isCardBuilt(Cards.HOLLYWOOD);
-        boolean internet = isCardBuilt(Cards.INTERNET);
+        boolean hollywood = wonders.contains(Cards.HOLLYWOOD);
+        boolean internet = wonders.contains(Cards.INTERNET);
 
         for (Entry<CultureProductionSource, Integer> cultureProductionSourceKV : cultureProductionSources.entrySet()) {
             Integer qty = cultureProductionSourceKV.getValue();
@@ -217,14 +207,23 @@ public class PlayerState {
             cultureProduction += getBuildingScienceOutput() + getBuildingMilitaryOutput();
         }
 
-        if (isCardBuilt(Cards.FIRST_SPACE_FLIGHT)) {
+        if (wonders.contains(Cards.FIRST_SPACE_FLIGHT)) {
             // TODO FSF - add sum of tech card levels
             // TODO FSF - on build tech set recalc CProd
         }
 
-        if (isCardBuilt(Cards.FAST_FOOD_CHAINS)) {
+        if (wonders.contains(Cards.FAST_FOOD_CHAINS)) {
             cultureProduction += 2 * (getFarms() + getMines()) + getUrbanBuildings() + getMilitaryUnits();
             // TODO  FFC - recalc CP on modify farm / mine / urban / mil building
+        }
+
+        if (leader == Cards.MICHELANGELO) {
+            iterateHappiness((happinessSource, value, qty) -> {
+                if (happinessSource == HappinessSource.THEATER
+                        || happinessSource instanceof TempleHappinessSource
+                        || happinessSource instanceof WonderHappinessSource)
+                    cultureProduction += qty * value;
+            });
         }
 
         recalcCultureProduction = false;
@@ -381,6 +380,8 @@ public class PlayerState {
         Integer current = happinessSources.get(happinessSource);
         happinessSources.put(happinessSource, current == null ? sign : current + sign);
         setRecalcHappiness();
+
+        if (leader == Cards.MICHELANGELO) setRecalcCultureProduction();
     }
 
     public void addHappinessSource(HappinessSource happinessSource) {
@@ -638,6 +639,34 @@ public class PlayerState {
 
     public void gainYellowTokens(int value) {
         // TODO gain yellow tokens
+    }
+
+    public void iterateHappiness(IHappinessSourceHandler handler) {
+        boolean stPeters = wonders.contains(Cards.ST_PETERS_BASILICA);
+        int baseValue;
+        for (Entry<HappinessSource, Integer> happinessSourceKV : happinessSources.entrySet()) {
+            Integer qty = happinessSourceKV.getValue();
+            if (qty.equals(0))
+                continue;
+            HappinessSource happinessSource = happinessSourceKV.getKey();
+            baseValue = happinessSource.getValue(this);
+            if (stPeters && baseValue > 0)
+                baseValue++;
+            handler.handle(happinessSource, baseValue, qty);
+        }
+    }
+
+    public void build(BuildingCard card) {
+        // TODO inc built cards?
+        card.assignWorker(1, this);
+
+        // TODO build - spend resources
+        // TODO build - spend pop
+    }
+
+    @FunctionalInterface
+    interface IHappinessSourceHandler {
+        void handle(HappinessSource happinessSource, int value, int qty);
     }
 
 

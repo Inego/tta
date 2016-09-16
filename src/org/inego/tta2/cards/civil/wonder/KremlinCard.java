@@ -1,8 +1,8 @@
 package org.inego.tta2.cards.civil.wonder;
 
-import org.inego.tta2.gamestate.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
  * Created by Inego on 26.08.2016.
@@ -30,6 +30,6 @@ public class KremlinCard extends WonderCard {
         playerState.addCultureProductionSource(CultureProductionSource.KREMLIN);
         playerState.modifyAdditionalCivilActions(1);
         playerState.modifyAdditionalMilitaryActions(1);
-        playerState.addHappinessSource(HappinessSource.KREMLIN);
+        playerState.addHappinessSource(WonderHappinessSource.KREMLIN);
     }
 }

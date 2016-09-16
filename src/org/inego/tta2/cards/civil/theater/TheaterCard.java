@@ -2,7 +2,7 @@ package org.inego.tta2.cards.civil.theater;
 
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
-import org.inego.tta2.gamestate.HappinessSource;
+import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**

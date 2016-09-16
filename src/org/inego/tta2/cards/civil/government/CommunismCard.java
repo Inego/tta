@@ -1,6 +1,6 @@
 package org.inego.tta2.cards.civil.government;
 
-import org.inego.tta2.gamestate.HappinessSource;
+import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
@@ -49,6 +49,6 @@ public class CommunismCard extends GovernmentCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.addHappinessSource(HappinessSource.COMMUNISM);
+        playerState.addHappinessSource(GovernmentHappinessSource.COMMUNISM);
     }
 }

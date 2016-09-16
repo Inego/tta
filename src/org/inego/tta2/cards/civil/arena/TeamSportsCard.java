@@ -1,6 +1,6 @@
 package org.inego.tta2.cards.civil.arena;
 
-import org.inego.tta2.gamestate.HappinessSource;
+import org.inego.tta2.gamestate.happiness.ArenaHappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
@@ -35,6 +35,6 @@ public class TeamSportsCard extends ArenaCard {
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
         super.assignWorker(sign, playerState);
-        playerState.modifyHappinessSource(HappinessSource.TEAM_SPORTS, sign);
+        playerState.modifyHappinessSource(ArenaHappinessSource.TEAM_SPORTS, sign);
     }
 }

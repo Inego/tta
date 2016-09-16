@@ -1,9 +1,10 @@
 package org.inego.tta2.cards.civil.leader;
 
 import org.inego.tta2.gamestate.GameState;
-import org.inego.tta2.gamestate.HappinessSource;
+import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.choice.Choice;
+import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
  * Created by Inego on 28.08.2016.
@@ -16,7 +17,7 @@ public class HomerCard extends LeaderCard {
         protected void apply(GameState gameState, PlayerState playerState) {
             // TODO make a custom (?) happiness source attached to wonder so that it's NOT extendable by StPeters in case the wonder has its own happy faces
             // TODO select wonder choice
-            playerState.addHappinessSource(HappinessSource.HOMER_EPIC);
+            playerState.addHappinessSource(WonderHappinessSource.HOMER_EPIC);
         }
     };
 
