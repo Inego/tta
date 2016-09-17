@@ -61,7 +61,8 @@ public class Cards {
     public static final LeaderCard ARISTOTLE = new AristotleCard();
     public static final LeaderCard ALEXANDER = new AlexanderCard();
     public static final LeaderCard MICHELANGELO = new MichelangeloCard();
-    public static final LeaderCard JOAN_OF_ARC = new JoanOfArcCard();
+    public static final LeaderCard GENGHIS_KHAN = new GenghisKhanCrd();
 
+    public static final LeaderCard JOAN_OF_ARC = new JoanOfArcCard();
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
 }

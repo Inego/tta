@@ -1,5 +1,6 @@
 package org.inego.tta2.gamestate;
 
+import org.inego.tta2.QuantityHashMap;
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCard;
@@ -12,6 +13,7 @@ import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.civil.theater.TheaterCard;
+import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
@@ -27,6 +29,7 @@ import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.GamePoint;
+import org.inego.tta2.gamestate.tactics.Composition;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -48,8 +51,8 @@ public class PlayerState {
     private int militaryStrength; // Derived
     private int militaryStrengthBase;
 
-    private Map<HappinessSource, Integer> happinessSources = new HashMap<>();
-    private Map<CultureProductionSource, Integer> cultureProductionSources = new HashMap<>();
+    private QuantityHashMap<HappinessSource> happinessSources = new QuantityHashMap<>();
+    private QuantityHashMap<CultureProductionSource> cultureProductionSources = new QuantityHashMap<>();
 
     private int happiness;
 
@@ -72,7 +75,10 @@ public class PlayerState {
     private ConstructionTechCard constructionTech;
 
     // Wonders
-    private Set<WonderCard> wonders;
+    private Set<WonderCard> wonders = new LinkedHashSet<>();
+
+    // Units
+    private QuantityHashMap<UnitCard> units = new QuantityHashMap<>();
 
     // Tactics
     private TacticCard tactic;
@@ -122,8 +128,6 @@ public class PlayerState {
         tactic = null;
         government = Cards.DESPOTISM;
         leader = null;
-
-        wonders = new LinkedHashSet<>();
 
     }
 
@@ -285,7 +289,26 @@ public class PlayerState {
             normalArmies = 0;
             obsoleteArmies = 0;
         }
+
         // TODO calculate normalArmies and obsoleteArmies
+
+        int age = gameState.getAge();
+
+        Composition composition = new Composition();
+
+        for (Entry<UnitCard, Integer> entry: units.entrySet()) {
+            entry.getKey().addToComposition(composition, entry.getValue(), age);
+        }
+
+        // Modern armies
+
+        if (leader == Cards.GENGHIS_KHAN) {
+
+        }
+        else {
+
+        }
+
     }
 
     public int getTacticsBonus() {
@@ -388,8 +411,7 @@ public class PlayerState {
     }
 
     public void modifyHappinessSource(HappinessSource happinessSource, int sign) {
-        Integer current = happinessSources.get(happinessSource);
-        happinessSources.put(happinessSource, current == null ? sign : current + sign);
+        happinessSources.delta(happinessSource, sign);
         setRecalcHappiness();
 
         if (leader == Cards.MICHELANGELO)
@@ -420,8 +442,7 @@ public class PlayerState {
     }
 
     public void modifyCultureProductionSource(int sign, CultureProductionSource cultureProductionSource) {
-        Integer current = cultureProductionSources.get(cultureProductionSource);
-        cultureProductionSources.put(cultureProductionSource, current == null ? sign : current + sign);
+        cultureProductionSources.delta(cultureProductionSource, sign);
         setRecalcCultureProduction();
     }
 
@@ -673,6 +694,10 @@ public class PlayerState {
     public void build(BuildingCard card) {
         // TODO inc built cards?
         card.assignWorker(1, this);
+
+        if (card instanceof UnitCard) {
+            units.delta((UnitCard) card, 1);
+        }
 
         // TODO build - spend resources
         // TODO build - spend pop

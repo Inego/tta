@@ -2,7 +2,7 @@ package org.inego.tta2.gamestate;
 
 import org.junit.Test;
 
-import static org.inego.tta2.gamestate.Utils.getGenghisKhanMaxArmies;
+import static org.inego.tta2.gamestate.tactics.Utils.getGenghisKhanMaxArmies;
 import static org.junit.Assert.*;
 
 /**

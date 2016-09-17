@@ -1,6 +1,7 @@
 package org.inego.tta2.cards.civil.unit;
 
 import org.inego.tta2.cards.civil.CivilCardKind;
+import org.inego.tta2.gamestate.tactics.Composition;
 
 /**
  * Created by Inego on 21.08.2016.
@@ -39,5 +40,10 @@ public class AirForcesCard extends UnitCard {
     @Override
     protected int getStrength() {
         return 5;
+    }
+
+    @Override
+    void addToComposition(Composition composition, int qty, boolean modern) {
+        // N/A
     }
 }
