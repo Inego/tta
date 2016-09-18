@@ -8,7 +8,7 @@ import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
  * Created by Inego on 21.08.2016.
  */
 public class GreatWallCard extends WonderCard {
-    private static final int[] COST = {2, 2, 3, 2};
+    private static final int[] STAGES = {2, 2, 3, 2};
 
     @Override
     public int getAge() {
@@ -21,8 +21,8 @@ public class GreatWallCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

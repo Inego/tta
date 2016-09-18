@@ -34,6 +34,7 @@ public class Cards {
     public static final WonderCard INTERNET = new InternetCard();
     public static final WonderCard FIRST_SPACE_FLIGHT = new FirstSpaceFlightCard();
     public static final WonderCard FAST_FOOD_CHAINS = new FastFoodChainsCard();
+    public static final WonderCard KREMLIN = new KremlinCard();
 
     public static final TempleCard RELIGION = new ReligionCard();
     public static final TempleCard THEOLOGY = new TheologyCard();
@@ -65,4 +66,5 @@ public class Cards {
 
     public static final LeaderCard JOAN_OF_ARC = new JoanOfArcCard();
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
+
 }

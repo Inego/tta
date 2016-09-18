@@ -7,7 +7,7 @@ import org.inego.tta2.gamestate.culture.CultureProductionSource;
  * Created by Inego on 21.08.2016.
  */
 public class LibraryOfAlexandriaCard extends WonderCard {
-    private static final int[] COST = {1, 4, 1};
+    private static final int[] STAGES = {1, 4, 1};
 
     @Override
     public int getAge() {
@@ -20,8 +20,8 @@ public class LibraryOfAlexandriaCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

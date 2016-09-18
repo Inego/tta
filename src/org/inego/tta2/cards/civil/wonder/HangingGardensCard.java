@@ -9,7 +9,7 @@ import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
  */
 public class HangingGardensCard extends WonderCard {
 
-    private static final int[] COST = {2, 2, 2};
+    private static final int[] STAGES = {2, 2, 2};
 
     @Override
     public int getAge() {
@@ -22,8 +22,8 @@ public class HangingGardensCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

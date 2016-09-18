@@ -9,7 +9,7 @@ import static org.inego.tta2.gamestate.happiness.WonderHappinessSource.ST_PETERS
  * Created by Inego on 21.08.2016.
  */
 public class StPetersBasilicaCard extends WonderCard {
-    private static final int[] COST = {4, 4};
+    private static final int[] STAGES = {4, 4};
 
     @Override
     public int getAge() {
@@ -22,8 +22,8 @@ public class StPetersBasilicaCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

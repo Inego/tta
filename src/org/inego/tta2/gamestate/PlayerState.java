@@ -12,7 +12,6 @@ import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
-import org.inego.tta2.cards.civil.theater.TheaterCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
@@ -30,10 +29,9 @@ import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.GamePoint;
 import org.inego.tta2.gamestate.tactics.Composition;
+import org.inego.tta2.gamestate.tactics.Utils;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -75,14 +73,16 @@ public class PlayerState {
     private ConstructionTechCard constructionTech;
 
     // Wonders
+    private WonderCard currentWonder;
     private Set<WonderCard> wonders = new LinkedHashSet<>();
+    private int builtStages;
 
     // Units
     private QuantityHashMap<UnitCard> units = new QuantityHashMap<>();
 
     // Tactics
     private TacticCard tactic;
-    private int normalArmies;
+    private int modernArmies;
     private int obsoleteArmies;
 
     private int culturePoints;
@@ -123,6 +123,8 @@ public class PlayerState {
 
         availableCivilActions = 0;
         spentCivilActions = 0;
+
+        builtStages = 0;
 
         workerPool = 1;
         tactic = null;
@@ -284,38 +286,66 @@ public class PlayerState {
     }
 
     public void formArmies() {
+
         if (tactic == null)
         {
-            normalArmies = 0;
+            modernArmies = 0;
             obsoleteArmies = 0;
+            return;
         }
 
-        // TODO calculate normalArmies and obsoleteArmies
-
-        int age = gameState.getAge();
-
-        Composition composition = new Composition();
-
-        for (Entry<UnitCard, Integer> entry: units.entrySet()) {
-            entry.getKey().addToComposition(composition, entry.getValue(), age);
-        }
+        Composition composition = getComposition();
 
         // Modern armies
 
-        if (leader == Cards.GENGHIS_KHAN) {
+        int infantry = tactic.getInfantry();
+        int cavalry = tactic.getCavalry();
+        int artillery = tactic.getArtillery();
 
-        }
+        if (leader == Cards.GENGHIS_KHAN)
+            modernArmies = Utils.getGenghisKhanMaxArmies(cavalry, infantry, composition.modernCavalry, composition.modernInfantry);
         else {
-
+            modernArmies = infantry > 0 ? composition.modernInfantry / infantry : 1000 /* arbitrary big number */;
+            if (modernArmies > 0 && cavalry > 0)
+                modernArmies = Math.min(modernArmies, composition.modernCavalry / cavalry);
         }
 
+        if (modernArmies > 0 && artillery > 0)
+            modernArmies = Math.min(modernArmies, composition.modernArtillery / artillery);
+
+        // Units not taking part in modern armies can take part in obsolete armies
+        if (infantry > 0)
+            composition.obsoleteInfantry += (composition.modernInfantry - modernArmies * infantry);
+        if (cavalry > 0)
+            composition.obsoleteCavalry += (composition.modernCavalry - modernArmies * cavalry);
+        if (artillery > 0)
+            composition.obsoleteArtillery += (composition.modernArtillery - modernArmies * artillery);
+
+        if (leader == Cards.GENGHIS_KHAN)
+            obsoleteArmies = Utils.getGenghisKhanMaxArmies(cavalry, infantry, composition.obsoleteCavalry, composition.obsoleteInfantry);
+        else {
+            obsoleteArmies = infantry > 0 ? composition.obsoleteInfantry / infantry : 1000 /* arbitrary big number */;
+            if (obsoleteArmies > 0 && cavalry > 0)
+                obsoleteArmies = Math.min(obsoleteArmies, composition.obsoleteCavalry / cavalry);
+        }
+
+        if (obsoleteArmies > 0 && artillery > 0)
+            obsoleteArmies = Math.min(obsoleteArmies, composition.obsoleteArtillery / artillery);
+    }
+
+    public Composition getComposition() {
+        Composition composition = new Composition();
+        int age = gameState.getAge();
+        for (Entry<UnitCard, Integer> entry: units.entrySet())
+            entry.getKey().addToComposition(composition, entry.getValue(), age);
+        return composition;
     }
 
     public int getTacticsBonus() {
 
         if (tactic == null) return 0;
 
-        int result = normalArmies * tactic.getNormalBonus() + obsoleteArmies * tactic.getObsoleteBonus();
+        int result = modernArmies * tactic.getNormalBonus() + obsoleteArmies * tactic.getObsoleteBonus();
 
         // Air force bonus
         if (result > 0)
@@ -324,7 +354,7 @@ public class PlayerState {
             if (remainingAirForce > 0)
             {
                 // Air force bonus for modern armies
-                int bonusAirForces = Math.min(remainingAirForce, normalArmies);
+                int bonusAirForces = Math.min(remainingAirForce, modernArmies);
                 result += bonusAirForces * tactic.getNormalBonus();
 
                 remainingAirForce -= bonusAirForces;
@@ -396,9 +426,6 @@ public class PlayerState {
                     militaryStrength += value * qty;
             });
         }
-
-
-
 
     }
 
@@ -563,8 +590,6 @@ public class PlayerState {
 
         produceResources();
 
-
-
     }
 
     private void drawMilitaryCards() {
@@ -685,7 +710,7 @@ public class PlayerState {
                 continue;
             HappinessSource happinessSource = happinessSourceKV.getKey();
             baseValue = happinessSource.getValue(this);
-            if (stPeters && baseValue > 0)
+            if (stPeters && (baseValue > 0 && happinessSource != WonderHappinessSource.ST_PETERS))
                 baseValue++;
             handler.handle(happinessSource, baseValue, qty);
         }
@@ -710,6 +735,46 @@ public class PlayerState {
     public void setMilitaryTactic(TacticCard tactic) {
         this.tactic = tactic;
         formArmies();
+    }
+
+    public void takeCard(CivilCard card) {
+
+        // TODO take card
+
+        if (card instanceof WonderCard) {
+            currentWonder = (WonderCard) card;
+        }
+    }
+
+    public WonderCard getCurrentWonder() {
+        return currentWonder;
+    }
+
+    public int getRemainingWonderStages() {
+        if (currentWonder == null)
+            return 0;
+        return currentWonder.getStages().length - builtStages;
+    }
+
+    public void buildWonderStages(int numberOfStages) {
+
+        int[] stages = currentWonder.getStages();
+
+        // TODO build wonder stages
+
+        if (stages.length == builtStages + numberOfStages) {
+
+            // TODO free workers from built stages
+
+            wonders.add(currentWonder);
+            currentWonder.onBuild(this);
+            currentWonder = null;
+            builtStages = 0;
+
+        }
+        else {
+            // TODO put worker on stages
+        }
     }
 
     @FunctionalInterface

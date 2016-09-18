@@ -7,7 +7,7 @@ import org.inego.tta2.gamestate.PlayerState;
  */
 public class HollywoodCard extends WonderCard {
 
-    private static final int[] COST = {5, 6, 5};
+    private static final int[] STAGES = {5, 6, 5};
 
     @Override
     public int getAge() {
@@ -20,8 +20,8 @@ public class HollywoodCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

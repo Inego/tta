@@ -1,6 +1,7 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,6 +50,25 @@ public class PlayerStateTest {
         playerState.setMilitaryTactic(Cards.FIGHTING_BAND);
         assertEquals(3, playerState.getMilitaryStrength());
 
+    }
+
+    @Test
+    public void testCalculateHappiness() {
+        assertEquals(0, playerState.getHappiness());
+
+        instaBuild(Cards.KREMLIN);
+        assertEquals(0, playerState.getHappiness()); // -1, can't get below 0
+
+        playerState.build(Cards.RELIGION);
+        assertEquals(0, playerState.getHappiness()); // +1 negates -1 from Kremlin
+
+        instaBuild(Cards.ST_PETERS_BASILICA);
+        assertEquals(2, playerState.getHappiness()); // +1 from Basilica itself and +1 additional from Religion
+    }
+
+    private void instaBuild(WonderCard wonderCard) {
+        playerState.takeCard(wonderCard);
+        playerState.buildWonderStages(wonderCard.getStages().length);
     }
 
 }

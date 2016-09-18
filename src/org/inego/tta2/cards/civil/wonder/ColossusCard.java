@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.PlayerState;
  * Created by Inego on 21.08.2016.
  */
 public class ColossusCard extends WonderCard {
-    private static final int[] COST = {3, 3};
+    private static final int[] STAGES = {3, 3};
 
     @Override
     public int getAge() {
@@ -19,8 +19,8 @@ public class ColossusCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

@@ -22,7 +22,7 @@ public abstract class WonderCard extends CivilCard {
         return 1;
     }
 
-    public abstract int[] getBuildingCost();
+    public abstract int[] getStages();
 
     public abstract void onBuild(PlayerState playerState);
 

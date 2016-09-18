@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.PlayerState;
  * Created by Inego on 27.08.2016.
  */
 public class FirstSpaceFlightCard extends WonderCard {
-    private static final int[] COST = {1, 2, 4, 9};
+    private static final int[] STAGES = {1, 2, 4, 9};
 
     @Override
     public int getAge() {
@@ -19,8 +19,8 @@ public class FirstSpaceFlightCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

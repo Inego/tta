@@ -8,7 +8,7 @@ import org.inego.tta2.gamestate.culture.CultureProductionSource;
  */
 public class TajMahalCard extends WonderCard {
 
-    private static final int[] COST = {2, 4, 2};
+    private static final int[] STAGES = {2, 4, 2};
 
     @Override
     public int getAge() {
@@ -21,8 +21,8 @@ public class TajMahalCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

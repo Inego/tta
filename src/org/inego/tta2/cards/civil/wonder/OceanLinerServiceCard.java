@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.PlayerState;
  * Created by Inego on 26.08.2016.
  */
 public class OceanLinerServiceCard extends WonderCard {
-    private static final int[] COST = {4, 2, 2, 4};
+    private static final int[] STAGES = {4, 2, 2, 4};
 
     @Override
     public int getAge() {
@@ -19,8 +19,8 @@ public class OceanLinerServiceCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override

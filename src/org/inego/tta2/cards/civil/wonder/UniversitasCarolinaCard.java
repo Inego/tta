@@ -8,7 +8,7 @@ import org.inego.tta2.gamestate.culture.CultureProductionSource;
  */
 public class UniversitasCarolinaCard extends WonderCard {
 
-    private static final int[] COST = {3, 3, 3};
+    private static final int[] STAGES = {3, 3, 3};
 
     @Override
     public String getName() {
@@ -21,8 +21,8 @@ public class UniversitasCarolinaCard extends WonderCard {
     }
 
     @Override
-    public int[] getBuildingCost() {
-        return COST;
+    public int[] getStages() {
+        return STAGES;
     }
 
     @Override
