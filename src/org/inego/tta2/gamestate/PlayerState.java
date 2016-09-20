@@ -112,8 +112,8 @@ public class PlayerState {
 
         militaryProductionBonus = 0;
         leaderMilitaryProductionBonus = 0;
-        militaryStrengthBase = 1; // From 1 warrior
-        militaryStrength = 1;
+
+        build(Cards.WARRIORS);
 
         yellowBank = 18;
         recalcHappiness = false;
@@ -287,6 +287,8 @@ public class PlayerState {
 
     public void formArmies() {
 
+        setRecalcMilitaryStrength();
+
         if (tactic == null)
         {
             modernArmies = 0;
@@ -294,7 +296,7 @@ public class PlayerState {
             return;
         }
 
-        Composition composition = getComposition();
+        Composition composition = getComposition(tactic.getAge());
 
         // Modern armies
 
@@ -333,9 +335,8 @@ public class PlayerState {
             obsoleteArmies = Math.min(obsoleteArmies, composition.obsoleteArtillery / artillery);
     }
 
-    public Composition getComposition() {
+    public Composition getComposition(int age) {
         Composition composition = new Composition();
-        int age = gameState.getAge();
         for (Entry<UnitCard, Integer> entry: units.entrySet())
             entry.getKey().addToComposition(composition, entry.getValue(), age);
         return composition;
@@ -722,6 +723,7 @@ public class PlayerState {
 
         if (card instanceof UnitCard) {
             units.delta((UnitCard) card, 1);
+            formArmies();
         }
 
         // TODO build - spend resources
@@ -777,10 +779,40 @@ public class PlayerState {
         }
     }
 
+    public int getModernArmies() {
+        return modernArmies;
+    }
+
+    public int getObsoleteArmies() {
+        return obsoleteArmies;
+    }
+
+    public void debugClearUnits() {
+        while (!units.isEmpty())
+        {
+            // Fake loop to obtain a(ny) single entry from the map
+            for (Entry<UnitCard, Integer> unitEntry : units.entrySet())
+            {
+                // Disband all its units
+                for (int i = 1; i <= unitEntry.getValue(); i++)
+                    disband(unitEntry.getKey());
+                break;
+            };
+        }
+    }
+
+    private void disband(BuildingCard card) {
+        card.assignWorker(-1, this);
+        if (card instanceof UnitCard) {
+            units.delta((UnitCard) card, -1);
+            formArmies();
+        }
+        // TODO disband - return pop
+    }
+
     @FunctionalInterface
     interface IHappinessSourceHandler {
         void handle(HappinessSource happinessSource, int value, int qty);
     }
-
 
 }

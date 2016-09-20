@@ -1,7 +1,9 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
+import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +43,6 @@ public class PlayerStateTest {
 
     @Test
     public void testCalculateMilitaryStrength() {
-
         assertEquals(1, playerState.getMilitaryStrength());
 
         playerState.build(Cards.WARRIORS);
@@ -49,7 +50,6 @@ public class PlayerStateTest {
 
         playerState.setMilitaryTactic(Cards.FIGHTING_BAND);
         assertEquals(3, playerState.getMilitaryStrength());
-
     }
 
     @Test
@@ -66,9 +66,57 @@ public class PlayerStateTest {
         assertEquals(2, playerState.getHappiness()); // +1 from Basilica itself and +1 additional from Religion
     }
 
+    @Test
+    public void testFormArmies() {
+
+        tactic(Cards.FIGHTING_BAND)
+                .add(Cards.WARRIORS)
+                .test(0, 0);
+
+        tactic(Cards.FIGHTING_BAND)
+                .add(Cards.WARRIORS, 2)
+                .test(1, 0);
+
+
+    }
+
     private void instaBuild(WonderCard wonderCard) {
         playerState.takeCard(wonderCard);
         playerState.buildWonderStages(wonderCard.getStages().length);
+    }
+
+    private FormArmiesTestBuilder tactic(TacticCard tactic) {
+        playerState.debugClearUnits();
+        playerState.setMilitaryTactic(tactic);
+        return new FormArmiesTestBuilder(playerState);
+    }
+
+    static class FormArmiesTestBuilder {
+
+        private PlayerState playerState;
+
+        public FormArmiesTestBuilder(PlayerState playerState) {
+            this.playerState = playerState;
+        }
+
+        public FormArmiesTestBuilder add(UnitCard unit)
+        {
+            return add(unit, 1);
+        }
+
+        public FormArmiesTestBuilder add(UnitCard unit, int qty)
+        {
+            for (int i = 1; i <= qty; i++)
+                playerState.build(unit);
+            return this;
+        }
+
+        public void test(int modernArmies, int obsoleteArmies) {
+            playerState.formArmies();
+            assertEquals(modernArmies, playerState.getModernArmies());
+            assertEquals(obsoleteArmies, playerState.getObsoleteArmies());
+        }
+
     }
 
 }

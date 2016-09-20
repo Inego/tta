@@ -17,7 +17,7 @@ public class QuantityHashMap<T> extends HashMap<T, Integer> {
 
     public int delta(T key, int value) {
         int newValue = get(key) + value;
-        if (value == 0)
+        if (newValue == 0)
             remove(key);
         else
             put(key, newValue);

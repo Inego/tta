@@ -13,7 +13,7 @@ public abstract class UnitCard extends BuildingCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyMilitaryStrengthBase(getStrength());
+        playerState.modifyMilitaryStrengthBase(sign * getStrength());
     }
 
     public void addToComposition(Composition composition, int qty, int age) {

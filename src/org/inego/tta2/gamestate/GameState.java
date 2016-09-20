@@ -155,4 +155,8 @@ public class GameState implements IGameState {
         cardRow.set(idx, null);
         return card;
     }
+
+    public void setCurrentAge(int age) {
+        this.currentAge = age;
+    }
 }
