@@ -122,10 +122,38 @@ public class PlayerStateTest {
                 .test(1, 1);
 
         tactic(Cards.CLASSIC_ARMY)
-                .add(Cards.RIFLEMEN, 1000)
-                .add(Cards.CAVALRYMEN, 2000)
-                .add(Cards.WARRIORS, 1100)
-                .test(500, 500);
+                .add(Cards.RIFLEMEN, 7)
+                .add(Cards.CAVALRYMEN, 15)
+                .add(Cards.WARRIORS, 7)
+                .test(3, 4);
+
+    }
+
+    @Test
+    public void testFormArmiesGenghis() {
+
+        tactic(Cards.NAPOLEONIC_ARMY)
+                .add(Cards.RIFLEMEN, 2)
+                .add(Cards.CANNON)
+                .test(0, 0);
+
+        playerState.electLeader(Cards.GENGHIS_KHAN);
+
+        tactic(Cards.NAPOLEONIC_ARMY)
+                .add(Cards.RIFLEMEN, 2)
+                .add(Cards.CANNON)
+                .test(1, 0);
+
+        tactic(Cards.NAPOLEONIC_ARMY)
+                .add(Cards.RIFLEMEN, 3)
+                .add(Cards.CANNON, 2)
+                .test(1, 0);
+
+        tactic(Cards.NAPOLEONIC_ARMY)
+                .add(Cards.RIFLEMEN, 3)
+                .add(Cards.CANNON, 2)
+                .add(Cards.WARRIORS)
+                .test(1, 1);
 
     }
 

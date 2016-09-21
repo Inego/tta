@@ -69,4 +69,5 @@ public class Cards {
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();
     public static final TacticCard SHOCK_TROOPS = new ShockTroopsCard();
     public static final TacticCard CLASSIC_ARMY = new ClassicArmyCard();
+    public static final TacticCard NAPOLEONIC_ARMY = new NapoleonicArmyCard();
 }
