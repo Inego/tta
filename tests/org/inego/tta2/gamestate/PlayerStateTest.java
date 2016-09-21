@@ -77,6 +77,55 @@ public class PlayerStateTest {
                 .add(Cards.WARRIORS, 2)
                 .test(1, 0);
 
+        tactic(Cards.FIGHTING_BAND)
+                .add(Cards.WARRIORS, 3)
+                .test(1, 0);
+
+        tactic(Cards.FIGHTING_BAND)
+                .add(Cards.WARRIORS, 4)
+                .test(2, 0);
+
+        tactic(Cards.ENTRENCHMENTS)
+                .add(Cards.RIFLEMEN)
+                .add(Cards.CANNON, 2)
+                .test(1, 0);
+
+        tactic(Cards.ENTRENCHMENTS)
+                .add(Cards.SWORDSMEN)
+                .add(Cards.CANNON, 2)
+                .test(0, 1);
+
+        tactic(Cards.ENTRENCHMENTS)
+                .add(Cards.RIFLEMEN, 2)
+                .add(Cards.CANNON, 3)
+                .test(1, 0);
+
+        tactic(Cards.SHOCK_TROOPS)
+                .add(Cards.SWORDSMEN, 1)
+                .add(Cards.TANKS, 3)
+                .test(0, 1);
+
+        tactic(Cards.SHOCK_TROOPS)
+                .add(Cards.MODERN_INFANTRY, 1)
+                .add(Cards.TANKS, 3)
+                .test(1, 0);
+
+        tactic(Cards.SHOCK_TROOPS)
+                .add(Cards.MODERN_INFANTRY, 2)
+                .add(Cards.TANKS, 5)
+                .test(1, 0);
+
+        tactic(Cards.SHOCK_TROOPS)
+                .add(Cards.MODERN_INFANTRY, 2)
+                .add(Cards.TANKS, 5)
+                .add(Cards.KNIGHTS)
+                .test(1, 1);
+
+        tactic(Cards.CLASSIC_ARMY)
+                .add(Cards.RIFLEMEN, 1000)
+                .add(Cards.CAVALRYMEN, 2000)
+                .add(Cards.WARRIORS, 1100)
+                .test(500, 500);
 
     }
 
