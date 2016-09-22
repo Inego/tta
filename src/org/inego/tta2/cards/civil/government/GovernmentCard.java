@@ -6,7 +6,7 @@ import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 18.08.2016.
+ *
  */
 public abstract class GovernmentCard extends CivilCard implements ITechnologyCard {
     @Override

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Inego on 17.09.2016.
+ *
  */
 public class QuantityHashMap<T> extends HashMap<T, Integer> {
 

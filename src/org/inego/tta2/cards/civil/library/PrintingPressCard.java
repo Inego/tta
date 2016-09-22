@@ -4,7 +4,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class PrintingPressCard extends LibraryCard {
     @Override

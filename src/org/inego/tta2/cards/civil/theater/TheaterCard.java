@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public abstract class TheaterCard extends BuildingCard {
 

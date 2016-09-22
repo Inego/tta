@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.leader;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class AristotleCard extends LeaderCard {
     @Override

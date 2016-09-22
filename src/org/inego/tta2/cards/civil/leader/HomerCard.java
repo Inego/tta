@@ -7,7 +7,7 @@ import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
- * Created by Inego on 28.08.2016.
+ *
  */
 public class HomerCard extends LeaderCard {
 

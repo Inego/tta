@@ -1,8 +1,5 @@
 package org.inego.tta2.cards.civil;
 
-/**
- * Created by Inego on 16.08.2016.
- */
 public enum CivilCardKind {
     MINE,
     FARM,
@@ -23,4 +20,7 @@ public enum CivilCardKind {
     WONDER,
     LEADER,
     ACTION
+/**
+ *
+ */
 }

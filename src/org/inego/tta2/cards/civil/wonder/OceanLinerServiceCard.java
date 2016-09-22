@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.wonder;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 26.08.2016.
+ *
  */
 public class OceanLinerServiceCard extends WonderCard {
     private static final int[] STAGES = {4, 2, 2, 4};

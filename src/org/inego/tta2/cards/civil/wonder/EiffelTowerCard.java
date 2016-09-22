@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
- * Created by Inego on 26.08.2016.
+ *
  */
 public class EiffelTowerCard extends WonderCard {
     private static final int[] STAGES = {3, 7, 3};

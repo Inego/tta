@@ -4,7 +4,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
- * Created by Inego on 16.09.2016.
+ *
  */
 public class JoanOfArcCard extends LeaderCard {
     @Override

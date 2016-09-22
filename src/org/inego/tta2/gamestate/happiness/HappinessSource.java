@@ -3,7 +3,7 @@ package org.inego.tta2.gamestate.happiness;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 24.08.2016.
+ *
  */
 public class HappinessSource {
 

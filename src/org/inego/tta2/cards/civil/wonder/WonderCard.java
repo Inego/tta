@@ -8,7 +8,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import javax.smartcardio.Card;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public abstract class WonderCard extends CivilCard {
 

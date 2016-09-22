@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.mine;
 import org.inego.tta2.cards.civil.mine.MineCard;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class OilCard extends MineCard {
     @Override

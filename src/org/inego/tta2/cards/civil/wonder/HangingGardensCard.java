@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class HangingGardensCard extends WonderCard {
 

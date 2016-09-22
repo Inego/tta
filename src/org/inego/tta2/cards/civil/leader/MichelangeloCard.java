@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.leader;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 11.09.2016.
+ *
  */
 public class MichelangeloCard extends LeaderCard {
     @Override

@@ -27,7 +27,7 @@ import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
-import org.inego.tta2.gamestate.point.GamePoint;
+import org.inego.tta2.gamestate.point.HomerReplaced;
 import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * Created by Inego on 16.08.2016.
+ *
  */
 public class PlayerState {
 
@@ -89,21 +89,24 @@ public class PlayerState {
     private int sciencePoints;
 
     private int colonizationBonus;
+
     private boolean recalcHappiness;
     private boolean recalcResourceProduction;
-    private int resourceProduction;
     private boolean recalcCultureProduction;
+    private boolean recalcMilitary;
+    private boolean recalcScienceProduction;
+
+    private int resourceProduction;
     private LeaderCard leader;
+
     private boolean leaderSpecialActionAvailable;
 
     private int resources;
-
     private int spentCivilActions;
     private int availableCivilActions;
     private int militaryProductionBonus;
     private int leaderMilitaryProductionBonus;
     private int availableMilitaryActions;
-    private boolean recalcMilitary;
 
 
     public PlayerState(GameState gameState) {
@@ -119,6 +122,7 @@ public class PlayerState {
         recalcHappiness = false;
         recalcResourceProduction = false;
         recalcCultureProduction = false;
+        recalcScienceProduction = false;
         recalcMilitary = false;
 
         availableCivilActions = 0;
@@ -267,10 +271,21 @@ public class PlayerState {
     }
 
     public int getCultureProduction() {
-        if (recalcCultureProduction) {
+        if (recalcCultureProduction)
             calculateCultureProduction();
-        }
         return cultureProduction;
+    }
+
+    public int getScienceProduction() {
+        if (recalcScienceProduction)
+            calculateScienceProduction();
+        return scienceProduction;
+    }
+
+    private void calculateScienceProduction() {
+        scienceProduction = 0;
+
+        // TODO iterate ScienceProductionSources
     }
 
     public void modifyMilitaryStrengthBase(int delta) {
@@ -465,6 +480,10 @@ public class PlayerState {
         recalcResourceProduction = true;
     }
 
+    public void setRecalcScienceProduction() {
+        recalcScienceProduction = true;
+    }
+
     public void addCultureProductionSource(CultureProductionSource cultureProductionSource) {
         modifyCultureProductionSource(1, cultureProductionSource);
     }
@@ -491,7 +510,7 @@ public class PlayerState {
 
             // TODO test getting 1 CA back and Homer's choice
             if (leader == Cards.HOMER && wonders.size() > 0) {
-                gameState.proceedTo(GamePoint.HOMER_REPLACED, HomerCard.ATTACH_HAPPY_FACE, ElectLeaderChoice.GET_BACK_AP);
+                gameState.proceedTo(HomerReplaced.HOMER_REPLACED, HomerCard.ATTACH_HAPPY_FACE, ElectLeaderChoice.GET_BACK_AP);
             }
             else {
                 // simply give 1 CA back

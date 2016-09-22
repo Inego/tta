@@ -17,7 +17,7 @@ import org.inego.tta2.cards.civil.wonder.*;
 import org.inego.tta2.cards.military.tactic.*;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class Cards {
 

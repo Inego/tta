@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by Inego on 16.09.2016.
+ *
  */
 public class PlayerStateTest {
 

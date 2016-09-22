@@ -4,7 +4,7 @@ import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.tactics.Composition;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class AirForcesCard extends UnitCard {
     @Override

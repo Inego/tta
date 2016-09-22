@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.tech.colonization;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class SatellitesCard extends ColonizationTechCard {
     @Override

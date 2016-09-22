@@ -7,9 +7,11 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.choice.political.PoliticalPhaseChoice;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class PoliticalPhase extends GamePoint {
+    public static final GamePoint POLITICAL_PHASE = new PoliticalPhase();
+
     @Override
     public void apply(GameState gameState, PlayerState playerState) {
 

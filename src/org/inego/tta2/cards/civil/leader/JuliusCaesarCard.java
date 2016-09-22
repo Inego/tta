@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.point.GamePoint;
 
 /**
- * Created by Inego on 27.08.2016.
+ *
  */
 public class JuliusCaesarCard extends LeaderCard {
 

@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.IGameState;
 import java.util.List;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public interface IPlayer {
 

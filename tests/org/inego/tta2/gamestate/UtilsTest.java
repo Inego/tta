@@ -6,7 +6,7 @@ import static org.inego.tta2.gamestate.tactics.Utils.getGenghisKhanMaxArmies;
 import static org.junit.Assert.*;
 
 /**
- * Created by Inego on 17.09.2016.
+ *
  */
 public class UtilsTest {
 

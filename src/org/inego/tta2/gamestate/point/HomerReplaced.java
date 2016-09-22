@@ -4,9 +4,11 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class HomerReplaced extends GamePoint {
+    public static final GamePoint HOMER_REPLACED = new HomerReplaced();
+
     @Override
     public void apply(GameState gameState, PlayerState playerState) {
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class RandomPlayer implements IPlayer {
 

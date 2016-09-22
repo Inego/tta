@@ -4,7 +4,7 @@ import org.inego.tta2.gamestate.happiness.ArenaHappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class BreadNCircusesCard extends ArenaCard {
     @Override

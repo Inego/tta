@@ -5,7 +5,7 @@ import org.inego.tta2.cards.CardType;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 16.08.2016.
+ *
  */
 public abstract class CivilCard extends AbstractCard {
 

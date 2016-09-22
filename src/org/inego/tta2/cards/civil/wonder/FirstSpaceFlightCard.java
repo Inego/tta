@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.wonder;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 27.08.2016.
+ *
  */
 public class FirstSpaceFlightCard extends WonderCard {
     private static final int[] STAGES = {1, 2, 4, 9};

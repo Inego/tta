@@ -3,8 +3,7 @@ package org.inego.tta2.gamestate;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.gamestate.choice.Choice;
-import org.inego.tta2.gamestate.point.GamePoint;
-import org.inego.tta2.gamestate.point.IGamePoint;
+import org.inego.tta2.gamestate.point.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by Inego on 16.08.2016.
+ *
  */
 public class GameState implements IGameState {
 
@@ -46,7 +45,7 @@ public class GameState implements IGameState {
             playerState.setAvailableMilitaryActions(0);
         }
 
-        gamePoints.push(GamePoint.START_TURN);
+        gamePoints.push(StartTurn.INSTANCE);
     }
 
     public GameState(GameState source) {
@@ -118,11 +117,11 @@ public class GameState implements IGameState {
     }
 
     public void startPoliticalPhase() {
-        proceedTo(GamePoint.POLITICAL_PHASE);
+        proceedTo(PoliticalPhase.POLITICAL_PHASE);
     }
 
     public void startActionPhase() {
-        proceedTo(GamePoint.ACTION_PHASE);
+        proceedTo(ActionPhase.ACTION_PHASE);
     }
 
     public PlayerState getCurrentPlayerState() {

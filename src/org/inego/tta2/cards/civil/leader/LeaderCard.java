@@ -6,7 +6,7 @@ import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public abstract class LeaderCard extends CivilCard {
     @Override

@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.lab;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class ScientificMethodCard extends LabCard {
     @Override

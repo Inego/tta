@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.IChoice;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 28.08.2016.
+ *
  */
 public abstract class Choice implements IChoice<GameState> {
 

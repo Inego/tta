@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class TakeCardChoice extends ActionPhaseChoice {
 

@@ -4,7 +4,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class ReligionCard extends TempleCard {
     @Override

@@ -4,7 +4,7 @@ import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.MilitaryCardKind;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public abstract class TacticCard extends MilitaryCard {
 

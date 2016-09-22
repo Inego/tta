@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.government;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class FundamentalismCard extends GovernmentCard {
     @Override

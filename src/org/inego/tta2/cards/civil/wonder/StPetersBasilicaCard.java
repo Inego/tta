@@ -6,7 +6,7 @@ import org.inego.tta2.gamestate.culture.CultureProductionSource;
 import static org.inego.tta2.gamestate.happiness.WonderHappinessSource.ST_PETERS;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class StPetersBasilicaCard extends WonderCard {
     private static final int[] STAGES = {4, 4};

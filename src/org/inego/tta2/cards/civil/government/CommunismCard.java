@@ -4,7 +4,7 @@ import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class CommunismCard extends GovernmentCard {
     @Override

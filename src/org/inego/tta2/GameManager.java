@@ -7,7 +7,7 @@ import org.inego.tta2.player.IPlayer;
 import java.util.List;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class GameManager implements IGameManager<GameState> {
 

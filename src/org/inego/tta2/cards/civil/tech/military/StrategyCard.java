@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.tech.military;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class StrategyCard extends MilitaryTechCard {
     @Override

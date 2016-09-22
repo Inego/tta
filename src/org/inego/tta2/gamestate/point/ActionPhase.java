@@ -4,9 +4,11 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class ActionPhase extends GamePoint {
+
+    public static final GamePoint ACTION_PHASE = new ActionPhase();
 
     @Override
     public void apply(GameState gameState, PlayerState playerState) {

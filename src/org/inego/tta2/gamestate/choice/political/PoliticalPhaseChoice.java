@@ -4,10 +4,10 @@ import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.leader.JuliusCaesarCard;
 import org.inego.tta2.gamestate.*;
 import org.inego.tta2.gamestate.choice.Choice;
-import org.inego.tta2.gamestate.point.GamePoint;
+import org.inego.tta2.gamestate.point.ActionPhase;
 
 /**
- * Created by Inego on 28.08.2016.
+ *
  */
 public abstract class PoliticalPhaseChoice extends Choice {
 
@@ -15,7 +15,7 @@ public abstract class PoliticalPhaseChoice extends Choice {
 
         @Override
         protected void apply(GameState gameState, PlayerState playerState) {
-            gameState.proceedTo(GamePoint.ACTION_PHASE);
+            gameState.proceedTo(ActionPhase.ACTION_PHASE);
         }
     };
 

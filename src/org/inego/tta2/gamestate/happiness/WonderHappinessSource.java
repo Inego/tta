@@ -1,7 +1,7 @@
 package org.inego.tta2.gamestate.happiness;
 
 /**
- * Created by Inego on 11.09.2016.
+ *
  */
 public class WonderHappinessSource extends HappinessSource {
     public static final WonderHappinessSource ST_PETERS = new WonderHappinessSource(1);

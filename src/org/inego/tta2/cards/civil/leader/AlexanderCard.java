@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.choice.Choice;
 
 /**
- * Created by Inego on 11.09.2016.
+ *
  */
 public class AlexanderCard extends LeaderCard {
     public static final Choice REMOVE = new Choice() {

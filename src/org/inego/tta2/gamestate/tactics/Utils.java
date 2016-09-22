@@ -1,7 +1,7 @@
 package org.inego.tta2.gamestate.tactics;
 
 /**
- * Created by Inego on 17.09.2016.
+ *
  */
 public class Utils {
 

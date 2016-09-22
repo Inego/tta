@@ -1,7 +1,7 @@
 package org.inego.tta2.gamestate.happiness;
 
 /**
- * Created by Inego on 11.09.2016.
+ *
  */
 public class TempleHappinessSource extends HappinessSource {
     public static final TempleHappinessSource RELIGION = new TempleHappinessSource(1);

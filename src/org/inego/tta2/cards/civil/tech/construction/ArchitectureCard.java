@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.tech.construction;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class ArchitectureCard extends ConstructionTechCard {
     @Override

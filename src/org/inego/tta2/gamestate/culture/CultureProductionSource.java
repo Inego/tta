@@ -1,11 +1,9 @@
 package org.inego.tta2.gamestate.culture;
 
 /**
- * Created by Inego on 27.08.2016.
+ *
  */
 public abstract class CultureProductionSource {
-
-    public static final BuildingCultureProductionSource TEMPLE = new BuildingCultureProductionSource(1);
 
     public static final LibraryCultureProductionSource PRINTING_PRESS = new LibraryCultureProductionSource(1);
     public static final LibraryCultureProductionSource JOURNALISM = new LibraryCultureProductionSource(2);

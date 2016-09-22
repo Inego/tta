@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.lab;
 import org.inego.tta2.cards.civil.lab.LabCard;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class PhilosophyCard extends LabCard {
     @Override

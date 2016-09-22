@@ -1,7 +1,5 @@
-package org.inego.tta2;
-
-/**
- * Created by Inego on 10.09.2016.
+package org.inego.tta2; /**
+ *
  */
 
 import org.inego.tta2.gamestate.IGameState;

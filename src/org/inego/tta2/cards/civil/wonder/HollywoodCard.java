@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.wonder;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 27.08.2016.
+ *
  */
 public class HollywoodCard extends WonderCard {
 

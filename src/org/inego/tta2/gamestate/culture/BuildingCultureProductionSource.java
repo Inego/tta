@@ -1,11 +1,10 @@
 package org.inego.tta2.gamestate.culture;
 
-/**
- * Created by Inego on 27.08.2016.
- */
 public class BuildingCultureProductionSource extends CultureProductionSource {
 
-    public BuildingCultureProductionSource(int value) {
+    public static final BuildingCultureProductionSource TEMPLE = new BuildingCultureProductionSource(1);
+
+    BuildingCultureProductionSource(int value) {
         super(value);
     }
 }

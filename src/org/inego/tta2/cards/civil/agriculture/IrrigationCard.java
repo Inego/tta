@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.agriculture;
 import org.inego.tta2.cards.civil.agriculture.FarmCard;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class IrrigationCard extends FarmCard {
 

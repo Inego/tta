@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.mine;
 
 /**
- * Created by Inego on 20.08.2016.
+ *
  */
 public class BronzeCard extends MineCard {
     @Override

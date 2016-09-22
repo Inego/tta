@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.military.tactic;
 
 /**
- * Created by Inego on 21.08.2016.
+ *
  */
 public class HeavyCavalryCard extends TacticCard {
     @Override

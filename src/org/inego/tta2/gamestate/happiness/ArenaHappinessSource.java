@@ -1,7 +1,7 @@
 package org.inego.tta2.gamestate.happiness;
 
 /**
- * Created by Inego on 11.09.2016.
+ *
  */
 public class ArenaHappinessSource extends HappinessSource {
     public static final ArenaHappinessSource BREAD_CIRCUSES = new ArenaHappinessSource(2);

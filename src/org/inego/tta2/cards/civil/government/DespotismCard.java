@@ -3,7 +3,7 @@ package org.inego.tta2.cards.civil.government;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 
 /**
- * Created by Inego on 18.08.2016.
+ *
  */
 public class DespotismCard extends GovernmentCard {
     @Override

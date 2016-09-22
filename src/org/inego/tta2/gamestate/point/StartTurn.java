@@ -5,9 +5,11 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Created by Inego on 10.09.2016.
+ *
  */
 public class StartTurn extends GamePoint {
+
+    public static final GamePoint INSTANCE = new StartTurn();
 
     @Override
     public void apply(GameState gameState, PlayerState playerState) {
@@ -24,7 +26,7 @@ public class StartTurn extends GamePoint {
             playerState.enableLeaderSpecialAction();
         }
 
-        gameState.proceedTo(POLITICAL_PHASE);
+        gameState.proceedTo(PoliticalPhase.POLITICAL_PHASE);
 
     }
 }

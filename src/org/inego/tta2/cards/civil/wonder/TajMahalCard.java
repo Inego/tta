@@ -4,7 +4,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
- * Created by Inego on 25.08.2016.
+ *
  */
 public class TajMahalCard extends WonderCard {
 

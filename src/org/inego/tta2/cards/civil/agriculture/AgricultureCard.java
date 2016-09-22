@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.agriculture;
 
 /**
- * Created by Inego on 16.08.2016.
+ *
  */
 public class AgricultureCard extends FarmCard {
 
