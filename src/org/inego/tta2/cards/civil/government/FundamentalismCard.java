@@ -1,6 +1,7 @@
 package org.inego.tta2.cards.civil.government;
 
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.science.GovernmentScienceProductionSource;
 
 /**
  *
@@ -48,7 +49,7 @@ public class FundamentalismCard extends GovernmentCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.modifyScienceProduction(-2 * sign);
+        playerState.modifyScienceProductionSource(sign, GovernmentScienceProductionSource.FUNDAMENTALISM);
         playerState.modifyMilitaryStrengthBase(5 * sign);
     }
 }

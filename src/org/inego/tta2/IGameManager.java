@@ -1,6 +1,4 @@
-package org.inego.tta2; /**
- *
- */
+package org.inego.tta2;
 
 import org.inego.tta2.gamestate.IGameState;
 import org.inego.tta2.gamestate.exception.GameStateException;

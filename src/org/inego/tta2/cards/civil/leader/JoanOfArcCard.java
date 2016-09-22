@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.leader;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.LeaderCultureProductionSource;
 
 /**
  *
@@ -20,7 +20,7 @@ public class JoanOfArcCard extends LeaderCard {
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         playerState.modifyAdditionalMilitaryActions(sign);
-        playerState.modifyCultureProductionSource(sign, CultureProductionSource.JOAN_OF_ARC);
+        playerState.modifyCultureProductionSource(sign, LeaderCultureProductionSource.JOAN_OF_ARC);
         playerState.setRecalcMilitaryStrength();
     }
 }

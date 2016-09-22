@@ -1,7 +1,8 @@
 package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.WonderCultureProductionSource;
+import org.inego.tta2.gamestate.science.WonderScienceProductionSource;
 
 /**
  *
@@ -27,7 +28,7 @@ public class UniversitasCarolinaCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.addCultureProductionSource(CultureProductionSource.UNIVERSITAS_CAROLINA);
-        playerState.modifyScienceProduction(2);
+        playerState.addCultureProductionSource(WonderCultureProductionSource.UNIVERSITAS_CAROLINA);
+        playerState.addScienceProductionSource(WonderScienceProductionSource.UNIVERSITAS_CAROLINA);
     }
 }

@@ -20,7 +20,4 @@ public enum CivilCardKind {
     WONDER,
     LEADER,
     ACTION
-/**
- *
- */
 }

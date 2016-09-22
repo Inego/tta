@@ -19,15 +19,14 @@ import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 import org.inego.tta2.gamestate.choice.action.IncreasePopulationChoice;
-import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
-import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
-import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
+import org.inego.tta2.gamestate.culture.*;
 import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.HomerReplaced;
+import org.inego.tta2.gamestate.science.ScienceProductionSource;
+import org.inego.tta2.gamestate.science.WonderScienceProductionSource;
 import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
@@ -51,6 +50,7 @@ public class PlayerState {
 
     private QuantityHashMap<HappinessSource> happinessSources = new QuantityHashMap<>();
     private QuantityHashMap<CultureProductionSource> cultureProductionSources = new QuantityHashMap<>();
+    private QuantityHashMap<ScienceProductionSource> scienceProductionSources = new QuantityHashMap<>();
 
     private int happiness;
 
@@ -165,11 +165,12 @@ public class PlayerState {
 
     private void calculateHappiness() {
         happiness = 0;
-        iterateHappiness((happinessSource, value, qty) -> { happiness += qty * value; });
+        iterateHappiness((happinessSource, value, qty) -> happiness += qty * value);
         if (happiness < 0)
             happiness = 0;
         else if (happiness > 8)
             happiness = 8;
+        recalcHappiness = false;
     }
 
     private void recalculateResourceProduction() {
@@ -182,10 +183,6 @@ public class PlayerState {
     }
 
     public void modifyResourceProduction(int delta) {
-    }
-
-    public void modifyScienceProduction(int delta) {
-        scienceProduction += delta;
     }
 
     public void setRecalcCultureProduction() {
@@ -286,6 +283,8 @@ public class PlayerState {
         scienceProduction = 0;
 
         // TODO iterate ScienceProductionSources
+
+        recalcScienceProduction = false;
     }
 
     public void modifyMilitaryStrengthBase(int delta) {
@@ -412,10 +411,8 @@ public class PlayerState {
 
     public int getMilitaryStrength() {
 
-        if (recalcMilitary) {
+        if (recalcMilitary)
             calculateMilitaryStrength();
-        }
-
 
         return militaryStrength;
     }
@@ -442,6 +439,8 @@ public class PlayerState {
                     militaryStrength += value * qty;
             });
         }
+
+        recalcMilitary = false;
 
     }
 
@@ -816,7 +815,7 @@ public class PlayerState {
                 for (int i = 1; i <= unitEntry.getValue(); i++)
                     disband(unitEntry.getKey());
                 break;
-            };
+            }
         }
     }
 
@@ -827,6 +826,14 @@ public class PlayerState {
             formArmies();
         }
         // TODO disband - return pop
+    }
+
+    public void modifyScienceProductionSource(int sign, ScienceProductionSource scienceProductionSource) {
+        scienceProductionSources.delta(scienceProductionSource, sign);
+    }
+
+    public void addScienceProductionSource(ScienceProductionSource scienceProductionSource) {
+        modifyScienceProductionSource(1, scienceProductionSource);
     }
 
     @FunctionalInterface

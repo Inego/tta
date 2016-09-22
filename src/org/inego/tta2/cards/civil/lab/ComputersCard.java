@@ -1,5 +1,8 @@
 package org.inego.tta2.cards.civil.lab;
 
+import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.science.LabScienceProductionSource;
+
 /**
  *
  */
@@ -25,12 +28,14 @@ public class ComputersCard extends LabCard {
     }
 
     @Override
+    public void assignWorker(int sign, PlayerState playerState) {
+        playerState.modifyScienceProductionSource(sign, LabScienceProductionSource.COMPUTERS);
+    }
+
+    @Override
     public int getResearchCost() {
         return 8;
     }
 
-    @Override
-    public int getScienceYield() {
-        return 5;
-    }
+
 }

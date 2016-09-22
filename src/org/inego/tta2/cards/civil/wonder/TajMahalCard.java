@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.WonderCultureProductionSource;
 
 /**
  *
@@ -27,7 +27,7 @@ public class TajMahalCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.addCultureProductionSource(CultureProductionSource.TAJ_MAHAL);
+        playerState.addCultureProductionSource(WonderCultureProductionSource.TAJ_MAHAL);
         playerState.gainBlueTokens(1);
     }
 

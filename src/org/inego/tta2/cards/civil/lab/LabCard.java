@@ -14,10 +14,4 @@ public abstract class LabCard extends BuildingCard {
         return CivilCardKind.LAB;
     }
 
-    public abstract int getScienceYield();
-
-    @Override
-    public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyScienceProduction(sign * getScienceYield());
-    }
 }

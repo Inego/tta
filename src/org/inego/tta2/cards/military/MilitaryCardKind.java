@@ -6,7 +6,4 @@ public enum MilitaryCardKind {
     WAR,
     PACT,
     TACTIC
-/**
- *
- */
 }

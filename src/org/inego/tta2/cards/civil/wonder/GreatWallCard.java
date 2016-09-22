@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.WonderCultureProductionSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
 /**
@@ -27,7 +27,7 @@ public class GreatWallCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.addCultureProductionSource(CultureProductionSource.GREAT_WALL);
+        playerState.addCultureProductionSource(WonderCultureProductionSource.GREAT_WALL);
         playerState.addHappinessSource(WonderHappinessSource.GREAT_WALL);
         // Military bonus calculated in getMilitaryStrength().
     }

@@ -1,8 +1,8 @@
 package org.inego.tta2.cards.civil.government;
 
+import org.inego.tta2.gamestate.culture.GovernmentCultureProductionSource;
 import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
 
 /**
  *
@@ -50,7 +50,7 @@ public class TheocracyCard extends GovernmentCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.modifyCultureProductionSource(sign, CultureProductionSource.THEOCRACY);
+        playerState.modifyCultureProductionSource(sign, GovernmentCultureProductionSource.THEOCRACY);
         playerState.modifyMilitaryStrengthBase(sign);
         playerState.modifyHappinessSource(GovernmentHappinessSource.THEOCRACY, sign);
     }

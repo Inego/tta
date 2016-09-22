@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.theater;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
 
 /**
  *
@@ -35,6 +35,6 @@ public class MoviesCard extends TheaterCard {
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
         super.assignWorker(sign, playerState);
-        playerState.modifyCultureProductionSource(sign, CultureProductionSource.MOVIES);
+        playerState.modifyCultureProductionSource(sign, TheaterCultureProductionSource.MOVIES);
     }
 }

@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.WonderCultureProductionSource;
 
 import static org.inego.tta2.gamestate.happiness.WonderHappinessSource.ST_PETERS;
 
@@ -28,7 +28,7 @@ public class StPetersBasilicaCard extends WonderCard {
 
     @Override
     public void onBuild(PlayerState playerState) {
-        playerState.addCultureProductionSource(CultureProductionSource.ST_PETERS);
+        playerState.addCultureProductionSource(WonderCultureProductionSource.ST_PETERS);
         playerState.addHappinessSource(ST_PETERS);
     }
 

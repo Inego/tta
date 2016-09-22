@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.government;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.GovernmentCultureProductionSource;
 
 /**
  *
@@ -49,6 +49,6 @@ public class DemocracyCard extends GovernmentCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.modifyCultureProductionSource(sign, CultureProductionSource.DEMOCRACY);
+        playerState.modifyCultureProductionSource(sign, GovernmentCultureProductionSource.DEMOCRACY);
     }
 }

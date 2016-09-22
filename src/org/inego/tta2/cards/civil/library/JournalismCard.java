@@ -1,7 +1,8 @@
 package org.inego.tta2.cards.civil.library;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
+import org.inego.tta2.gamestate.science.LibraryScienceProductionSource;
 
 /**
  *
@@ -34,7 +35,7 @@ public class JournalismCard extends LibraryCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        super.assignWorker(sign, playerState);
-        playerState.modifyCultureProductionSource(sign, CultureProductionSource.JOURNALISM);
+        playerState.modifyScienceProductionSource(sign, LibraryScienceProductionSource.JOURNALISM);
+        playerState.modifyCultureProductionSource(sign, LibraryCultureProductionSource.JOURNALISM);
     }
 }
