@@ -2,7 +2,7 @@ package org.inego.tta2.cards.civil.library;
 
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
-import org.inego.tta2.gamestate.science.LibraryScienceProductionSource;
+import org.inego.tta2.gamestate.science.IScienceProductionSource;
 
 /**
  *
@@ -35,7 +35,12 @@ public class PrintingPressCard extends LibraryCard {
 
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyScienceProductionSource(sign, LibraryScienceProductionSource.PRINTING_PRESS);
+        super.assignWorker(sign, playerState);
         playerState.modifyCultureProductionSource(sign, LibraryCultureProductionSource.PRINTING_PRESS);
+    }
+
+    @Override
+    public int getScienceProductionValue() {
+        return 1;
     }
 }

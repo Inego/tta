@@ -2,7 +2,7 @@ package org.inego.tta2.cards.civil.lab;
 
 import org.inego.tta2.cards.civil.lab.LabCard;
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.science.LabScienceProductionSource;
+import org.inego.tta2.gamestate.science.IScienceProductionSource;
 
 /**
  *
@@ -34,7 +34,7 @@ public class PhilosophyCard extends LabCard {
     }
 
     @Override
-    public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyScienceProductionSource(sign, LabScienceProductionSource.PHILOSOPHY);
+    public int getScienceProductionValue() {
+        return 1;
     }
 }

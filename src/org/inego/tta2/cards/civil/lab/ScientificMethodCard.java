@@ -1,7 +1,7 @@
 package org.inego.tta2.cards.civil.lab;
 
 import org.inego.tta2.gamestate.PlayerState;
-import org.inego.tta2.gamestate.science.LabScienceProductionSource;
+import org.inego.tta2.gamestate.science.IScienceProductionSource;
 
 /**
  *
@@ -33,7 +33,7 @@ public class ScientificMethodCard extends LabCard {
     }
 
     @Override
-    public void assignWorker(int sign, PlayerState playerState) {
-        playerState.modifyScienceProductionSource(sign, LabScienceProductionSource.SCIENTIFIC_METHOD);
+    public int getScienceProductionValue() {
+        return 3;
     }
 }

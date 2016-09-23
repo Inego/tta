@@ -2,12 +2,12 @@ package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.WonderCultureProductionSource;
-import org.inego.tta2.gamestate.science.WonderScienceProductionSource;
+import org.inego.tta2.gamestate.science.IScienceProductionSource;
 
 /**
  *
  */
-public class LibraryOfAlexandriaCard extends WonderCard {
+public class LibraryOfAlexandriaCard extends WonderCard implements IScienceProductionSource {
     private static final int[] STAGES = {1, 4, 1};
 
     @Override
@@ -28,7 +28,12 @@ public class LibraryOfAlexandriaCard extends WonderCard {
     @Override
     public void onBuild(PlayerState playerState) {
         playerState.addCultureProductionSource(WonderCultureProductionSource.LIBRARY_OF_ALEXANDRIA);
-        playerState.addScienceProductionSource(WonderScienceProductionSource.LIBRARY_OF_ALEXANDRIA);
+        playerState.addScienceProductionSource(this);
         // Civil & mil. hand size + 1 -- see getHandSize method
+    }
+
+    @Override
+    public int getScienceProductionValue() {
+        return 1;
     }
 }

@@ -2,12 +2,12 @@ package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.WonderCultureProductionSource;
-import org.inego.tta2.gamestate.science.WonderScienceProductionSource;
+import org.inego.tta2.gamestate.science.IScienceProductionSource;
 
 /**
  *
  */
-public class UniversitasCarolinaCard extends WonderCard {
+public class UniversitasCarolinaCard extends WonderCard implements IScienceProductionSource {
 
     private static final int[] STAGES = {3, 3, 3};
 
@@ -29,6 +29,11 @@ public class UniversitasCarolinaCard extends WonderCard {
     @Override
     public void onBuild(PlayerState playerState) {
         playerState.addCultureProductionSource(WonderCultureProductionSource.UNIVERSITAS_CAROLINA);
-        playerState.addScienceProductionSource(WonderScienceProductionSource.UNIVERSITAS_CAROLINA);
+        playerState.addScienceProductionSource(this);
+    }
+
+    @Override
+    public int getScienceProductionValue() {
+        return 2;
     }
 }

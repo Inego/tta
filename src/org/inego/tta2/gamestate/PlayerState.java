@@ -6,8 +6,10 @@ import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
+import org.inego.tta2.cards.civil.lab.LabCard;
 import org.inego.tta2.cards.civil.leader.HomerCard;
 import org.inego.tta2.cards.civil.leader.LeaderCard;
+import org.inego.tta2.cards.civil.library.LibraryCard;
 import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
@@ -25,10 +27,7 @@ import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.HomerReplaced;
-import org.inego.tta2.gamestate.science.LabScienceProductionSource;
-import org.inego.tta2.gamestate.science.LibraryScienceProductionSource;
-import org.inego.tta2.gamestate.science.ScienceProductionSource;
-import org.inego.tta2.gamestate.science.WonderScienceProductionSource;
+import org.inego.tta2.gamestate.science.*;
 import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
@@ -52,7 +51,7 @@ public class PlayerState {
 
     private QuantityHashMap<HappinessSource> happinessSources = new QuantityHashMap<>();
     private QuantityHashMap<CultureProductionSource> cultureProductionSources = new QuantityHashMap<>();
-    private QuantityHashMap<ScienceProductionSource> scienceProductionSources = new QuantityHashMap<>();
+    private QuantityHashMap<IScienceProductionSource> scienceProductionSources = new QuantityHashMap<>();
 
     private int happiness;
 
@@ -284,15 +283,15 @@ public class PlayerState {
     private void calculateScienceProduction() {
         scienceProduction = 0;
 
-        for (Entry<ScienceProductionSource, Integer> entry : scienceProductionSources.entrySet()) {
-            scienceProduction += entry.getValue() * entry.getKey().getValue();
+        for (Entry<IScienceProductionSource, Integer> entry : scienceProductionSources.entrySet()) {
+            scienceProduction += entry.getValue() * entry.getKey().getScienceProductionValue();
         }
 
         if (leader == Cards.LEONARDO_DA_VINCI) {
             int bestLevel = 0;
-            for (ScienceProductionSource scienceProductionSource : scienceProductionSources.keySet()) {
-                if (scienceProductionSource instanceof LabScienceProductionSource
-                        || scienceProductionSource instanceof LibraryScienceProductionSource)
+            for (IScienceProductionSource scienceProductionSource : scienceProductionSources.keySet()) {
+                if (scienceProductionSource instanceof LibraryCard
+                        || scienceProductionSource instanceof LabCard)
                     // TODO Leonardo
                     ;
             }
@@ -842,11 +841,11 @@ public class PlayerState {
         // TODO disband - return pop
     }
 
-    public void modifyScienceProductionSource(int sign, ScienceProductionSource scienceProductionSource) {
+    public void modifyScienceProductionSource(int sign, IScienceProductionSource scienceProductionSource) {
         scienceProductionSources.delta(scienceProductionSource, sign);
     }
 
-    public void addScienceProductionSource(ScienceProductionSource scienceProductionSource) {
+    public void addScienceProductionSource(IScienceProductionSource scienceProductionSource) {
         modifyScienceProductionSource(1, scienceProductionSource);
     }
 
