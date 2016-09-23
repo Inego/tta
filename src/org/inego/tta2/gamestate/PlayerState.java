@@ -290,11 +290,12 @@ public class PlayerState {
         if (leader == Cards.LEONARDO_DA_VINCI) {
             int bestLevel = 0;
             for (IScienceProductionSource scienceProductionSource : scienceProductionSources.keySet()) {
-                if (scienceProductionSource instanceof LibraryCard
-                        || scienceProductionSource instanceof LabCard)
-                    // TODO Leonardo
-                    ;
+                if (scienceProductionSource instanceof LibraryCard || scienceProductionSource instanceof LabCard) {
+                    if (scienceProductionSource.getAge() > bestLevel)
+                        bestLevel = scienceProductionSource.getAge();
+                }
             }
+            scienceProduction += bestLevel;
         }
 
         recalcScienceProduction = false;
@@ -708,6 +709,11 @@ public class PlayerState {
         resources -= value;
     }
 
+    private void gainResources(int value) {
+        // TODO gain resources
+        resources += value;
+    }
+
     public void enableLeaderSpecialAction() {
         leaderSpecialActionAvailable = true;
     }
@@ -847,6 +853,13 @@ public class PlayerState {
 
     public void addScienceProductionSource(IScienceProductionSource scienceProductionSource) {
         modifyScienceProductionSource(1, scienceProductionSource);
+    }
+
+    public void discover(ITechnologyCard technologyCard) {
+        // TODO discover technology
+
+        if (leader == Cards.LEONARDO_DA_VINCI)
+            gainResources(1);
     }
 
     @FunctionalInterface
