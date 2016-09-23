@@ -25,6 +25,8 @@ import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.HomerReplaced;
+import org.inego.tta2.gamestate.science.LabScienceProductionSource;
+import org.inego.tta2.gamestate.science.LibraryScienceProductionSource;
 import org.inego.tta2.gamestate.science.ScienceProductionSource;
 import org.inego.tta2.gamestate.science.WonderScienceProductionSource;
 import org.inego.tta2.gamestate.tactics.Composition;
@@ -282,7 +284,19 @@ public class PlayerState {
     private void calculateScienceProduction() {
         scienceProduction = 0;
 
-        // TODO iterate ScienceProductionSources
+        for (Entry<ScienceProductionSource, Integer> entry : scienceProductionSources.entrySet()) {
+            scienceProduction += entry.getValue() * entry.getKey().getValue();
+        }
+
+        if (leader == Cards.LEONARDO_DA_VINCI) {
+            int bestLevel = 0;
+            for (ScienceProductionSource scienceProductionSource : scienceProductionSources.keySet()) {
+                if (scienceProductionSource instanceof LabScienceProductionSource
+                        || scienceProductionSource instanceof LibraryScienceProductionSource)
+                    // TODO Leonardo
+                    ;
+            }
+        }
 
         recalcScienceProduction = false;
     }
