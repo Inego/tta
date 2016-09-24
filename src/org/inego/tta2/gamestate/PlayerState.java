@@ -22,6 +22,8 @@ import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 import org.inego.tta2.gamestate.choice.action.IncreasePopulationChoice;
+import org.inego.tta2.gamestate.comparison.PlayerComparison;
+import org.inego.tta2.gamestate.comparison.TopNumber;
 import org.inego.tta2.gamestate.choice.leader.ColumbusColonizationChoice;
 import org.inego.tta2.gamestate.culture.*;
 import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
@@ -33,6 +35,7 @@ import org.inego.tta2.gamestate.science.*;
 import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -162,7 +165,7 @@ public class PlayerState {
     }
 
     public int getCulturePoints() {
-        return sciencePoints;
+        return culturePoints;
     }
 
     public int getHappiness() {
@@ -613,8 +616,12 @@ public class PlayerState {
     }
 
     private void checkGenghisCultureBonus() {
-        if (gameState.isAmongTop(TopCriterion.STRENGTH, TopNumber.TWO))
+        if (isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH))
             gainCulturePoints(3);
+    }
+
+    public boolean isAmongTop(TopNumber topNumber, Comparator<PlayerState> comparator) {
+        return gameState.isAmongTop(this, topNumber, comparator);
     }
 
     private void gainCulturePoints(int value) {

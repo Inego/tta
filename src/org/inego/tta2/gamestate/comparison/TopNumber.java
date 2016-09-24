@@ -1,4 +1,6 @@
-package org.inego.tta2.gamestate;
+package org.inego.tta2.gamestate.comparison;
+
+import org.inego.tta2.gamestate.GameState;
 
 public interface TopNumber {
 
