@@ -20,6 +20,10 @@ public class PoliticalPhase extends GamePoint {
         if (playerState.getLeader() == Cards.ALEXANDER) {
             gameState.addChoice(AlexanderCard.REMOVE);
         }
+        else if (playerState.getLeader() == Cards.CHRISTOPHER_COLUMBUS) {
+            playerState.addColumbusColonizationChoices();
+        }
+
 
         gameState.addChoice(PoliticalPhaseChoice.PASS);
 

@@ -17,10 +17,12 @@ import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
+import org.inego.tta2.cards.military.colony.ColonyCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 import org.inego.tta2.gamestate.choice.action.IncreasePopulationChoice;
+import org.inego.tta2.gamestate.choice.leader.ColumbusColonizationChoice;
 import org.inego.tta2.gamestate.culture.*;
 import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.happiness.HappinessSource;
@@ -32,6 +34,7 @@ import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -110,6 +113,8 @@ public class PlayerState {
     private int availableMilitaryActions;
     private int waitingTurns;
 
+    private LinkedList<CivilCard> cardsInHand;
+
 
     public PlayerState(GameState gameState) {
 
@@ -135,6 +140,8 @@ public class PlayerState {
         tactic = null;
         government = Cards.DESPOTISM;
         leader = null;
+
+        cardsInHand = new LinkedList<>();
 
     }
 
@@ -892,6 +899,16 @@ public class PlayerState {
             }
         }
         return super.toString();
+    }
+
+    public void addColumbusColonizationChoices() {
+
+        for (CivilCard civilCard : cardsInHand) {
+            if (civilCard instanceof ColonyCard) {
+                gameState.addChoice(new ColumbusColonizationChoice());
+            }
+        }
+
     }
 
     @FunctionalInterface
