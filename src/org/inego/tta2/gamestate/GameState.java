@@ -5,10 +5,7 @@ import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.point.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  *
@@ -44,6 +41,8 @@ public class GameState implements IGameState {
             playerState.setAvailableCivilActions(i);
             playerState.setAvailableMilitaryActions(0);
         }
+
+        updateWaitingTurns();
 
         gamePoints.push(StartTurn.INSTANCE);
     }
@@ -101,7 +100,7 @@ public class GameState implements IGameState {
     }
 
     public void startPlayerTurn() {
-
+        // TODO attach startPlayerTurn to something useful or move to PlayerState
         if (currentAge == 0)
             startActionPhase();
         else
@@ -109,11 +108,23 @@ public class GameState implements IGameState {
     }
 
     public void endPlayerTurn() {
-
         currentPlayer++;
         if (currentPlayer == numberOfPlayers)
             currentPlayer = 0;
+
+        updateWaitingTurns();
+
         startPoliticalPhase();
+    }
+
+    private void updateWaitingTurns() {
+        int waitingTurns = currentPlayer == 0 ? 0 : numberOfPlayers - currentPlayer;
+        for (PlayerState playerState : playerStates) {
+            playerState.setWaitingTurns(waitingTurns);
+            waitingTurns++;
+            if (waitingTurns == numberOfPlayers)
+                waitingTurns = 0;
+        }
     }
 
     public void startPoliticalPhase() {
@@ -157,5 +168,32 @@ public class GameState implements IGameState {
 
     public void setCurrentAge(int age) {
         this.currentAge = age;
+    }
+
+    public boolean isAmongTop(TopCriterion criterion, TopNumber topNumber) {
+        // TODO is among top
+        return false;
+    }
+
+    public List<PlayerState> getPlayersSortedBy(Comparator<PlayerState> comparator) {
+        ArrayList<PlayerState> playerStatesCopy = new ArrayList<>(this.playerStates);
+        playerStatesCopy.sort(comparator);
+        return playerStatesCopy;
+    }
+
+    /**
+     * For testing purposes.
+     * @return An array of remaining waiting turns of players
+     */
+    public Integer[] getWaitingTurnsArray() {
+        return playerStates.stream().map(PlayerState::getWaitingTurns).toArray(Integer[]::new);
+    }
+
+    public PlayerState getPlayerState(int i) {
+        return playerStates.get(i);
+    }
+
+    public int getIndex(PlayerState playerState) {
+        return playerStates.indexOf(playerState);
     }
 }

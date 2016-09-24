@@ -10,10 +10,14 @@ public class RandomGame {
 
     public static void main(String... args)
     {
-        RandomPlayer randomPlayer = new RandomPlayer();
-        GameManager manager = new GameManager(new IPlayer[] {randomPlayer, randomPlayer, randomPlayer});
+        System.out.print(Math.floorMod(-1, 4));
 
-        manager.run();
+
+
+//        RandomPlayer randomPlayer = new RandomPlayer();
+//        GameManager manager = new GameManager(new IPlayer[] {randomPlayer, randomPlayer, randomPlayer});
+//
+//        manager.run();
 
     }
 }

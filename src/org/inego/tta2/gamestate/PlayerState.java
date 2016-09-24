@@ -108,6 +108,7 @@ public class PlayerState {
     private int militaryProductionBonus;
     private int leaderMilitaryProductionBonus;
     private int availableMilitaryActions;
+    private int waitingTurns;
 
 
     public PlayerState(GameState gameState) {
@@ -124,7 +125,6 @@ public class PlayerState {
         recalcResourceProduction = false;
         recalcCultureProduction = false;
         recalcScienceProduction = false;
-        recalcMilitary = false;
 
         availableCivilActions = 0;
         spentCivilActions = 0;
@@ -306,13 +306,6 @@ public class PlayerState {
         setRecalcMilitaryStrength();
     }
 
-
-    public int getWorkersOnCard(BuildingCard card)
-    {
-        // TODO get workers on card
-        return 0;
-    }
-
     public void formArmies() {
 
         setRecalcMilitaryStrength();
@@ -379,7 +372,7 @@ public class PlayerState {
         // Air force bonus
         if (result > 0)
         {
-            int remainingAirForce = getWorkersOnCard(Cards.AIR_FORCES);
+            int remainingAirForce = units.get(Cards.AIR_FORCES);
             if (remainingAirForce > 0)
             {
                 // Air force bonus for modern armies
@@ -436,13 +429,15 @@ public class PlayerState {
         militaryStrength = militaryStrengthBase;
 
         if (wonders.contains(Cards.GREAT_WALL)) {
-            militaryStrength += getWorkersOnCard(Cards.WARRIORS);
-            militaryStrength += getWorkersOnCard(Cards.SWORDSMEN);
-            militaryStrength += getWorkersOnCard(Cards.RIFLEMEN);
-            militaryStrength += getWorkersOnCard(Cards.MODERN_INFANTRY);
-            militaryStrength += getWorkersOnCard(Cards.CANNON);
-            militaryStrength += getWorkersOnCard(Cards.ROCKETS); // :)
+            militaryStrength += units.get(Cards.WARRIORS);
+            militaryStrength += units.get(Cards.SWORDSMEN);
+            militaryStrength += units.get(Cards.RIFLEMEN);
+            militaryStrength += units.get(Cards.MODERN_INFANTRY);
+            militaryStrength += units.get(Cards.CANNON);
+            militaryStrength += units.get(Cards.ROCKETS); // :)
         }
+
+        militaryStrength += getTacticsBonus();
 
         if (leader == Cards.ALEXANDER) {
             // TODO Alexander - add total number of military units
@@ -596,6 +591,11 @@ public class PlayerState {
     }
 
     public void endTurn() {
+
+        if (leader == Cards.GENGHIS_KHAN) {
+            checkGenghisCultureBonus();
+        }
+
         discardExcessMilitaryCards();
         if (!isUprising()) {
             handleProductionPhase();
@@ -603,6 +603,15 @@ public class PlayerState {
         drawMilitaryCards();
         resetActions();
         gameState.endPlayerTurn();
+    }
+
+    private void checkGenghisCultureBonus() {
+        if (gameState.isAmongTop(TopCriterion.STRENGTH, TopNumber.TWO))
+            gainCulturePoints(3);
+    }
+
+    private void gainCulturePoints(int value) {
+        culturePoints += value;
     }
 
     private void resetActions() {
@@ -691,7 +700,7 @@ public class PlayerState {
             gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
         }
 
-        gameState.addChoice(ActionPhaseChoice.PASS);
+        gameState.addChoice(ActionPhaseChoice.END);
 
     }
 
@@ -860,6 +869,29 @@ public class PlayerState {
 
         if (leader == Cards.LEONARDO_DA_VINCI)
             gainResources(1);
+    }
+
+    public void setWaitingTurns(int waitingTurns) {
+        this.waitingTurns = waitingTurns;
+    }
+
+    /**
+     * Returns the number of turns this player has to wait until he becomes the current player.
+     * @return Number of turns to wait, {@code 0} if the player is the current player
+     */
+    public int getWaitingTurns() {
+        return waitingTurns;
+    }
+
+    @Override
+    public String toString() {
+        if (gameState != null) {
+            int orderNo = gameState.getIndex(this);
+            if (orderNo != -1) {
+                return "P" + orderNo;
+            }
+        }
+        return super.toString();
     }
 
     @FunctionalInterface

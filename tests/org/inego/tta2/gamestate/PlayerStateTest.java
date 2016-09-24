@@ -50,6 +50,9 @@ public class PlayerStateTest {
 
         playerState.setMilitaryTactic(Cards.FIGHTING_BAND);
         assertEquals(3, playerState.getMilitaryStrength());
+
+        playerState.build(Cards.AIR_FORCES); // +5 from card, +1 from doubled tactics
+        assertEquals(9, playerState.getMilitaryStrength());
     }
 
     @Test
