@@ -2,6 +2,7 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.gamestate.comparison.PlayerComparison;
+import org.inego.tta2.gamestate.comparison.TopNumber;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -66,6 +67,18 @@ public class GameStateTest {
 
         p0.build(Cards.WARRIORS);
         assertEquals(Arrays.asList(p0, p3, p1, p2), gameState.getPlayersSortedBy(PlayerComparison.MILITARY_STRENGTH));
+
+        assertTrue(p0.isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH));
+        assertTrue(p3.isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH));
+        assertFalse(p1.isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH));
+        assertFalse(p2.isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH));
+
+        gameState = new GameState(2);
+        p0 = gameState.getPlayerState(0);
+        p1 = gameState.getPlayerState(1);
+
+        assertTrue(p0.isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH));
+        assertFalse(p1.isAmongTop(TopNumber.TWO, PlayerComparison.MILITARY_STRENGTH));
 
     }
 

@@ -3,6 +3,7 @@ package org.inego.tta2.gamestate;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.gamestate.choice.Choice;
+import org.inego.tta2.gamestate.comparison.TopNumber;
 import org.inego.tta2.gamestate.point.*;
 
 import java.util.*;
@@ -170,13 +171,18 @@ public class GameState implements IGameState {
         this.currentAge = age;
     }
 
-    public boolean isAmongTop(TopCriterion criterion, TopNumber topNumber) {
-        // TODO is among top
+    public boolean isAmongTop(PlayerState playerState, TopNumber topNumber, Comparator<PlayerState> comparator) {
+        List<PlayerState> sortedPlayers = getPlayersSortedBy(comparator);
+        int topNumberValue = topNumber.getTopNumber(this);
+        for (int i = 0; i < topNumberValue; i++) {
+            if (sortedPlayers.get(i) == playerState)
+                return true;
+        }
         return false;
     }
 
     public List<PlayerState> getPlayersSortedBy(Comparator<PlayerState> comparator) {
-        ArrayList<PlayerState> playerStatesCopy = new ArrayList<>(this.playerStates);
+        ArrayList<PlayerState> playerStatesCopy = new ArrayList<>(playerStates);
         playerStatesCopy.sort(comparator);
         return playerStatesCopy;
     }

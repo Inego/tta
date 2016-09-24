@@ -14,12 +14,13 @@ import static org.junit.Assert.*;
  */
 public class PlayerStateTest {
 
-    private GameState gameState = new GameState(3);
+    private GameState gameState;
     private PlayerState playerState;
 
     @Before
     public void setUp() {
-        playerState = new PlayerState(gameState);
+        gameState = new GameState(3);
+        playerState = gameState.getPlayerState(0);
     }
 
     @Test
@@ -158,6 +159,13 @@ public class PlayerStateTest {
                 .add(Cards.WARRIORS)
                 .test(1, 1);
 
+    }
+
+    @Test
+    public void testGenghis3Culture() {
+        playerState.electLeader(Cards.GENGHIS_KHAN);
+        playerState.endTurn();
+        assertEquals(3, playerState.getCulturePoints());
     }
 
     private void instaBuild(WonderCard wonderCard) {
