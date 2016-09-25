@@ -15,7 +15,7 @@ public abstract class ConstructionTechCard extends TechnologyCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 3 * getAge();
     }
 

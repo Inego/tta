@@ -24,12 +24,12 @@ public class MultimediaCard extends LibraryCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 11;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 9;
     }
 

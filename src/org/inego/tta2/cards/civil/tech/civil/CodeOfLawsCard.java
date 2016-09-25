@@ -22,7 +22,7 @@ public class CodeOfLawsCard extends CivilTechCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 6;
     }
 

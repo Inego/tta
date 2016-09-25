@@ -20,12 +20,12 @@ public class CannonCard extends ArtilleryCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 6;
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 5;
     }
 

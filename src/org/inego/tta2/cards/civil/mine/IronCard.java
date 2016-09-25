@@ -20,12 +20,12 @@ public class IronCard extends MineCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 5;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 5;
     }
 

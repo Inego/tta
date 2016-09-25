@@ -23,12 +23,12 @@ public class AlchemyCard extends LabCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 6;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 4;
     }
 

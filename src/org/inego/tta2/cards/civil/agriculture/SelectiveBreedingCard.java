@@ -22,12 +22,12 @@ public class SelectiveBreedingCard extends FarmCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 6;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 5;
     }
 

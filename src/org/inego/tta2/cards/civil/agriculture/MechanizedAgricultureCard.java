@@ -19,12 +19,12 @@ public class MechanizedAgricultureCard extends FarmCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 8;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 7;
     }
 

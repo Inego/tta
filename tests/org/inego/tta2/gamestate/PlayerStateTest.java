@@ -168,6 +168,62 @@ public class PlayerStateTest {
         assertEquals(3, playerState.getCulturePoints());
     }
 
+    @Test
+    public void testHasTheaters() {
+
+        assertFalse(playerState.hasTheaters());
+        assertEquals(11, Cards.MULTIMEDIA.getBuildingCost(playerState));
+        assertEquals(6, Cards.JOURNALISM.getResearchCost(playerState));
+
+        playerState.build(Cards.OPERA);
+
+        assertTrue(playerState.hasTheaters());
+        assertEquals(11, Cards.MULTIMEDIA.getBuildingCost(playerState));
+        assertEquals(6, Cards.JOURNALISM.getResearchCost(playerState));
+
+        playerState.electLeader(Cards.WILLIAM_SHAKESPEARE);
+
+        assertEquals(10, Cards.MULTIMEDIA.getBuildingCost(playerState));
+        assertEquals(5, Cards.JOURNALISM.getResearchCost(playerState));
+    }
+
+    @Test
+    public void testHasLibraries() {
+        assertFalse(playerState.hasLibraries());
+        assertEquals(7, Cards.OPERA.getResearchCost(playerState));
+        assertEquals(11, Cards.MOVIES.getBuildingCost(playerState));
+
+        playerState.build(Cards.PRINTING_PRESS);
+
+        assertTrue(playerState.hasLibraries());
+        assertEquals(7, Cards.OPERA.getResearchCost(playerState));
+        assertEquals(11, Cards.MOVIES.getBuildingCost(playerState));
+
+        playerState.electLeader(Cards.WILLIAM_SHAKESPEARE);
+        assertEquals(6, Cards.OPERA.getResearchCost(playerState));
+        assertEquals(10, Cards.MOVIES.getBuildingCost(playerState));
+
+    }
+
+    @Test
+    public void testShakespeareCultureProductionBonus() {
+
+        assertEquals(0, playerState.getCultureProduction());
+
+        playerState.build(Cards.PRINTING_PRESS); // +1
+        playerState.build(Cards.JOURNALISM);     // +2
+        assertEquals(3, playerState.getCultureProduction());
+
+        playerState.build(Cards.DRAMA);          // +2
+        playerState.build(Cards.OPERA);          // +3
+        playerState.build(Cards.MOVIES);         // +4
+        assertEquals(12, playerState.getCultureProduction());
+
+        playerState.electLeader(Cards.WILLIAM_SHAKESPEARE);
+        assertEquals(16, playerState.getCultureProduction()); // + 2 * 2 Library-Theater pairs
+
+    }
+
     private void instaBuild(WonderCard wonderCard) {
         playerState.takeCard(wonderCard);
         playerState.buildWonderStages(wonderCard.getStages().length);

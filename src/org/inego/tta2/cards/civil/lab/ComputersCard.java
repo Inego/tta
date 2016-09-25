@@ -23,12 +23,12 @@ public class ComputersCard extends LabCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 11;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 8;
     }
 

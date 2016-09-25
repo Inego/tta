@@ -22,7 +22,7 @@ public class JusticeSystemCard extends CivilTechCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 7;
     }
 

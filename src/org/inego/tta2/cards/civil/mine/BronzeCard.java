@@ -20,12 +20,12 @@ public class BronzeCard extends MineCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 2;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 0;
     }
 

@@ -23,12 +23,12 @@ public class ReligionCard extends TempleCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 3;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 0;
     }
 

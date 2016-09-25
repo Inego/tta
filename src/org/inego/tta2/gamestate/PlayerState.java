@@ -15,6 +15,7 @@ import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
+import org.inego.tta2.cards.civil.theater.TheaterCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
@@ -36,11 +37,8 @@ import org.inego.tta2.gamestate.science.*;
 import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  *
@@ -87,6 +85,7 @@ public class PlayerState {
 
     // Units
     private QuantityHashMap<UnitCard> units = new QuantityHashMap<>();
+    private QuantityHashMap<BuildingCard> buildings = new QuantityHashMap<>();
 
     // Tactics
     private TacticCard tactic;
@@ -122,7 +121,7 @@ public class PlayerState {
     private LinkedList<CivilCard> civilHand;
 
     private LinkedList<MilitaryCard> militaryHand;
-    private Set<ITechnologyCard> discoveredTechs;
+    private Set<ITechnologyCard> discoveredTechs = new HashSet<>();
 
 
     public PlayerState(GameState gameState) {
@@ -259,6 +258,17 @@ public class PlayerState {
                         || happinessSource instanceof WonderHappinessSource)
                     cultureProduction += qty * value;
             });
+        }
+        else if (leader == Cards.WILLIAM_SHAKESPEARE) {
+            int libraries = 0;
+            int theaters = 0;
+            for (Entry<CultureProductionSource, Integer> entry : cultureProductionSources.entrySet()) {
+                if (entry.getKey() instanceof LibraryCultureProductionSource)
+                    libraries += entry.getValue();
+                else if (entry.getKey() instanceof TheaterCultureProductionSource)
+                    theaters += entry.getValue();
+            }
+            cultureProduction += 2 * Math.min(libraries, theaters);
         }
 
         recalcCultureProduction = false;
@@ -735,7 +745,7 @@ public class PlayerState {
             if (foodCost <= food) {
                 for (ITechnologyCard discoveredTech : discoveredTechs) {
                     if (discoveredTech instanceof UnitCard) {
-                        int buildingCost = ((UnitCard) discoveredTech).getBuildCost() - 1;
+                        int buildingCost = ((UnitCard) discoveredTech).getBuildingCost(this) - 1;
                         if (buildingCost <= resources) {
                             gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) discoveredTech, foodCost, buildingCost));
                         }
@@ -819,6 +829,9 @@ public class PlayerState {
         if (card instanceof UnitCard) {
             units.delta((UnitCard) card, 1);
             formArmies();
+        }
+        else {
+            buildings.delta(card, 1);
         }
     }
 
@@ -964,6 +977,32 @@ public class PlayerState {
     public void spendMilitaryActions(int value) {
         availableMilitaryActions -= value;
     }
+
+    public boolean hasTheaters() {
+        return has(TheaterCard.class);
+    }
+
+    public boolean hasLibraries() {
+        return has(LibraryCard.class);
+    }
+
+    private boolean has(Class<? extends BuildingCard> cardClass) {
+        if (UnitCard.class.isAssignableFrom(cardClass)) {
+            for (UnitCard unitCard : units.keySet()) {
+                if (cardClass.isInstance(unitCard))
+                    return true;
+            }
+        }
+        else {
+            // Building
+            for (BuildingCard buildingCard : buildings.keySet()) {
+                if (cardClass.isInstance(buildingCard))
+                    return true;
+            }
+        }
+        return false;
+    }
+
 
     @FunctionalInterface
     interface IHappinessSourceHandler {

@@ -28,12 +28,12 @@ public class AirForcesCard extends UnitCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 12;
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 7;
     }
 

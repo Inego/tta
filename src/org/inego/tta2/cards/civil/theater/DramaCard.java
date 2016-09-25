@@ -23,12 +23,12 @@ public class DramaCard extends TheaterCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 4;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 3;
     }
 

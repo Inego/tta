@@ -42,7 +42,7 @@ public class DespotismCard extends GovernmentCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 0;
     }
 }

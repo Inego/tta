@@ -20,12 +20,12 @@ public class ModernInfantryCard extends InfantryCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 7;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 10;
     }
 

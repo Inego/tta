@@ -20,12 +20,12 @@ public class TanksCard extends CavalryCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 9;
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 7;
     }
 

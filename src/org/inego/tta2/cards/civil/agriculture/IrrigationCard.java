@@ -23,12 +23,12 @@ public class IrrigationCard extends FarmCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 4;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 3;
     }
 

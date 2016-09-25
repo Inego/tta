@@ -44,7 +44,7 @@ public class TheocracyCard extends GovernmentCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 6;
     }
 

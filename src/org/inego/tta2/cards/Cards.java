@@ -7,6 +7,10 @@ import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.lab.*;
 import org.inego.tta2.cards.civil.leader.*;
+import org.inego.tta2.cards.civil.library.JournalismCard;
+import org.inego.tta2.cards.civil.library.LibraryCard;
+import org.inego.tta2.cards.civil.library.MultimediaCard;
+import org.inego.tta2.cards.civil.library.PrintingPressCard;
 import org.inego.tta2.cards.civil.mine.*;
 import org.inego.tta2.cards.civil.temple.OrganizedReligionCard;
 import org.inego.tta2.cards.civil.temple.ReligionCard;
@@ -62,6 +66,10 @@ public class Cards {
     public static final TheaterCard OPERA = new OperaCard();
     public static final TheaterCard MOVIES = new MoviesCard();
 
+    public static final LibraryCard PRINTING_PRESS = new PrintingPressCard();
+    public static final LibraryCard JOURNALISM = new JournalismCard();
+    public static final LibraryCard MULTIMEDIA = new MultimediaCard();
+
     public static final UnitCard WARRIORS = new WarriorsCard();
     public static final UnitCard SWORDSMEN = new SwordsmenCard();
     public static final UnitCard RIFLEMEN = new RiflemenCard();
@@ -85,12 +93,14 @@ public class Cards {
     public static final LeaderCard JOAN_OF_ARC = new JoanOfArcCard();
     public static final LeaderCard CHRISTOPHER_COLUMBUS = new ChristopherColumbusCard();
     public static final LeaderCard FREDERICK_BARBAROSSA = new FrederickBarbarossaCard();
+    public static final LeaderCard WILLIAM_SHAKESPEARE = new WilliamShakespeareCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();
     public static final TacticCard SHOCK_TROOPS = new ShockTroopsCard();
     public static final TacticCard CLASSIC_ARMY = new ClassicArmyCard();
     public static final TacticCard NAPOLEONIC_ARMY = new NapoleonicArmyCard();
+
 
 
 }

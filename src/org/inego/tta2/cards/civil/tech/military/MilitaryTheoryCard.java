@@ -22,7 +22,7 @@ public class MilitaryTheoryCard extends MilitaryTechCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 11;
     }
 

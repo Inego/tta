@@ -20,12 +20,12 @@ public class RiflemenCard extends InfantryCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 5;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 6;
     }
 

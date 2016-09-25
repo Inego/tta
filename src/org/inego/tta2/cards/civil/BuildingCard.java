@@ -9,8 +9,11 @@ public abstract class BuildingCard extends CivilCard implements ITechnologyCard 
 
 
 
-    public abstract int getBuildCost();
+    public abstract int getNominalCost();
 
     public abstract void assignWorker(int sign, PlayerState playerState);
 
+    public int getBuildingCost(PlayerState playerState) {
+        return getNominalCost();
+    }
 }

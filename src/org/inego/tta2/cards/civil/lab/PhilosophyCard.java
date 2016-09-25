@@ -24,12 +24,12 @@ public class PhilosophyCard extends LabCard {
     }
 
     @Override
-    public int getBuildCost() {
+    public int getNominalCost() {
         return 3;
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 0;
     }
 

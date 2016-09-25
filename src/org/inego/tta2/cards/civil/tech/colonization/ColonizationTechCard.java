@@ -20,7 +20,7 @@ public abstract class ColonizationTechCard extends TechnologyCard {
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 2 * (1 + getAge());
     }
 

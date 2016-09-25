@@ -43,7 +43,7 @@ public class FundamentalismCard extends GovernmentCard implements IScienceProduc
     }
 
     @Override
-    public int getResearchCost() {
+    public int getNominalResearchCost() {
         return 18;
     }
 
