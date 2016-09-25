@@ -5,5 +5,6 @@ public enum MilitaryCardKind {
     AGGRESSION,
     WAR,
     PACT,
+    COLONY,
     TACTIC
 }

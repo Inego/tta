@@ -208,8 +208,6 @@ public class PlayerStateTest {
     @Test
     public void testShakespeareCultureProductionBonus() {
 
-        assertEquals(0, playerState.getCultureProduction());
-
         playerState.build(Cards.PRINTING_PRESS); // +1
         playerState.build(Cards.JOURNALISM);     // +2
         assertEquals(3, playerState.getCultureProduction());
@@ -221,6 +219,21 @@ public class PlayerStateTest {
 
         playerState.electLeader(Cards.WILLIAM_SHAKESPEARE);
         assertEquals(16, playerState.getCultureProduction()); // + 2 * 2 Library-Theater pairs
+
+    }
+
+    @Test
+    public void testJamesCookColonyCultureProductionBonus() {
+
+        playerState.colonize(Cards.DEVELOPED_TERRITORY_I);
+
+        assertEquals(0, playerState.getCultureProduction());
+
+        playerState.electLeader(Cards.JAMES_COOK);
+        assertEquals(2, playerState.getCultureProduction());
+
+        playerState.colonize(Cards.DEVELOPED_TERRITORY_II);
+        assertEquals(3, playerState.getCultureProduction());
 
     }
 

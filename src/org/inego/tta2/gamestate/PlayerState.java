@@ -118,10 +118,12 @@ public class PlayerState {
     private int availableMilitaryActions;
 
     private int waitingTurns;
-    private LinkedList<CivilCard> civilHand;
 
-    private LinkedList<MilitaryCard> militaryHand;
+    private LinkedList<CivilCard> civilHand;
+    private LinkedList<MilitaryCard> militaryHand ;
+
     private Set<ITechnologyCard> discoveredTechs = new HashSet<>();
+    private LinkedList<ColonyCard> colonies = new LinkedList<>();
 
 
     public PlayerState(GameState gameState) {
@@ -269,6 +271,9 @@ public class PlayerState {
                     theaters += entry.getValue();
             }
             cultureProduction += 2 * Math.min(libraries, theaters);
+        }
+        else if (leader == Cards.JAMES_COOK && !colonies.isEmpty()) {
+            cultureProduction += colonies.size() + 1;
         }
 
         recalcCultureProduction = false;
@@ -650,7 +655,7 @@ public class PlayerState {
         return gameState.isAmongTop(this, topNumber, comparator);
     }
 
-    private void gainCulturePoints(int value) {
+    public void gainCulturePoints(int value) {
         culturePoints += value;
     }
 
@@ -680,12 +685,16 @@ public class PlayerState {
 
             int cardsToDraw = Math.min(availableMilitaryActions, 3);
 
-            if (cardsToDraw > 0) {
-                addMilitaryCards(gameState.drawMilitaryCards(cardsToDraw));
-            }
+            drawMilitaryCards(cardsToDraw);
 
         }
 
+    }
+
+    public void drawMilitaryCards(int cardsToDraw) {
+        if (cardsToDraw > 0) {
+            addMilitaryCards(gameState.drawMilitaryCards(cardsToDraw));
+        }
     }
 
     private void addMilitaryCards(MilitaryCard[] militaryCards) {
@@ -768,7 +777,8 @@ public class PlayerState {
         gainPopulation(1);
     }
 
-    private void gainPopulation(int value) {
+    public void gainPopulation(int value) {
+        // TODO gain population
         workerPool += value;
     }
 
@@ -777,7 +787,7 @@ public class PlayerState {
         resources -= value;
     }
 
-    private void gainResources(int value) {
+    public void gainResources(int value) {
         // TODO gain resources
         resources += value;
     }
@@ -964,6 +974,23 @@ public class PlayerState {
 
     public void colonize(ColonyCard colony) {
         // TODO colonize
+        colonies.add(colony);
+
+        if (leader == Cards.JAMES_COOK)
+            setRecalcCultureProduction();
+
+        colony.immediateBonus(this);
+        colony.onGain(1, this);
+    }
+
+    public void loseColony(ColonyCard colony) {
+        // TODO lose colony
+        colonies.remove(colony);
+
+        if (leader == Cards.JAMES_COOK)
+            setRecalcCultureProduction();
+
+        colony.onGain(-1, this);
     }
 
     public void payFood(int value) {
@@ -1003,6 +1030,36 @@ public class PlayerState {
         return false;
     }
 
+    public void gainSciencePoints(int value) {
+        sciencePoints += value;
+    }
+
+    public void modifyBlueTokens(int value) {
+        if (value > 0)
+            gainBlueTokens(value);
+        else
+            loseBlueTokens(-value);
+    }
+
+    private void loseBlueTokens(int value) {
+        // TODO lose blue tokens
+    }
+
+    public void modifyYellowTokens(int value) {
+        if (value > 0)
+            gainYellowTokens(value);
+        else
+            loseYellowTokens(-value);
+    }
+
+    private void loseYellowTokens(int value) {
+        // TODO lose yellow tokens
+    }
+
+    public void gainFood(int value) {
+        // TODO gain food
+        food += value;
+    }
 
     @FunctionalInterface
     interface IHappinessSourceHandler {

@@ -1,7 +1,5 @@
 package org.inego.tta2.cards;
 
-import org.inego.tta2.cards.civil.BuildingCard;
-import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.agriculture.*;
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
@@ -22,6 +20,7 @@ import org.inego.tta2.cards.civil.theater.OperaCard;
 import org.inego.tta2.cards.civil.theater.TheaterCard;
 import org.inego.tta2.cards.civil.unit.*;
 import org.inego.tta2.cards.civil.wonder.*;
+import org.inego.tta2.cards.military.colony.*;
 import org.inego.tta2.cards.military.tactic.*;
 
 /**
@@ -94,6 +93,7 @@ public class Cards {
     public static final LeaderCard CHRISTOPHER_COLUMBUS = new ChristopherColumbusCard();
     public static final LeaderCard FREDERICK_BARBAROSSA = new FrederickBarbarossaCard();
     public static final LeaderCard WILLIAM_SHAKESPEARE = new WilliamShakespeareCard();
+    public static final LeaderCard JAMES_COOK = new JamesCookCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();
@@ -101,6 +101,18 @@ public class Cards {
     public static final TacticCard CLASSIC_ARMY = new ClassicArmyCard();
     public static final TacticCard NAPOLEONIC_ARMY = new NapoleonicArmyCard();
 
+    public static final ColonyCard DEVELOPED_TERRITORY_I = new DevelopedTerritory1Card();
+    public static final ColonyCard DEVELOPED_TERRITORY_II = new DevelopedTerritory2Card();
+    public static final ColonyCard HISTORIC_TERRITORY_I = new HistoricTerritory1Card();
+    public static final ColonyCard HISTORIC_TERRITORY_II = new HistoricTerritory2Card();
+    public static final ColonyCard INHABITED_TERRITORY_I = new InhabitedTerritory1Card();
+    public static final ColonyCard INHABITED_TERRITORY_II = new InhabitedTerritory2Card();
+    public static final ColonyCard STRATEGIC_TERRITORY_I = new StrategicTerritory1Card();
+    public static final ColonyCard STRATEGIC_TERRITORY_II = new StrategicTerritory2Card();
+    public static final ColonyCard VAST_TERRITORY_I = new VastTerritory1Card();
+    public static final ColonyCard VAST_TERRITORY_II = new VastTerritory2Card();
+    public static final ColonyCard WEALTHY_TERRITORY_I = new WealthyTerritory1Card();
+    public static final ColonyCard WEALTHY_TERRITORY_II = new WealthyTerritory2Card();
 
 
 }
