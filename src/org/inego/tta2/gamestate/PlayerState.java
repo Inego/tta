@@ -16,7 +16,10 @@ import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
 import org.inego.tta2.cards.civil.theater.TheaterCard;
+import org.inego.tta2.cards.civil.unit.ArtilleryCard;
+import org.inego.tta2.cards.civil.unit.InfantryCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
+import org.inego.tta2.cards.civil.unit.UnitType;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.colony.ColonyCard;
@@ -358,6 +361,7 @@ public class PlayerState {
             return;
         }
 
+        // TODO refactor getComposition to using UnitCard.getUnitType
         Composition composition = getComposition(tactic.getAge());
 
         // Modern armies
@@ -432,6 +436,7 @@ public class PlayerState {
     }
 
     public void modifyAdditionalMilitaryActions(int delta) {
+        // TODO increase available military actions?
         additionalMilitaryActions += delta;
     }
 
@@ -470,18 +475,18 @@ public class PlayerState {
         militaryStrength = militaryStrengthBase;
 
         if (wonders.contains(Cards.GREAT_WALL)) {
-            militaryStrength += units.get(Cards.WARRIORS);
-            militaryStrength += units.get(Cards.SWORDSMEN);
-            militaryStrength += units.get(Cards.RIFLEMEN);
-            militaryStrength += units.get(Cards.MODERN_INFANTRY);
-            militaryStrength += units.get(Cards.CANNON);
-            militaryStrength += units.get(Cards.ROCKETS); // :)
+            for (Entry<UnitCard, Integer> unit : units.entrySet()) {
+                if (unit.getKey() instanceof InfantryCard || unit.getKey() instanceof ArtilleryCard)
+                    militaryStrength += unit.getValue();
+            }
         }
 
         militaryStrength += getTacticsBonus();
 
         if (leader == Cards.ALEXANDER) {
-            // TODO Alexander - add total number of military units
+            for (Entry<UnitCard, Integer> unit : units.entrySet()) {
+                militaryStrength += unit.getValue();
+            }
         }
         else if (leader == Cards.JOAN_OF_ARC) {
             iterateHappiness((happinessSource, value, qty) -> {
@@ -489,9 +494,14 @@ public class PlayerState {
                     militaryStrength += value * qty;
             });
         }
-
+        else if (leader == Cards.NAPOLEON_BONAPARTE) {
+            Set<UnitType> types = EnumSet.noneOf(UnitType.class);
+            for (UnitCard unitCard : units.keySet()) {
+                types.add(unitCard.getUnitType());
+            }
+            militaryStrength += 2 * types.size();
+        }
         recalcMilitary = false;
-
     }
 
     public boolean isCardBuilt(WonderCard wonderCard) {
@@ -660,8 +670,8 @@ public class PlayerState {
     }
 
     private void resetActions() {
-        availableCivilActions = maxCivilActions;
-        availableMilitaryActions = maxMilitaryActions;
+        availableCivilActions = maxCivilActions + additionalCivilActions;
+        availableMilitaryActions = maxMilitaryActions + additionalMilitaryActions;
     }
 
     private void handleProductionPhase() {

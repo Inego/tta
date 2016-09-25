@@ -14,6 +14,11 @@ public abstract class ArtilleryCard extends UnitCard {
     }
 
     @Override
+    public UnitType getUnitType() {
+        return UnitType.ARTILLERY;
+    }
+
+    @Override
     void addToComposition(Composition composition, int qty, boolean modern) {
         if (modern)
             composition.modernArtillery += qty;

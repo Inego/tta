@@ -237,6 +237,39 @@ public class PlayerStateTest {
 
     }
 
+    @Test
+    public void testNapoleonMilitaryBonus() {
+
+        playerState.electLeader(Cards.NAPOLEON_BONAPARTE);
+
+        assertEquals(3, playerState.getMilitaryStrength()); // 1 for Warriors, +2 for Infantry type
+
+        playerState.build(Cards.SWORDSMEN);
+
+        assertEquals(5, playerState.getMilitaryStrength()); // +2 for Swordsmen, +0 for Infantry type
+
+        playerState.build(Cards.KNIGHTS);
+
+        assertEquals(9, playerState.getMilitaryStrength()); // +2 for Knights, +2 for Cavalry type
+
+        playerState.build(Cards.CAVALRYMEN);
+
+        assertEquals(12, playerState.getMilitaryStrength()); // +3 for Cavalrymen, +0 for Cavalry type
+
+        playerState.build(Cards.CANNON);
+
+        assertEquals(17, playerState.getMilitaryStrength()); // +3 for Cannon, +2 for Artillery type
+
+        playerState.build(Cards.ROCKETS);
+
+        assertEquals(22, playerState.getMilitaryStrength()); // +5 for Rockets, +0 for Artillery type
+
+        playerState.build(Cards.AIR_FORCES);
+
+        assertEquals(29, playerState.getMilitaryStrength()); // +5 for Air Forces, +2 for Air Forces type
+
+    }
+
     private void instaBuild(WonderCard wonderCard) {
         playerState.takeCard(wonderCard);
         playerState.buildWonderStages(wonderCard.getStages().length);

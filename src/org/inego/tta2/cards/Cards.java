@@ -1,5 +1,6 @@
 package org.inego.tta2.cards;
 
+import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.agriculture.*;
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
@@ -94,6 +95,7 @@ public class Cards {
     public static final LeaderCard FREDERICK_BARBAROSSA = new FrederickBarbarossaCard();
     public static final LeaderCard WILLIAM_SHAKESPEARE = new WilliamShakespeareCard();
     public static final LeaderCard JAMES_COOK = new JamesCookCard();
+    public static final LeaderCard NAPOLEON_BONAPARTE = new NapoleonBonaparteCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();

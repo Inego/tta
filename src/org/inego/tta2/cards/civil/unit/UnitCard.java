@@ -11,6 +11,8 @@ public abstract class UnitCard extends BuildingCard {
 
     protected abstract int getStrength();
 
+    public abstract UnitType getUnitType();
+
     @Override
     public void assignWorker(int sign, PlayerState playerState) {
         playerState.modifyMilitaryStrengthBase(sign * getStrength());

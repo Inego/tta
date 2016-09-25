@@ -14,6 +14,11 @@ public abstract class InfantryCard extends UnitCard {
     }
 
     @Override
+    public UnitType getUnitType() {
+        return UnitType.INFANTRY;
+    }
+
+    @Override
     void addToComposition(Composition composition, int qty, boolean modern) {
         if (modern)
             composition.modernInfantry += qty;

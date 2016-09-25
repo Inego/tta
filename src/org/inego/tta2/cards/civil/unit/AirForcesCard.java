@@ -7,9 +7,15 @@ import org.inego.tta2.gamestate.tactics.Composition;
  *
  */
 public class AirForcesCard extends UnitCard {
+
     @Override
     public CivilCardKind getKind() {
         return CivilCardKind.AIR_FORCE;
+    }
+
+    @Override
+    public UnitType getUnitType() {
+        return UnitType.AIR_FORCE;
     }
 
     @Override
