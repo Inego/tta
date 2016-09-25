@@ -15,6 +15,12 @@ public class ColumbusColonizationChoice extends Choice {
 
     @Override
     protected void apply(GameState gameState, PlayerState playerState) {
-        // TODO Columbus colonization choice
+
+        // Colonize for free
+        playerState.colonize(colony);
+
+        // Columbus leaves
+        playerState.removeCurrentLeader();
+
     }
 }

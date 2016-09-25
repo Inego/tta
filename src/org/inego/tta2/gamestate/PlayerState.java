@@ -116,7 +116,8 @@ public class PlayerState {
     private int availableMilitaryActions;
     private int waitingTurns;
 
-    private LinkedList<CivilCard> cardsInHand;
+    private LinkedList<CivilCard> civilHand;
+    private LinkedList<MilitaryCard> militaryHand;
 
 
     public PlayerState(GameState gameState) {
@@ -144,7 +145,8 @@ public class PlayerState {
         government = Cards.DESPOTISM;
         leader = null;
 
-        cardsInHand = new LinkedList<>();
+        civilHand = new LinkedList<>();
+        militaryHand = new LinkedList<>();
 
     }
 
@@ -909,13 +911,15 @@ public class PlayerState {
     }
 
     public void addColumbusColonizationChoices() {
-
-        for (CivilCard civilCard : cardsInHand) {
-            if (civilCard instanceof ColonyCard) {
-                gameState.addChoice(new ColumbusColonizationChoice());
+        for (MilitaryCard militaryCard : militaryHand) {
+            if (militaryCard instanceof ColonyCard) {
+                gameState.addChoice(new ColumbusColonizationChoice((ColonyCard) militaryCard));
             }
         }
+    }
 
+    public void colonize(ColonyCard colony) {
+        // TODO colonize
     }
 
     @FunctionalInterface
