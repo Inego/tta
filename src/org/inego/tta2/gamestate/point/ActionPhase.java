@@ -12,13 +12,7 @@ public class ActionPhase extends GamePoint {
 
     @Override
     public void apply(GameState gameState, PlayerState playerState) {
-
-        // TODO collect action phase choices
-
         playerState.addActionPhaseChoices();
-
-
-
     }
 
 }

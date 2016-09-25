@@ -1,9 +1,13 @@
 package org.inego.tta2.cards;
 
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.ITechnologyCard;
+import org.inego.tta2.cards.civil.agriculture.*;
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
+import org.inego.tta2.cards.civil.lab.*;
 import org.inego.tta2.cards.civil.leader.*;
+import org.inego.tta2.cards.civil.mine.*;
 import org.inego.tta2.cards.civil.temple.OrganizedReligionCard;
 import org.inego.tta2.cards.civil.temple.ReligionCard;
 import org.inego.tta2.cards.civil.temple.TempleCard;
@@ -35,6 +39,21 @@ public class Cards {
     public static final WonderCard FAST_FOOD_CHAINS = new FastFoodChainsCard();
     public static final WonderCard KREMLIN = new KremlinCard();
 
+    public static final FarmCard AGRICULTURE = new AgricultureCard();
+    public static final FarmCard IRRIGATION = new IrrigationCard();
+    public static final FarmCard SELECTIVE_BREEDING = new SelectiveBreedingCard();
+    public static final FarmCard MECHANIZED_AGRICULTURE = new MechanizedAgricultureCard();
+
+    public static final MineCard BRONZE = new BronzeCard();
+    public static final MineCard IRON = new IronCard();
+    public static final MineCard COAL = new CoalCard();
+    public static final MineCard OIL = new OilCard();
+
+    public static final LabCard PHILOSOPHY = new PhilosophyCard();
+    public static final LabCard ALCHEMY = new AlchemyCard();
+    public static final LabCard SCIENTIFIC_METHOD = new ScientificMethodCard();
+    public static final LabCard COMPUTERS = new ComputersCard();
+
     public static final TempleCard RELIGION = new ReligionCard();
     public static final TempleCard THEOLOGY = new TheologyCard();
     public static final TempleCard ORGANIZED_RELIGION = new OrganizedReligionCard();
@@ -65,10 +84,13 @@ public class Cards {
     public static final LeaderCard LEONARDO_DA_VINCI = new LeonardoDaVinciCard();
     public static final LeaderCard JOAN_OF_ARC = new JoanOfArcCard();
     public static final LeaderCard CHRISTOPHER_COLUMBUS = new ChristopherColumbusCard();
+    public static final LeaderCard FREDERICK_BARBAROSSA = new FrederickBarbarossaCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();
     public static final TacticCard SHOCK_TROOPS = new ShockTroopsCard();
     public static final TacticCard CLASSIC_ARMY = new ClassicArmyCard();
     public static final TacticCard NAPOLEONIC_ARMY = new NapoleonicArmyCard();
+
+
 }

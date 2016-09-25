@@ -2,9 +2,6 @@ package org.inego.tta2.cards.civil.agriculture;
 
 import org.inego.tta2.cards.civil.agriculture.FarmCard;
 
-/**
- *
- */
 public class MechanizedAgricultureCard extends FarmCard {
     @Override
     public int getAge() {

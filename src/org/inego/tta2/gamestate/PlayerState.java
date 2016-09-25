@@ -7,6 +7,7 @@ import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.lab.LabCard;
+import org.inego.tta2.cards.civil.leader.FrederickBarbarossaCard;
 import org.inego.tta2.cards.civil.leader.HomerCard;
 import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.cards.civil.library.LibraryCard;
@@ -108,16 +109,20 @@ public class PlayerState {
 
     private boolean leaderSpecialActionAvailable;
 
+    private int food;
     private int resources;
+
     private int spentCivilActions;
     private int availableCivilActions;
     private int militaryProductionBonus;
     private int leaderMilitaryProductionBonus;
     private int availableMilitaryActions;
-    private int waitingTurns;
 
+    private int waitingTurns;
     private LinkedList<CivilCard> civilHand;
+
     private LinkedList<MilitaryCard> militaryHand;
+    private Set<ITechnologyCard> discoveredTechs;
 
 
     public PlayerState(GameState gameState) {
@@ -138,6 +143,9 @@ public class PlayerState {
         availableCivilActions = 0;
         spentCivilActions = 0;
 
+        food = 0;
+        resources = 0;
+
         builtStages = 0;
 
         workerPool = 1;
@@ -147,6 +155,12 @@ public class PlayerState {
 
         civilHand = new LinkedList<>();
         militaryHand = new LinkedList<>();
+
+        discoveredTechs.add(Cards.WARRIORS);
+        discoveredTechs.add(Cards.AGRICULTURE);
+        discoveredTechs.add(Cards.BRONZE);
+        discoveredTechs.add(Cards.PHILOSOPHY);
+        discoveredTechs.add(Cards.RELIGION);
 
     }
 
@@ -716,8 +730,27 @@ public class PlayerState {
             gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
         }
 
+        if (leader == Cards.FREDERICK_BARBAROSSA && availableMilitaryActions > 0) {
+            int foodCost = getIncreasePopulationCost() - 1;
+            if (foodCost <= food) {
+                for (ITechnologyCard discoveredTech : discoveredTechs) {
+                    if (discoveredTech instanceof UnitCard) {
+                        int buildingCost = ((UnitCard) discoveredTech).getBuildCost() - 1;
+                        if (buildingCost <= resources) {
+                            gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) discoveredTech, foodCost, buildingCost));
+                        }
+                    }
+                }
+            }
+        }
+
         gameState.addChoice(ActionPhaseChoice.END);
 
+    }
+
+    private int getIncreasePopulationCost() {
+        // TODO get increase population cost
+        return 1;
     }
 
     public void increasePopulation(int populationProductionCost) {
@@ -787,9 +820,6 @@ public class PlayerState {
             units.delta((UnitCard) card, 1);
             formArmies();
         }
-
-        // TODO build - spend resources
-        // TODO build - spend pop
     }
 
     public Set<WonderCard> getWonders() {
@@ -881,6 +911,7 @@ public class PlayerState {
     }
 
     public void discover(ITechnologyCard technologyCard) {
+
         // TODO discover technology
 
         if (leader == Cards.LEONARDO_DA_VINCI)
@@ -920,6 +951,18 @@ public class PlayerState {
 
     public void colonize(ColonyCard colony) {
         // TODO colonize
+    }
+
+    public void payFood(int value) {
+        // TODO pay food
+    }
+
+    public void payResources(int value) {
+        // TODO pay resources
+    }
+
+    public void spendMilitaryActions(int value) {
+        availableMilitaryActions -= value;
     }
 
     @FunctionalInterface
