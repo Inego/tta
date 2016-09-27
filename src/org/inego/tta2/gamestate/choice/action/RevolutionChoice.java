@@ -31,7 +31,7 @@ public class RevolutionChoice extends ActionPhaseChoice {
             playerState.gainCulturePoints(3);
         }
         else
-            playerState.payCivilActions(actionPointsCost);
+            playerState.useCivilActions(actionPointsCost);
     }
 
 }

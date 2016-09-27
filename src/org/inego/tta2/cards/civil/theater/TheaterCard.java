@@ -27,8 +27,14 @@ public abstract class TheaterCard extends BuildingCard {
     @Override
     public int getResearchCost(PlayerState playerState) {
         int researchCost = super.getResearchCost(playerState);
-        if (playerState.getLeader() == Cards.WILLIAM_SHAKESPEARE && playerState.hasLibraries())
-            researchCost -= 1;
+        if (playerState.getLeader() == Cards.WILLIAM_SHAKESPEARE) {
+            if (playerState.hasLibraries()) {
+                researchCost -= 1;
+            }
+        }
+        else if (playerState.getLeader() == Cards.JS_BACH) {
+            researchCost -= 2;
+        }
         return researchCost;
     }
 

@@ -97,6 +97,7 @@ public class Cards {
     public static final LeaderCard JAMES_COOK = new JamesCookCard();
     public static final LeaderCard NAPOLEON_BONAPARTE = new NapoleonBonaparteCard();
     public static final LeaderCard MAXIMILIEN_ROBESPIERRE = new MaximilienRobespierreCard();
+    public static final LeaderCard JS_BACH = new JsBachCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();

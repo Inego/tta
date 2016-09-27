@@ -125,7 +125,7 @@ public class PlayerState {
     private int waitingTurns;
 
     private LinkedList<CivilCard> civilHand;
-    private LinkedList<MilitaryCard> militaryHand ;
+    private LinkedList<MilitaryCard> militaryHand;
 
     private Set<ITechnologyCard> discoveredTechs = new HashSet<>();
     private LinkedList<ColonyCard> colonies = new LinkedList<>();
@@ -243,8 +243,8 @@ public class PlayerState {
         }
 
         if (internet) {
-            // TODO on science building change recalc culture production
-            // TODO on military building change recalc culture production
+            // TODO on science building and Internet change recalc culture production
+            // TODO on military building and Internet change recalc culture production
             cultureProduction += getBuildingScienceOutput() + getBuildingMilitaryOutput();
         }
 
@@ -279,6 +279,12 @@ public class PlayerState {
         }
         else if (leader == Cards.JAMES_COOK && !colonies.isEmpty()) {
             cultureProduction += colonies.size() + 1;
+        }
+        else if (leader == Cards.JS_BACH) {
+            for (Entry<CultureProductionSource, Integer> entry : cultureProductionSources.entrySet()) {
+                if (entry.getKey() instanceof TheaterCultureProductionSource)
+                    cultureProduction += entry.getValue();
+            }
         }
 
         recalcCultureProduction = false;
@@ -784,25 +790,30 @@ public class PlayerState {
                     else {
                         // Standard revolution, spend all civil actions
                         int civilActionsTotal = getCivilActionsTotal();
-                        if (availableCivilActions >= civilActionsTotal)
+                        if (getAvailableCivilActions() >= civilActionsTotal)
                             gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, civilActionsTotal, false));
                     }
                 }
             }
         }
 
-        if (leader == Cards.FREDERICK_BARBAROSSA && availableMilitaryActions > 0) {
-            int foodCost = getIncreasePopulationCost() - 1;
-            if (foodCost <= food) {
-                for (ITechnologyCard discoveredTech : discoveredTechs) {
-                    if (discoveredTech instanceof UnitCard) {
-                        int buildingCost = ((UnitCard) discoveredTech).getBuildingCost(this) - 1;
-                        if (buildingCost <= resources) {
-                            gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) discoveredTech, foodCost, buildingCost));
+        if (leader == Cards.FREDERICK_BARBAROSSA) {
+            if (availableMilitaryActions > 0) {
+                int foodCost = getIncreasePopulationCost() - 1;
+                if (foodCost <= food) {
+                    for (ITechnologyCard discoveredTech : discoveredTechs) {
+                        if (discoveredTech instanceof UnitCard) {
+                            int buildingCost = ((UnitCard) discoveredTech).getBuildingCost(this) - 1;
+                            if (buildingCost <= resources) {
+                                gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) discoveredTech, foodCost, buildingCost));
+                            }
                         }
                     }
                 }
             }
+        }
+        else if (leader == Cards.JS_BACH) {
+            
         }
 
         gameState.addChoice(ActionPhaseChoice.END);
@@ -1122,10 +1133,6 @@ public class PlayerState {
 
     public void payMilitaryActions(int cost) {
         availableMilitaryActions -= cost;
-    }
-
-    public void payCivilActions(int cost) {
-        availableCivilActions -= cost;
     }
 
     public void discoverGovernment(GovernmentCard government, int scienceCost) {
