@@ -26,7 +26,9 @@ import org.inego.tta2.cards.military.colony.ColonyCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
+import org.inego.tta2.gamestate.choice.action.ChangeGovernmentChoice;
 import org.inego.tta2.gamestate.choice.action.IncreasePopulationChoice;
+import org.inego.tta2.gamestate.choice.action.RevolutionChoice;
 import org.inego.tta2.gamestate.comparison.PlayerComparison;
 import org.inego.tta2.gamestate.comparison.TopNumber;
 import org.inego.tta2.gamestate.choice.leader.ColumbusColonizationChoice;
@@ -670,8 +672,12 @@ public class PlayerState {
     }
 
     private void resetActions() {
-        availableCivilActions = maxCivilActions + additionalCivilActions;
-        availableMilitaryActions = maxMilitaryActions + additionalMilitaryActions;
+        availableCivilActions = getCivilActionsTotal();
+        availableMilitaryActions = getMilitaryActionsTotal();
+    }
+
+    private int getMilitaryActionsTotal() {
+        return maxMilitaryActions + additionalMilitaryActions;
     }
 
     private void handleProductionPhase() {
@@ -759,6 +765,32 @@ public class PlayerState {
             gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
         }
 
+        for (CivilCard civilCard : civilHand) {
+            if (civilCard instanceof GovernmentCard) {
+                GovernmentCard governmentCard = (GovernmentCard) civilCard;
+                // Peaceful discover
+                int researchCost = governmentCard.getResearchCost(this);
+                if (sciencePoints >= researchCost) {
+                    gameState.addChoice(new ChangeGovernmentChoice(governmentCard, researchCost));
+                }
+                // Revolution
+                researchCost = governmentCard.getRevolutionCost();
+                if (researchCost >= sciencePoints) {
+                    if (leader == Cards.MAXIMILIEN_ROBESPIERRE) {
+                        int militaryActionsTotal = getMilitaryActionsTotal();
+                        if (availableMilitaryActions >= militaryActionsTotal)
+                            gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, militaryActionsTotal, true));
+                    }
+                    else {
+                        // Standard revolution, spend all civil actions
+                        int civilActionsTotal = getCivilActionsTotal();
+                        if (availableCivilActions >= civilActionsTotal)
+                            gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, civilActionsTotal, false));
+                    }
+                }
+            }
+        }
+
         if (leader == Cards.FREDERICK_BARBAROSSA && availableMilitaryActions > 0) {
             int foodCost = getIncreasePopulationCost() - 1;
             if (foodCost <= food) {
@@ -775,6 +807,11 @@ public class PlayerState {
 
         gameState.addChoice(ActionPhaseChoice.END);
 
+    }
+
+    private int getCivilActionsTotal() {
+        // TODO get civil actions total
+        return maxCivilActions + additionalCivilActions;
     }
 
     private int getIncreasePopulationCost() {
@@ -1070,6 +1107,33 @@ public class PlayerState {
         // TODO gain food
         food += value;
     }
+
+    public void loseCivilCard(CivilCard card) {
+        civilHand.remove(card);
+    }
+
+    public void paySciencePoints(int cost) {
+        sciencePoints -= cost;
+    }
+
+    public void setGovernment(GovernmentCard newGovernment) {
+        this.government = newGovernment;
+    }
+
+    public void payMilitaryActions(int cost) {
+        availableMilitaryActions -= cost;
+    }
+
+    public void payCivilActions(int cost) {
+        availableCivilActions -= cost;
+    }
+
+    public void discoverGovernment(GovernmentCard government, int scienceCost) {
+        paySciencePoints(scienceCost);
+        setGovernment(government);
+        loseCivilCard(government);
+    }
+
 
     @FunctionalInterface
     interface IHappinessSourceHandler {

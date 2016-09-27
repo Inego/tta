@@ -7,7 +7,7 @@ import org.inego.tta2.gamestate.choice.Choice;
 /**
  *
  */
-public class IncreasePopulationChoice extends Choice {
+public class IncreasePopulationChoice extends ActionPhaseChoice {
 
     private int populationProductionCost;
 

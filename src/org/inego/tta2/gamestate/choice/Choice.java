@@ -10,7 +10,7 @@ import org.inego.tta2.gamestate.PlayerState;
 public abstract class Choice implements IChoice<GameState> {
 
     @Override
-    public void apply(GameState gameState) {
+    public final void apply(GameState gameState) {
         apply(gameState, gameState.getCurrentPlayerState());
     }
 
