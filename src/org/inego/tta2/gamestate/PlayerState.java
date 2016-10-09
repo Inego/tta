@@ -147,6 +147,10 @@ public class PlayerState {
 
         this.gameState = gameState;
 
+        // From 1 Warrior:
+        militaryStrengthBase = 1;
+        militaryStrength = 1;
+
         militaryProductionBonus = 0;
         leaderMilitaryProductionBonus = 0;
 
@@ -1073,6 +1077,7 @@ public class PlayerState {
             if (age > currentChainTop.getAge())
             {
                 currentChainTop.next = newChainElement;
+                newChainElement.prev = currentChainTop;
                 buildingChains.put(kind, newChainElement);
             }
             else {

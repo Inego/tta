@@ -30,13 +30,13 @@ public class PlayerStateTest {
 
         assertEquals(0, playerState.getCultureProduction());
 
-        playerState.build(Cards.THEOLOGY);
+        build(Cards.THEOLOGY);
         assertEquals(1, playerState.getCultureProduction());
 
-        playerState.build(Cards.OPERA);
+        build(Cards.OPERA);
         assertEquals(4, playerState.getCultureProduction());
 
-        playerState.build(Cards.OPERA);
+        build(Cards.OPERA);
         assertEquals(7, playerState.getCultureProduction());
 
         playerState.electLeader(Cards.MICHELANGELO);
@@ -48,13 +48,13 @@ public class PlayerStateTest {
     public void testCalculateMilitaryStrength() {
         assertEquals(1, playerState.getMilitaryStrength());
 
-        playerState.build(Cards.WARRIORS);
+        build(Cards.WARRIORS);
         assertEquals(2, playerState.getMilitaryStrength());
 
         playerState.setMilitaryTactic(Cards.FIGHTING_BAND);
         assertEquals(3, playerState.getMilitaryStrength());
 
-        playerState.build(Cards.AIR_FORCES); // +5 from card, +1 from doubled tactics
+        build(Cards.AIR_FORCES); // +5 from card, +1 from doubled tactics
         assertEquals(9, playerState.getMilitaryStrength());
     }
 
@@ -177,7 +177,7 @@ public class PlayerStateTest {
         assertEquals(11, Cards.MULTIMEDIA.getBuildingCost(playerState));
         assertEquals(6, Cards.JOURNALISM.getResearchCost(playerState));
 
-        playerState.build(Cards.OPERA);
+        build(Cards.OPERA);
 
         assertTrue(playerState.hasTheaters());
         assertEquals(11, Cards.MULTIMEDIA.getBuildingCost(playerState));
@@ -195,7 +195,7 @@ public class PlayerStateTest {
         assertEquals(7, Cards.OPERA.getResearchCost(playerState));
         assertEquals(11, Cards.MOVIES.getBuildingCost(playerState));
 
-        playerState.build(Cards.PRINTING_PRESS);
+        build(Cards.PRINTING_PRESS);
 
         assertTrue(playerState.hasLibraries());
         assertEquals(7, Cards.OPERA.getResearchCost(playerState));
@@ -253,27 +253,27 @@ public class PlayerStateTest {
 
         assertEquals(3, playerState.getMilitaryStrength()); // 1 for Warriors, +2 for Infantry type
 
-        playerState.build(Cards.SWORDSMEN);
+        build(Cards.SWORDSMEN);
 
         assertEquals(5, playerState.getMilitaryStrength()); // +2 for Swordsmen, +0 for Infantry type
 
-        playerState.build(Cards.KNIGHTS);
+        build(Cards.KNIGHTS);
 
         assertEquals(9, playerState.getMilitaryStrength()); // +2 for Knights, +2 for Cavalry type
 
-        playerState.build(Cards.CAVALRYMEN);
+        build(Cards.CAVALRYMEN);
 
         assertEquals(12, playerState.getMilitaryStrength()); // +3 for Cavalrymen, +0 for Cavalry type
 
-        playerState.build(Cards.CANNON);
+        build(Cards.CANNON);
 
         assertEquals(17, playerState.getMilitaryStrength()); // +3 for Cannon, +2 for Artillery type
 
-        playerState.build(Cards.ROCKETS);
+        build(Cards.ROCKETS);
 
         assertEquals(22, playerState.getMilitaryStrength()); // +5 for Rockets, +0 for Artillery type
 
-        playerState.build(Cards.AIR_FORCES);
+        build(Cards.AIR_FORCES);
 
         assertEquals(29, playerState.getMilitaryStrength()); // +5 for Air Forces, +2 for Air Forces type
 
