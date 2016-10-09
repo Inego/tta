@@ -4,6 +4,7 @@ import org.inego.tta2.QuantityHashMap;
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.CivilCard;
+import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.lab.LabCard;
@@ -20,6 +21,7 @@ import org.inego.tta2.cards.civil.unit.ArtilleryCard;
 import org.inego.tta2.cards.civil.unit.InfantryCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.unit.UnitType;
+import org.inego.tta2.cards.civil.upgrade.BuildingChainElement;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.colony.ColonyCard;
@@ -44,11 +46,15 @@ import org.inego.tta2.gamestate.tactics.Utils;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  *
  */
 public class PlayerState {
+
+    private static final CivilCardKind[] GREAT_WALL_UNITS = {CivilCardKind.INFANTRY, CivilCardKind.ARTILLERY};
 
     private GameState gameState;
 
@@ -88,10 +94,6 @@ public class PlayerState {
     private Set<WonderCard> wonders = new LinkedHashSet<>();
     private int builtStages;
 
-    // Units
-    private QuantityHashMap<UnitCard> units = new QuantityHashMap<>();
-    private QuantityHashMap<BuildingCard> buildings = new QuantityHashMap<>();
-
     // Tactics
     private TacticCard tactic;
     private int modernArmies;
@@ -128,6 +130,16 @@ public class PlayerState {
     private LinkedList<MilitaryCard> militaryHand;
 
     private Set<ITechnologyCard> discoveredTechs = new HashSet<>();
+
+    /**
+     * A map of building chains. Building chains are represented by the <b>latest</b> discovered card of its kind,
+     * in order to make ordered inserts fastest (since incremental age discoveries are the most common case).
+     * Because of that, building chains must be iterated backwards (by using {@link BuildingChainElement#prev} property.
+     */
+    private Map<CivilCardKind, BuildingChainElement> buildingChains;
+
+    private Map<BuildingCard, BuildingChainElement> discoveredBuildings;
+
     private LinkedList<ColonyCard> colonies = new LinkedList<>();
 
 
@@ -137,8 +149,6 @@ public class PlayerState {
 
         militaryProductionBonus = 0;
         leaderMilitaryProductionBonus = 0;
-
-        build(Cards.WARRIORS);
 
         yellowBank = 18;
         recalcHappiness = false;
@@ -162,11 +172,14 @@ public class PlayerState {
         civilHand = new LinkedList<>();
         militaryHand = new LinkedList<>();
 
-        discoveredTechs.add(Cards.WARRIORS);
-        discoveredTechs.add(Cards.AGRICULTURE);
-        discoveredTechs.add(Cards.BRONZE);
-        discoveredTechs.add(Cards.PHILOSOPHY);
-        discoveredTechs.add(Cards.RELIGION);
+        buildingChains = new EnumMap<>(CivilCardKind.class);
+        discoveredBuildings = new HashMap<>();
+
+        discoverBuilding(Cards.WARRIORS).qty = 1;
+        discoverBuilding(Cards.AGRICULTURE).qty = 2;
+        discoverBuilding(Cards.BRONZE).qty = 2;
+        discoverBuilding(Cards.PHILOSOPHY).qty = 1;
+        discoverBuilding(Cards.RELIGION);
 
     }
 
@@ -409,11 +422,47 @@ public class PlayerState {
             obsoleteArmies = Math.min(obsoleteArmies, composition.obsoleteArtillery / artillery);
     }
 
+    private void iterateUnitKinds(CivilCardKind[] kinds, Consumer<BuildingChainElement> consumer)
+    {
+        for (CivilCardKind kind : kinds) {
+            Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
+            while (chainIterator.hasNext()) {
+                BuildingChainElement chainElement = chainIterator.next();
+                if (chainElement.qty > 0)
+                    consumer.accept(chainElement);
+            }
+        }
+    }
+
+
     public Composition getComposition(int age) {
+
         Composition composition = new Composition();
-        for (Entry<UnitCard, Integer> entry: units.entrySet())
-            entry.getKey().addToComposition(composition, entry.getValue(), age);
+
+        iterateUnitKinds(UnitCard.TACTIC_KINDS, element -> ((UnitCard)element.buildingCard).addToComposition(composition, element.qty, age));
+
         return composition;
+
+    }
+
+    public Iterator<BuildingChainElement> getChainIterator(CivilCardKind kind) {
+
+        return new Iterator<BuildingChainElement>() {
+
+            private BuildingChainElement next = buildingChains.get(kind);
+
+            @Override
+            public boolean hasNext() {
+                return next != null;
+            }
+
+            @Override
+            public BuildingChainElement next() {
+                BuildingChainElement result = next;
+                next = next.prev;
+                return result;
+            }
+        };
     }
 
     public int getTacticsBonus() {
@@ -425,7 +474,10 @@ public class PlayerState {
         // Air force bonus
         if (result > 0)
         {
-            int remainingAirForce = units.get(Cards.AIR_FORCES);
+            BuildingChainElement chainElement = discoveredBuildings.get(Cards.AIR_FORCES);
+
+            int remainingAirForce = chainElement == null ? 0 : chainElement.qty;
+
             if (remainingAirForce > 0)
             {
                 // Air force bonus for modern armies
@@ -483,18 +535,13 @@ public class PlayerState {
         militaryStrength = militaryStrengthBase;
 
         if (wonders.contains(Cards.GREAT_WALL)) {
-            for (Entry<UnitCard, Integer> unit : units.entrySet()) {
-                if (unit.getKey() instanceof InfantryCard || unit.getKey() instanceof ArtilleryCard)
-                    militaryStrength += unit.getValue();
-            }
+            iterateUnitKinds(GREAT_WALL_UNITS, element -> {militaryStrength += element.qty;});
         }
 
         militaryStrength += getTacticsBonus();
 
         if (leader == Cards.ALEXANDER) {
-            for (Entry<UnitCard, Integer> unit : units.entrySet()) {
-                militaryStrength += unit.getValue();
-            }
+            iterateUnitKinds(UnitCard.ALL_KINDS, element -> {militaryStrength += element.qty;});
         }
         else if (leader == Cards.JOAN_OF_ARC) {
             iterateHappiness((happinessSource, value, qty) -> {
@@ -504,9 +551,18 @@ public class PlayerState {
         }
         else if (leader == Cards.NAPOLEON_BONAPARTE) {
             Set<UnitType> types = EnumSet.noneOf(UnitType.class);
-            for (UnitCard unitCard : units.keySet()) {
-                types.add(unitCard.getUnitType());
+
+            for (CivilCardKind kind : UnitCard.ALL_KINDS) {
+                Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
+                while (chainIterator.hasNext()) {
+                    BuildingChainElement chainElement = chainIterator.next();
+                    if (chainElement.qty > 0) {
+                        types.add(((UnitCard)chainElement.buildingCard).getUnitType());
+                        break;
+                    }
+                }
             }
+
             militaryStrength += 2 * types.size();
         }
         recalcMilitary = false;
@@ -813,7 +869,7 @@ public class PlayerState {
             }
         }
         else if (leader == Cards.JS_BACH) {
-            
+            // TODO Bach!
         }
 
         gameState.addChoice(ActionPhaseChoice.END);
@@ -894,12 +950,10 @@ public class PlayerState {
         // TODO inc built cards?
         card.assignWorker(1, this);
 
+        discoveredBuildings.get(card).qty++;
+
         if (card instanceof UnitCard) {
-            units.delta((UnitCard) card, 1);
             formArmies();
-        }
-        else {
-            buildings.delta(card, 1);
         }
     }
 
@@ -961,25 +1015,21 @@ public class PlayerState {
     }
 
     public void debugClearUnits() {
-        while (!units.isEmpty())
-        {
-            // Fake loop to obtain a(ny) single entry from the map
-            for (Entry<UnitCard, Integer> unitEntry : units.entrySet())
-            {
-                // Disband all its units
-                for (int i = 1; i <= unitEntry.getValue(); i++)
-                    disband(unitEntry.getKey());
-                break;
-            }
-        }
+        iterateUnitKinds(UnitCard.ALL_KINDS, element -> {
+            while (element.qty > 0)
+                disband(element.buildingCard);
+        });
     }
 
     private void disband(BuildingCard card) {
         card.assignWorker(-1, this);
+
+        discoveredBuildings.get(card).qty--;
+
         if (card instanceof UnitCard) {
-            units.delta((UnitCard) card, -1);
             formArmies();
         }
+
         // TODO disband - return pop
     }
 
@@ -995,9 +1045,58 @@ public class PlayerState {
 
         // TODO discover technology
 
+        if (technologyCard instanceof BuildingCard)
+            discoverBuilding((BuildingCard)technologyCard);
+
         if (leader == Cards.LEONARDO_DA_VINCI)
             gainResources(1);
     }
+
+    /**
+     * Inserts a new building card into the appropriate building chain according to its age
+     * @param buildingCard The building card
+     */
+    private BuildingChainElement discoverBuilding(BuildingCard buildingCard) {
+
+        BuildingChainElement newChainElement = new BuildingChainElement(buildingCard, 0);
+
+        discoveredBuildings.put(buildingCard, newChainElement);
+
+        CivilCardKind kind = buildingCard.getKind();
+
+        BuildingChainElement currentChainTop = buildingChains.get(kind);
+
+        if (currentChainTop == null)
+            buildingChains.put(kind, newChainElement);
+        else {
+            int age = buildingCard.getAge();
+            if (age > currentChainTop.getAge())
+            {
+                currentChainTop.next = newChainElement;
+                buildingChains.put(kind, newChainElement);
+            }
+            else {
+                BuildingChainElement previous = currentChainTop;
+                currentChainTop = currentChainTop.prev;
+                while (currentChainTop != null) {
+                    if (age > currentChainTop.getAge()) {
+                        currentChainTop.next = newChainElement;
+                        previous.prev = newChainElement;
+                        newChainElement.prev = currentChainTop;
+                        newChainElement.next = previous;
+                        return newChainElement;
+                    }
+                    previous = currentChainTop;
+                    currentChainTop = currentChainTop.prev;
+                }
+                // The new element is the first
+                previous.prev = newChainElement;
+                newChainElement.next = previous;
+            }
+        }
+        return newChainElement;
+    }
+
 
     public void setWaitingTurns(int waitingTurns) {
         this.waitingTurns = waitingTurns;
@@ -1064,27 +1163,23 @@ public class PlayerState {
     }
 
     public boolean hasTheaters() {
-        return has(TheaterCard.class);
+        return has(CivilCardKind.THEATER);
     }
 
     public boolean hasLibraries() {
-        return has(LibraryCard.class);
+        return has(CivilCardKind.LIBRARY);
     }
 
-    private boolean has(Class<? extends BuildingCard> cardClass) {
-        if (UnitCard.class.isAssignableFrom(cardClass)) {
-            for (UnitCard unitCard : units.keySet()) {
-                if (cardClass.isInstance(unitCard))
-                    return true;
-            }
+    private boolean has(CivilCardKind kind) {
+
+        Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
+        while (chainIterator.hasNext())
+        {
+            BuildingChainElement chainElement = chainIterator.next();
+            if (chainElement.qty > 0)
+                return true;
         }
-        else {
-            // Building
-            for (BuildingCard buildingCard : buildings.keySet()) {
-                if (cardClass.isInstance(buildingCard))
-                    return true;
-            }
-        }
+
         return false;
     }
 
@@ -1139,6 +1234,10 @@ public class PlayerState {
         paySciencePoints(scienceCost);
         setGovernment(government);
         loseCivilCard(government);
+    }
+
+    public boolean hasDiscovered(BuildingCard buildingCard) {
+        return discoveredBuildings.containsKey(buildingCard);
     }
 
 

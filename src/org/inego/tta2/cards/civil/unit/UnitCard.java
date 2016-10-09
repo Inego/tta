@@ -1,6 +1,7 @@
 package org.inego.tta2.cards.civil.unit;
 
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.tactics.Composition;
 
@@ -8,6 +9,9 @@ import org.inego.tta2.gamestate.tactics.Composition;
  *
  */
 public abstract class UnitCard extends BuildingCard {
+
+    public static final CivilCardKind[] ALL_KINDS = {CivilCardKind.INFANTRY, CivilCardKind.CAVALRY, CivilCardKind.ARTILLERY, CivilCardKind.AIR_FORCE};
+    public static final CivilCardKind[] TACTIC_KINDS = {CivilCardKind.INFANTRY, CivilCardKind.CAVALRY, CivilCardKind.ARTILLERY};
 
     protected abstract int getStrength();
 

@@ -1,6 +1,8 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.library.LibraryCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
@@ -208,18 +210,25 @@ public class PlayerStateTest {
     @Test
     public void testShakespeareCultureProductionBonus() {
 
-        playerState.build(Cards.PRINTING_PRESS); // +1
-        playerState.build(Cards.JOURNALISM);     // +2
+        build(Cards.PRINTING_PRESS); // +1
+        build(Cards.JOURNALISM);     // +2
         assertEquals(3, playerState.getCultureProduction());
 
-        playerState.build(Cards.DRAMA);          // +2
-        playerState.build(Cards.OPERA);          // +3
-        playerState.build(Cards.MOVIES);         // +4
+        build(Cards.DRAMA);          // +2
+        build(Cards.OPERA);          // +3
+        build(Cards.MOVIES);         // +4
         assertEquals(12, playerState.getCultureProduction());
 
         playerState.electLeader(Cards.WILLIAM_SHAKESPEARE);
         assertEquals(16, playerState.getCultureProduction()); // + 2 * 2 Library-Theater pairs
 
+    }
+
+    // Discover (if needed) and build
+    private void build(BuildingCard buildingCard) {
+        if (!playerState.hasDiscovered(buildingCard))
+            playerState.discover(buildingCard);
+        playerState.build(buildingCard);
     }
 
     @Test
@@ -296,8 +305,11 @@ public class PlayerStateTest {
 
         public FormArmiesTestBuilder add(UnitCard unit, int qty)
         {
-            for (int i = 1; i <= qty; i++)
+            for (int i = 1; i <= qty; i++) {
+                if (!playerState.hasDiscovered(unit))
+                    playerState.discover(unit);
                 playerState.build(unit);
+            }
             return this;
         }
 
