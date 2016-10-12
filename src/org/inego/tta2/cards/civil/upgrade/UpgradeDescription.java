@@ -19,5 +19,4 @@ public class UpgradeDescription implements Comparable<UpgradeDescription> {
         return this.delta - o.delta;
     }
 
-
 }

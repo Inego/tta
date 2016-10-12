@@ -16,12 +16,11 @@ import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
-import org.inego.tta2.cards.civil.theater.TheaterCard;
-import org.inego.tta2.cards.civil.unit.ArtilleryCard;
-import org.inego.tta2.cards.civil.unit.InfantryCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.unit.UnitType;
 import org.inego.tta2.cards.civil.upgrade.BuildingChainElement;
+import org.inego.tta2.cards.civil.upgrade.UpgradeDescription;
+import org.inego.tta2.cards.civil.upgrade.UpgradeDescriptionFactory;
 import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.colony.ColonyCard;
@@ -46,12 +45,8 @@ import org.inego.tta2.gamestate.tactics.Utils;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-/**
- *
- */
 public class PlayerState {
 
     private static final CivilCardKind[] GREAT_WALL_UNITS = {CivilCardKind.INFANTRY, CivilCardKind.ARTILLERY};
@@ -129,7 +124,7 @@ public class PlayerState {
     private LinkedList<CivilCard> civilHand;
     private LinkedList<MilitaryCard> militaryHand;
 
-    private Set<ITechnologyCard> discoveredTechs = new HashSet<>();
+    private SortedSet<UpgradeDescription> availableUpgrades;
 
     /**
      * A map of building chains. Building chains are represented by the <b>latest</b> discovered card of its kind,
@@ -175,6 +170,8 @@ public class PlayerState {
 
         civilHand = new LinkedList<>();
         militaryHand = new LinkedList<>();
+
+        availableUpgrades = new TreeSet<>();
 
         buildingChains = new EnumMap<>(CivilCardKind.class);
         discoveredBuildings = new HashMap<>();
@@ -426,7 +423,7 @@ public class PlayerState {
             obsoleteArmies = Math.min(obsoleteArmies, composition.obsoleteArtillery / artillery);
     }
 
-    private void iterateUnitKinds(CivilCardKind[] kinds, Consumer<BuildingChainElement> consumer)
+    private void iterateBuildings(CivilCardKind[] kinds, Consumer<BuildingChainElement> consumer)
     {
         for (CivilCardKind kind : kinds) {
             Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
@@ -438,12 +435,23 @@ public class PlayerState {
         }
     }
 
+    private void iterateBuildingChains(CivilCardKind[] kinds, Consumer<BuildingChainElement> consumer)
+    {
+        for (CivilCardKind kind : kinds) {
+            Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
+            while (chainIterator.hasNext()) {
+                BuildingChainElement chainElement = chainIterator.next();
+                if (chainElement.qty > 0)
+                    consumer.accept(chainElement);
+            }
+        }
+    }
 
     public Composition getComposition(int age) {
 
         Composition composition = new Composition();
 
-        iterateUnitKinds(UnitCard.TACTIC_KINDS, element -> ((UnitCard)element.buildingCard).addToComposition(composition, element.qty, age));
+        iterateBuildings(UnitCard.TACTIC_KINDS, element -> ((UnitCard)element.buildingCard).addToComposition(composition, element.qty, age));
 
         return composition;
 
@@ -539,13 +547,13 @@ public class PlayerState {
         militaryStrength = militaryStrengthBase;
 
         if (wonders.contains(Cards.GREAT_WALL)) {
-            iterateUnitKinds(GREAT_WALL_UNITS, element -> {militaryStrength += element.qty;});
+            iterateBuildings(GREAT_WALL_UNITS, element -> {militaryStrength += element.qty;});
         }
 
         militaryStrength += getTacticsBonus();
 
         if (leader == Cards.ALEXANDER) {
-            iterateUnitKinds(UnitCard.ALL_KINDS, element -> {militaryStrength += element.qty;});
+            iterateBuildings(UnitCard.ALL_KINDS, element -> {militaryStrength += element.qty;});
         }
         else if (leader == Cards.JOAN_OF_ARC) {
             iterateHappiness((happinessSource, value, qty) -> {
@@ -857,18 +865,17 @@ public class PlayerState {
             }
         }
 
+        // TODO Barbarossa unit test
         if (leader == Cards.FREDERICK_BARBAROSSA) {
             if (availableMilitaryActions > 0) {
                 int foodCost = getIncreasePopulationCost() - 1;
                 if (foodCost <= food) {
-                    for (ITechnologyCard discoveredTech : discoveredTechs) {
-                        if (discoveredTech instanceof UnitCard) {
-                            int buildingCost = ((UnitCard) discoveredTech).getBuildingCost(this) - 1;
-                            if (buildingCost <= resources) {
-                                gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) discoveredTech, foodCost, buildingCost));
-                            }
+                    iterateBuildingChains(UnitCard.ALL_KINDS, element -> {
+                        int buildingCost = ((UnitCard) element.buildingCard).getBuildingCost(this) - 1;
+                        if (buildingCost <= resources) {
+                            gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) element.buildingCard, foodCost, buildingCost));
                         }
-                    }
+                    });
                 }
             }
         }
@@ -954,7 +961,14 @@ public class PlayerState {
         // TODO inc built cards?
         card.assignWorker(1, this);
 
-        discoveredBuildings.get(card).qty++;
+        BuildingChainElement chainElement = discoveredBuildings.get(card);
+        chainElement.qty++;
+
+        if (chainElement.qty == 1) {
+            // Add higher upgrades
+            for (BuildingChainElement higher = chainElement.next; higher != null; higher = higher.next)
+                availableUpgrades.add(UpgradeDescriptionFactory.get(card, higher.buildingCard));
+        }
 
         if (card instanceof UnitCard) {
             formArmies();
@@ -1019,7 +1033,7 @@ public class PlayerState {
     }
 
     public void debugClearUnits() {
-        iterateUnitKinds(UnitCard.ALL_KINDS, element -> {
+        iterateBuildings(UnitCard.ALL_KINDS, element -> {
             while (element.qty > 0)
                 disband(element.buildingCard);
         });
@@ -1028,7 +1042,15 @@ public class PlayerState {
     private void disband(BuildingCard card) {
         card.assignWorker(-1, this);
 
-        discoveredBuildings.get(card).qty--;
+        BuildingChainElement chainElement = discoveredBuildings.get(card);
+
+        chainElement.qty--;
+
+        if (chainElement.qty == 0) {
+            // Add higher upgrades
+            for (BuildingChainElement lower = chainElement.prev; lower != null; lower = lower.prev)
+                availableUpgrades.remove(UpgradeDescriptionFactory.get(card, lower.buildingCard));
+        }
 
         if (card instanceof UnitCard) {
             formArmies();
@@ -1049,8 +1071,16 @@ public class PlayerState {
 
         // TODO discover technology
 
-        if (technologyCard instanceof BuildingCard)
-            discoverBuilding((BuildingCard)technologyCard);
+        if (technologyCard instanceof BuildingCard) {
+            BuildingCard buildingCard = (BuildingCard) technologyCard;
+            BuildingChainElement chainElement = discoverBuilding(buildingCard);
+            // Update available upgrades from building chain
+            for (BuildingChainElement lower = chainElement.prev; lower != null; lower = lower.prev) {
+                if (lower.qty > 0) {
+                    availableUpgrades.add(UpgradeDescriptionFactory.get(lower.buildingCard, buildingCard));
+                }
+            }
+        }
 
         if (leader == Cards.LEONARDO_DA_VINCI)
             gainResources(1);
