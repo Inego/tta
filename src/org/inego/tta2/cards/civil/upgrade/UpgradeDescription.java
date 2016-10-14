@@ -16,7 +16,20 @@ public class UpgradeDescription implements Comparable<UpgradeDescription> {
 
     @Override
     public int compareTo(UpgradeDescription o) {
-        return this.delta - o.delta;
+        int result  = this.delta - o.delta;
+        if (result != 0)
+            return result;
+
+        result = this.source.getKind().compareTo(o.source.getKind());
+
+        if (result != 0)
+            return result;
+
+        return this.source.getAge()- o.source.getAge();
     }
 
+    @Override
+    public String toString() {
+        return source.toString() + "->" + destination.toString();
+    }
 }

@@ -1039,7 +1039,7 @@ public class PlayerState {
         });
     }
 
-    private void disband(BuildingCard card) {
+    public void disband(BuildingCard card) {
         card.assignWorker(-1, this);
 
         BuildingChainElement chainElement = discoveredBuildings.get(card);
@@ -1047,9 +1047,9 @@ public class PlayerState {
         chainElement.qty--;
 
         if (chainElement.qty == 0) {
-            // Add higher upgrades
-            for (BuildingChainElement lower = chainElement.prev; lower != null; lower = lower.prev)
-                availableUpgrades.remove(UpgradeDescriptionFactory.get(card, lower.buildingCard));
+            // Remove higher upgrades
+            for (BuildingChainElement higher = chainElement.next; higher != null; higher = higher.next)
+                availableUpgrades.remove(UpgradeDescriptionFactory.get(card, higher.buildingCard));
         }
 
         if (card instanceof UnitCard) {
@@ -1275,6 +1275,9 @@ public class PlayerState {
         return discoveredBuildings.containsKey(buildingCard);
     }
 
+    public Collection<UpgradeDescription> getAvailableUpgrades() {
+        return availableUpgrades;
+    }
 
     @FunctionalInterface
     interface IHappinessSourceHandler {
