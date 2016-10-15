@@ -26,10 +26,7 @@ import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.colony.ColonyCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
 import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
-import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
-import org.inego.tta2.gamestate.choice.action.ChangeGovernmentChoice;
-import org.inego.tta2.gamestate.choice.action.IncreasePopulationChoice;
-import org.inego.tta2.gamestate.choice.action.RevolutionChoice;
+import org.inego.tta2.gamestate.choice.action.*;
 import org.inego.tta2.gamestate.comparison.PlayerComparison;
 import org.inego.tta2.gamestate.comparison.TopNumber;
 import org.inego.tta2.gamestate.choice.leader.ColumbusColonizationChoice;
@@ -832,6 +829,14 @@ public class PlayerState {
     public void addActionPhaseChoices() {
 
         // TODO add action phase choices
+
+        // Upgrades
+
+        for (UpgradeDescription availableUpgrade : availableUpgrades) {
+            if (availableUpgrade.delta > resources)
+                break;
+            gameState.addChoice(new UpgradeChoice(availableUpgrade));
+        }
 
         int populationProductionCost = getPopulationProductionCost();
 
