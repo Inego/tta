@@ -14,7 +14,9 @@ public class StartTurn extends GamePoint {
     @Override
     public void apply(GameState gameState, PlayerState playerState) {
 
-        if (gameState.getAge() > 0) {
+        boolean normal = gameState.getAge() > 0;
+
+        if (normal) {
             gameState.replenishCardRow();
         }
 
@@ -26,7 +28,7 @@ public class StartTurn extends GamePoint {
             playerState.enableLeaderSpecialAction();
         }
 
-        gameState.proceedTo(PoliticalPhase.POLITICAL_PHASE);
+        gameState.proceedTo(normal ? PoliticalPhase.INSTANCE : ActionPhase.INSTANCE);
 
     }
 }

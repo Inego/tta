@@ -15,7 +15,7 @@ public abstract class PoliticalPhaseChoice extends Choice {
 
         @Override
         protected void apply(GameState gameState, PlayerState playerState) {
-            gameState.proceedTo(ActionPhase.ACTION_PHASE);
+            gameState.proceedTo(ActionPhase.INSTANCE);
         }
     };
 

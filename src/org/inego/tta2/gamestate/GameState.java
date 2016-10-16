@@ -129,11 +129,11 @@ public class GameState implements IGameState {
     }
 
     public void startPoliticalPhase() {
-        proceedTo(PoliticalPhase.POLITICAL_PHASE);
+        proceedTo(PoliticalPhase.INSTANCE);
     }
 
     public void startActionPhase() {
-        proceedTo(ActionPhase.ACTION_PHASE);
+        proceedTo(ActionPhase.INSTANCE);
     }
 
     public PlayerState getCurrentPlayerState() {
