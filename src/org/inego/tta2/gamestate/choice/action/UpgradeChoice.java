@@ -11,10 +11,9 @@ import org.inego.tta2.gamestate.choice.Choice;
  */
 public class UpgradeChoice extends Choice {
 
-    private BuildingCard from;
-    private BuildingCard to;
-    private int cost;
-
+    public BuildingCard from;
+    public BuildingCard to;
+    public int cost;
 
     public UpgradeChoice(UpgradeDescription availableUpgrade) {
         super();

@@ -48,6 +48,8 @@ public class PlayerState {
 
     private static final CivilCardKind[] GREAT_WALL_UNITS = {CivilCardKind.INFANTRY, CivilCardKind.ARTILLERY};
 
+    private final int index;
+
     private GameState gameState;
 
     private int foodProduction;
@@ -135,7 +137,9 @@ public class PlayerState {
     private LinkedList<ColonyCard> colonies = new LinkedList<>();
 
 
-    public PlayerState(GameState gameState) {
+    public PlayerState(GameState gameState, int index) {
+
+        this.index = index;
 
         this.gameState = gameState;
 
@@ -830,67 +834,74 @@ public class PlayerState {
 
         // TODO add action phase choices
 
-        // Upgrades
+        // TODO take cards
 
-        for (UpgradeDescription availableUpgrade : availableUpgrades) {
-            if (availableUpgrade.delta > resources)
-                break;
-            gameState.addChoice(new UpgradeChoice(availableUpgrade));
-        }
 
-        int populationProductionCost = getPopulationProductionCost();
 
-        if (populationProductionCost <= resources) {
-            gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
-        }
+        if (gameState.getAge() > 0) {
 
-        for (CivilCard civilCard : civilHand) {
-            if (civilCard instanceof GovernmentCard) {
-                GovernmentCard governmentCard = (GovernmentCard) civilCard;
-                // Peaceful discover
-                int researchCost = governmentCard.getResearchCost(this);
-                if (sciencePoints >= researchCost) {
-                    gameState.addChoice(new ChangeGovernmentChoice(governmentCard, researchCost));
-                }
-                // Revolution
-                researchCost = governmentCard.getRevolutionCost();
-                if (researchCost >= sciencePoints) {
-                    if (leader == Cards.MAXIMILIEN_ROBESPIERRE) {
-                        int militaryActionsTotal = getMilitaryActionsTotal();
-                        if (availableMilitaryActions >= militaryActionsTotal)
-                            gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, militaryActionsTotal, true));
-                    }
-                    else {
-                        // Standard revolution, spend all civil actions
-                        int civilActionsTotal = getCivilActionsTotal();
-                        if (getAvailableCivilActions() >= civilActionsTotal)
-                            gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, civilActionsTotal, false));
-                    }
-                }
+            // Upgrades
+
+            for (UpgradeDescription availableUpgrade : availableUpgrades) {
+                if (availableUpgrade.delta > resources)
+                    break;
+                gameState.addChoice(new UpgradeChoice(availableUpgrade));
             }
-        }
 
-        // TODO Barbarossa unit test
-        if (leader == Cards.FREDERICK_BARBAROSSA) {
-            if (availableMilitaryActions > 0) {
-                int foodCost = getIncreasePopulationCost() - 1;
-                if (foodCost <= food) {
-                    iterateBuildingChains(UnitCard.ALL_KINDS, element -> {
-                        int buildingCost = ((UnitCard) element.buildingCard).getBuildingCost(this) - 1;
-                        if (buildingCost <= resources) {
-                            gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) element.buildingCard, foodCost, buildingCost));
+            int populationProductionCost = getPopulationProductionCost();
+
+            if (populationProductionCost <= resources) {
+                gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
+            }
+
+            for (CivilCard civilCard : civilHand) {
+                if (civilCard instanceof GovernmentCard) {
+                    GovernmentCard governmentCard = (GovernmentCard) civilCard;
+                    // Peaceful discover
+                    int researchCost = governmentCard.getResearchCost(this);
+                    if (sciencePoints >= researchCost) {
+                        gameState.addChoice(new ChangeGovernmentChoice(governmentCard, researchCost));
+                    }
+                    // Revolution
+                    researchCost = governmentCard.getRevolutionCost();
+                    if (researchCost >= sciencePoints) {
+                        if (leader == Cards.MAXIMILIEN_ROBESPIERRE) {
+                            int militaryActionsTotal = getMilitaryActionsTotal();
+                            if (availableMilitaryActions >= militaryActionsTotal)
+                                gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, militaryActionsTotal, true));
+                        } else {
+                            // Standard revolution, spend all civil actions
+                            int civilActionsTotal = getCivilActionsTotal();
+                            if (getAvailableCivilActions() >= civilActionsTotal)
+                                gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, civilActionsTotal, false));
                         }
-                    });
+                    }
                 }
             }
-        }
-        else if (leader == Cards.JS_BACH) {
-            // TODO Bach!
+
+            // TODO Barbarossa unit test
+            if (leader == Cards.FREDERICK_BARBAROSSA) {
+                if (availableMilitaryActions > 0) {
+                    int foodCost = getIncreasePopulationCost() - 1;
+                    if (foodCost <= food) {
+                        iterateBuildingChains(UnitCard.ALL_KINDS, element -> {
+                            int buildingCost = ((UnitCard) element.buildingCard).getBuildingCost(this) - 1;
+                            if (buildingCost <= resources) {
+                                gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) element.buildingCard, foodCost, buildingCost));
+                            }
+                        });
+                    }
+                }
+            } else if (leader == Cards.JS_BACH) {
+                // TODO Bach!
+            }
+
         }
 
         gameState.addChoice(ActionPhaseChoice.END);
 
     }
+
 
     private int getCivilActionsTotal() {
         // TODO get civil actions total
@@ -978,6 +989,11 @@ public class PlayerState {
         if (card instanceof UnitCard) {
             formArmies();
         }
+    }
+
+    public int getBuildingQty(BuildingCard buildingCard) {
+        BuildingChainElement chainElement = discoveredBuildings.get(buildingCard);
+        return chainElement == null ? 0 : chainElement.qty;
     }
 
     public Set<WonderCard> getWonders() {
@@ -1282,6 +1298,14 @@ public class PlayerState {
 
     public Collection<UpgradeDescription> getAvailableUpgrades() {
         return availableUpgrades;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void debugSetResources(int value) {
+        resources = value;
     }
 
     @FunctionalInterface

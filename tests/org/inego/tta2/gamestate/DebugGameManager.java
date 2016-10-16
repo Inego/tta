@@ -23,6 +23,10 @@ public class DebugGameManager {
         gameState = new GameState(players.length);
     }
 
+    public boolean next() {
+        return waitPoints(1);
+    }
+
     public boolean waitPoints(int points) {
         return runTo(new WaitPoints(points));
     }
@@ -31,6 +35,8 @@ public class DebugGameManager {
         this.pauseCondition = pauseCondition;
         return run();
     }
+
+
 
     public boolean run() {
 
@@ -57,6 +63,10 @@ public class DebugGameManager {
 
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
     /**
      * Decrements with every test
      */
@@ -73,6 +83,5 @@ public class DebugGameManager {
             return (remaining-- <= 0);
         }
     }
-
 
 }

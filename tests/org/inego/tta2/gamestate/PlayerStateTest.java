@@ -331,17 +331,7 @@ public class PlayerStateTest {
     private void checkUpgrades(UpgradeDescription... upgradeDescriptions) {
 
         Collection<UpgradeDescription> availableUpgrades = playerState.getAvailableUpgrades();
-
         assertArrayEquals(availableUpgrades.toArray(), upgradeDescriptions);
-
-//        assertEquals(availableUpgrades.size(), upgradeDescriptions.length);
-//
-//        int idx = 0;
-//
-//        for (UpgradeDescription availableUpgrade : availableUpgrades) {
-//            assertEquals(availableUpgrade, upgradeDescriptions[idx]);
-//            idx++;
-//        }
 
     }
 

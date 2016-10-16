@@ -35,7 +35,7 @@ public class GameState implements IGameState {
         playerStates = new ArrayList<>(numberOfPlayers);
 
         for (int i = 1; i <= numberOfPlayers; i++) {
-            PlayerState playerState = new PlayerState(this);
+            PlayerState playerState = new PlayerState(this, i - 1);
             playerStates.add(playerState);
 
             // Age A specific setup
@@ -110,8 +110,13 @@ public class GameState implements IGameState {
 
     public void endPlayerTurn() {
         currentPlayer++;
-        if (currentPlayer == numberOfPlayers)
+        if (currentPlayer == numberOfPlayers) {
             currentPlayer = 0;
+            if (currentAge == 0) {
+                // TODO end Age A
+                currentAge++;
+            }
+        }
 
         updateWaitingTurns();
 
