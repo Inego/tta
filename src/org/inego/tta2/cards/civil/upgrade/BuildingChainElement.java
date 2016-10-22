@@ -24,4 +24,8 @@ public class BuildingChainElement {
     public int getAge() {
         return buildingCard.getAge();
     }
+
+    public int getNominalCost() {
+        return buildingCard.getNominalCost();
+    }
 }

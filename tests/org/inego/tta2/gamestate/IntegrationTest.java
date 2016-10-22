@@ -1,15 +1,14 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.gamestate.choice.action.UpgradeChoice;
 import org.inego.tta2.gamestate.point.ActionPhase;
 import org.inego.tta2.player.MockPlayer;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * Created by Inego on 15.10.2016.
@@ -50,43 +49,33 @@ public class IntegrationTest {
 
         debugGameManager.next();
 
-        boolean found = false;
-
-        for (IChoice choice : gameState.getChoices()) {
-            if (choice instanceof UpgradeChoice) {
-                UpgradeChoice upgradeChoice = (UpgradeChoice) choice;
-                if (upgradeChoice.from == Cards.WARRIORS && upgradeChoice.to == Cards.SWORDSMEN) {
-                    p1.mock(upgradeChoice);
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        assertTrue(found);
+        UpgradeChoice found = getUpgradeChoice(gameState, Cards.WARRIORS, Cards.SWORDSMEN);
+        assertNotNull(found);
+        p1.mock(found);
 
         debugGameManager.next();
 
         assertEquals(3, currentPlayerState.getAvailableCivilActions());
-
         assertEquals(0, currentPlayerState.getBuildingQty(Cards.WARRIORS));
         assertEquals(1, currentPlayerState.getBuildingQty(Cards.SWORDSMEN));
 
         debugGameManager.next();
 
-        found = false;
+        found = getUpgradeChoice(gameState, Cards.WARRIORS, Cards.SWORDSMEN);
 
+        assertNull(found);
+
+    }
+
+    private UpgradeChoice getUpgradeChoice(GameState gameState, BuildingCard from, BuildingCard to) {
         for (IChoice choice : gameState.getChoices()) {
             if (choice instanceof UpgradeChoice) {
                 UpgradeChoice upgradeChoice = (UpgradeChoice) choice;
-                if (upgradeChoice.from == Cards.WARRIORS && upgradeChoice.to == Cards.SWORDSMEN) {
-                    found = true;
-                    break;
+                if (upgradeChoice.from == from && upgradeChoice.to == to) {
+                    return upgradeChoice;
                 }
             }
         }
-
-        assertFalse(found);
-
+        return null;
     }
 }

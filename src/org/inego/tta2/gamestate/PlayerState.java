@@ -885,8 +885,12 @@ public class PlayerState {
 
                                     // Calculate cost
 
-                                    int cost = currentTheater.getBuildingCost() - currentUrban.getBuildingCost();
+                                    int cost = currentTheater.getNominalCost() - currentUrban.getNominalCost();
 
+                                    if (cost < 0)  cost = 0;
+
+                                    if (cost <= resources)
+                                        gameState.addChoice(new UpgradeChoice(currentUrban.buildingCard, currentTheater.buildingCard, cost));
 
                                     currentTheater = currentTheater.prev;
                                 }
