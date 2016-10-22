@@ -42,6 +42,8 @@ public class IntegrationTest {
 
         assertEquals(0, currentPlayerState.getIndex());
 
+        assertEquals(4, currentPlayerState.getAvailableCivilActions());
+
         currentPlayerState.discover(Cards.SWORDSMEN);
 
         currentPlayerState.debugSetResources(1);
@@ -65,6 +67,8 @@ public class IntegrationTest {
 
         debugGameManager.next();
 
+        assertEquals(3, currentPlayerState.getAvailableCivilActions());
+
         assertEquals(0, currentPlayerState.getBuildingQty(Cards.WARRIORS));
         assertEquals(1, currentPlayerState.getBuildingQty(Cards.SWORDSMEN));
 
@@ -76,7 +80,6 @@ public class IntegrationTest {
             if (choice instanceof UpgradeChoice) {
                 UpgradeChoice upgradeChoice = (UpgradeChoice) choice;
                 if (upgradeChoice.from == Cards.WARRIORS && upgradeChoice.to == Cards.SWORDSMEN) {
-                    p1.mock(upgradeChoice);
                     found = true;
                     break;
                 }

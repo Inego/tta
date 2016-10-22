@@ -24,7 +24,8 @@ public class StartTurn extends GamePoint {
         playerState.makeCurrentTacticsAvailable();
 
         // Hammurabi restores his special action every turn
-        if (playerState.getLeader() == Cards.HAMMURABI) {
+        if (playerState.getLeader() == Cards.HAMMURABI
+                || playerState.getLeader() == Cards.JS_BACH) {
             playerState.enableLeaderSpecialAction();
         }
 

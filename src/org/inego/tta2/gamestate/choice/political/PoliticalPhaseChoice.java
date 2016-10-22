@@ -35,13 +35,10 @@ public abstract class PoliticalPhaseChoice extends Choice {
 
     @Override
     protected void apply(GameState gameState, PlayerState playerState) {
-
         // TODO Test Julius Caesar special action
-
         if (playerState.getLeader() == Cards.JULIUS_CAESAR && playerState.isLeaderSpecialActionAvailable()) {
             gameState.proceedTo(JuliusCaesarCard.POINT, JC_PASS, JC_USE);
         }
-
     }
 
 }

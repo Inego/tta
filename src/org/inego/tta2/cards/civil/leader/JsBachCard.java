@@ -19,5 +19,9 @@ public class JsBachCard extends LeaderCard {
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         // Only special abilities and bonuses
+
+        if (sign == 1) {
+            playerState.enableLeaderSpecialAction();
+        }
     }
 }

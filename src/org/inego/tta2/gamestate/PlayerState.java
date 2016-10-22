@@ -70,7 +70,6 @@ public class PlayerState {
 
     private int workerPool;
 
-    private int maxCivilActions;
     private int maxMilitaryActions;
     private int additionalMilitaryActions;
     private int additionalCivilActions;
@@ -296,10 +295,8 @@ public class PlayerState {
             cultureProduction += colonies.size() + 1;
         }
         else if (leader == Cards.JS_BACH) {
-            for (Entry<CultureProductionSource, Integer> entry : cultureProductionSources.entrySet()) {
-                if (entry.getKey() instanceof TheaterCultureProductionSource)
-                    cultureProduction += entry.getValue();
-            }
+            // 1 culture / each theater
+            iterateBuildings(CivilCardKind.THEATER, el -> cultureProduction += el.qty);
         }
 
         recalcCultureProduction = false;
@@ -424,6 +421,7 @@ public class PlayerState {
             obsoleteArmies = Math.min(obsoleteArmies, composition.obsoleteArtillery / artillery);
     }
 
+    // TODO refactor iterateBuildings in terms of iterateBuildingChains (+ probably support filtering there)
     private void iterateBuildings(CivilCardKind[] kinds, Consumer<BuildingChainElement> consumer)
     {
         for (CivilCardKind kind : kinds) {
@@ -433,6 +431,16 @@ public class PlayerState {
                 if (chainElement.qty > 0)
                     consumer.accept(chainElement);
             }
+        }
+    }
+
+    private void iterateBuildings(CivilCardKind kind, Consumer<BuildingChainElement> consumer)
+    {
+        Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
+        while (chainIterator.hasNext()) {
+            BuildingChainElement chainElement = chainIterator.next();
+            if (chainElement.qty > 0)
+                consumer.accept(chainElement);
         }
     }
 
@@ -681,7 +689,7 @@ public class PlayerState {
         return availableCivilActions;
     }
 
-    public void useCivilActions(int value) {
+    public void spendCivilActions(int value) {
         // TODO find all usages of spending civil actions
         availableCivilActions -= value;
         if (availableCivilActions < 0) {
@@ -834,10 +842,6 @@ public class PlayerState {
 
         // TODO add action phase choices
 
-        // TODO take cards
-
-
-
         if (gameState.getAge() > 0) {
 
             // Upgrades
@@ -847,6 +851,8 @@ public class PlayerState {
                     break;
                 gameState.addChoice(new UpgradeChoice(availableUpgrade));
             }
+
+            //if (leader == Cards.JS_BACH && leaderSpecialActionAvailable)
 
             int populationProductionCost = getPopulationProductionCost();
 
@@ -905,7 +911,7 @@ public class PlayerState {
 
     private int getCivilActionsTotal() {
         // TODO get civil actions total
-        return maxCivilActions + additionalCivilActions;
+        return government.getMaxCivilActions() + additionalCivilActions;
     }
 
     private int getIncreasePopulationCost() {
@@ -1214,10 +1220,6 @@ public class PlayerState {
         // TODO pay resources
     }
 
-    public void spendMilitaryActions(int value) {
-        availableMilitaryActions -= value;
-    }
-
     public boolean hasTheaters() {
         return has(CivilCardKind.THEATER);
     }
@@ -1282,7 +1284,7 @@ public class PlayerState {
         this.government = newGovernment;
     }
 
-    public void payMilitaryActions(int cost) {
+    public void spendMilitaryActions(int cost) {
         availableMilitaryActions -= cost;
     }
 

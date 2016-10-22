@@ -18,7 +18,7 @@ public class HammurabiCard extends LeaderCard {
 
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
-        if(sign == 1) {
+        if (sign == 1) {
             playerState.enableLeaderSpecialAction();
         }
     }

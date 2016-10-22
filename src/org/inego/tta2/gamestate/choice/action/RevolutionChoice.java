@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 
 /**
- * Peaceful change of government
+ * Violent change of government
  */
 public class RevolutionChoice extends ActionPhaseChoice {
 
@@ -22,16 +22,25 @@ public class RevolutionChoice extends ActionPhaseChoice {
     }
 
     @Override
+    public int getCivilActionCost() {
+        return robespierre ? 0 : actionPointsCost;
+    }
+
+    @Override
+    public int getMilitaryActionCost() {
+        return robespierre ? actionPointsCost : 0;
+    }
+
+    @Override
     protected void apply(GameState gameState, PlayerState playerState) {
+
+        super.apply(gameState, playerState);
 
         playerState.discoverGovernment(card, scienceCost);
 
         if (robespierre) {
-            playerState.payMilitaryActions(actionPointsCost);
             playerState.gainCulturePoints(3);
         }
-        else
-            playerState.useCivilActions(actionPointsCost);
     }
 
 }

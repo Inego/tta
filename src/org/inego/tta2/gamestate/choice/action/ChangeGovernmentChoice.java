@@ -18,7 +18,18 @@ public class ChangeGovernmentChoice extends ActionPhaseChoice {
     }
 
     @Override
+    public int getCivilActionCost() {
+        return 1;
+    }
+
+    @Override
+    public int getMilitaryActionCost() {
+        return 0;
+    }
+
+    @Override
     protected void apply(GameState gameState, PlayerState playerState) {
+        super.apply(gameState, playerState);
         playerState.discoverGovernment(card, scienceCost);
     }
 

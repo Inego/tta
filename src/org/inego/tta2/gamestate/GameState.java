@@ -164,6 +164,11 @@ public class GameState implements IGameState {
         currentChoices.add(choice);
     }
 
+
+    public CivilCard peekCardRow(int idx) {
+        return cardRow.get(idx);
+    }
+
     public CivilCard getCardFromRow(int idx) {
         CivilCard card = cardRow.get(idx);
         if (card == null)

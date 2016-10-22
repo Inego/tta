@@ -9,7 +9,7 @@ import org.inego.tta2.gamestate.choice.Choice;
 /**
  * Created by Inego on 15.10.2016.
  */
-public class UpgradeChoice extends Choice {
+public class UpgradeChoice extends ActionPhaseChoice {
 
     public BuildingCard from;
     public BuildingCard to;
@@ -23,7 +23,18 @@ public class UpgradeChoice extends Choice {
     }
 
     @Override
+    public int getCivilActionCost() {
+        return 1;
+    }
+
+    @Override
+    public int getMilitaryActionCost() {
+        return 0;
+    }
+
+    @Override
     protected void apply(GameState gameState, PlayerState playerState) {
+        super.apply(gameState, playerState);
         playerState.disband(from);
         playerState.build(to);
         playerState.payResources(cost);
