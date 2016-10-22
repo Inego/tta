@@ -16,10 +16,15 @@ public class UpgradeChoice extends ActionPhaseChoice {
     public int cost;
 
     public UpgradeChoice(UpgradeDescription availableUpgrade) {
-        super();
         from = availableUpgrade.source;
-        to = availableUpgrade.destination;
+        to   = availableUpgrade.destination;
         cost = availableUpgrade.delta;
+    }
+
+    public UpgradeChoice(BuildingCard from, BuildingCard to, int cost) {
+        this.from = from;
+        this.to   = to;
+        this.cost = cost;
     }
 
     @Override

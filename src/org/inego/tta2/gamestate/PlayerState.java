@@ -48,6 +48,14 @@ public class PlayerState {
 
     private static final CivilCardKind[] GREAT_WALL_UNITS = {CivilCardKind.INFANTRY, CivilCardKind.ARTILLERY};
 
+    // Urban buildings that can be upgraded to theaters
+    private static final CivilCardKind[] BACH_BUILDINGS = {
+            CivilCardKind.LAB,
+            CivilCardKind.TEMPLE,
+            CivilCardKind.LIBRARY,
+            CivilCardKind.ARENA
+    };
+
     private final int index;
 
     private GameState gameState;
@@ -846,18 +854,58 @@ public class PlayerState {
 
             // Upgrades
 
-            for (UpgradeDescription availableUpgrade : availableUpgrades) {
-                if (availableUpgrade.delta > resources)
-                    break;
-                gameState.addChoice(new UpgradeChoice(availableUpgrade));
-            }
+            if (availableCivilActions > 0) {
 
-            //if (leader == Cards.JS_BACH && leaderSpecialActionAvailable)
+                for (UpgradeDescription availableUpgrade : availableUpgrades) {
+                    if (availableUpgrade.delta > resources)
+                        break;
+                    gameState.addChoice(new UpgradeChoice(availableUpgrade));
+                }
 
-            int populationProductionCost = getPopulationProductionCost();
+                if (leader == Cards.JS_BACH && leaderSpecialActionAvailable) {
 
-            if (populationProductionCost <= resources) {
-                gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
+                    // Prerequisites: theater building limit is not yet reached
+                    // AND the building chain is not empty
+
+                    BuildingChainElement theaterChainTop = buildingChains.get(CivilCardKind.THEATER);
+
+                    if (theaterChainTop != null && getChainTotalQty(theaterChainTop) < government.getUrbanBuildingLimit()) {
+
+                        for (CivilCardKind urbanKind : BACH_BUILDINGS) {
+
+                            BuildingChainElement currentUrban = buildingChains.get(urbanKind);
+
+                            while (currentUrban != null) {
+
+                                BuildingChainElement currentTheater = theaterChainTop;
+
+                                while (currentTheater != null) {
+                                    if (currentTheater.getAge() < currentUrban.getAge())
+                                        break;
+
+                                    // Calculate cost
+
+                                    int cost = currentTheater.getBuildingCost() - currentUrban.getBuildingCost();
+
+
+                                    currentTheater = currentTheater.prev;
+                                }
+
+                                currentUrban = currentUrban.prev;
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                int populationProductionCost = getPopulationProductionCost();
+
+                if (populationProductionCost <= resources) {
+                    gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
+                }
+
             }
 
             for (CivilCard civilCard : civilHand) {
@@ -865,7 +913,7 @@ public class PlayerState {
                     GovernmentCard governmentCard = (GovernmentCard) civilCard;
                     // Peaceful discover
                     int researchCost = governmentCard.getResearchCost(this);
-                    if (sciencePoints >= researchCost) {
+                    if (sciencePoints >= researchCost && availableCivilActions > 0) {
                         gameState.addChoice(new ChangeGovernmentChoice(governmentCard, researchCost));
                     }
                     // Revolution
@@ -898,14 +946,20 @@ public class PlayerState {
                         });
                     }
                 }
-            } else if (leader == Cards.JS_BACH) {
-                // TODO Bach!
             }
-
         }
 
         gameState.addChoice(ActionPhaseChoice.END);
 
+    }
+
+    private static int getChainTotalQty(BuildingChainElement chainElement) {
+        int result = 0;
+        while (chainElement != null) {
+            result += chainElement.qty;
+            chainElement = chainElement.prev;
+        }
+        return result;
     }
 
 
