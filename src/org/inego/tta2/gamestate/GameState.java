@@ -116,11 +116,12 @@ public class GameState implements IGameState {
                 // TODO end Age A
                 currentAge++;
             }
+
         }
 
         updateWaitingTurns();
 
-        startPoliticalPhase();
+        proceedTo(StartTurn.INSTANCE);
     }
 
     private void updateWaitingTurns() {

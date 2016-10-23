@@ -1,7 +1,12 @@
 package org.inego.tta2.cards;
 
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.agriculture.*;
+import org.inego.tta2.cards.civil.arena.ArenaCard;
+import org.inego.tta2.cards.civil.arena.BreadNCircusesCard;
+import org.inego.tta2.cards.civil.arena.ProSportsCard;
+import org.inego.tta2.cards.civil.arena.TeamSportsCard;
 import org.inego.tta2.cards.civil.government.DespotismCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.lab.*;
@@ -62,6 +67,10 @@ public class Cards {
     public static final TempleCard THEOLOGY = new TheologyCard();
     public static final TempleCard ORGANIZED_RELIGION = new OrganizedReligionCard();
 
+    public static final ArenaCard BREAD_N_CIRCUSES = new BreadNCircusesCard();
+    public static final ArenaCard TEAM_SPORTS = new TeamSportsCard();
+    public static final ArenaCard PRO_SPORTS = new ProSportsCard();
+
     public static final TheaterCard DRAMA = new DramaCard();
     public static final TheaterCard OPERA = new OperaCard();
     public static final TheaterCard MOVIES = new MoviesCard();
@@ -117,6 +126,5 @@ public class Cards {
     public static final ColonyCard VAST_TERRITORY_II = new VastTerritory2Card();
     public static final ColonyCard WEALTHY_TERRITORY_I = new WealthyTerritory1Card();
     public static final ColonyCard WEALTHY_TERRITORY_II = new WealthyTerritory2Card();
-
 
 }

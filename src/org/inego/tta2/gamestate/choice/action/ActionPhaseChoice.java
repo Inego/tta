@@ -33,6 +33,11 @@ public abstract class ActionPhaseChoice extends Choice {
         protected void apply(GameState gameState, PlayerState playerState) {
             playerState.endTurn();
         }
+
+        @Override
+        public String toString() {
+            return "End Action phase choice";
+        }
     };
 
 }

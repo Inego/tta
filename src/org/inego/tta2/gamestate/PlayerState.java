@@ -169,6 +169,10 @@ public class PlayerState {
         food = 0;
         resources = 0;
 
+        resourceProduction = 2;
+        foodProduction = 2;
+        scienceProduction = 1;
+
         builtStages = 0;
 
         workerPool = 1;
@@ -650,7 +654,7 @@ public class PlayerState {
     }
 
     public void useJuliusCaesarAction() {
-        leaderSpecialActionAvailable = false;
+        disableLeaderSpecialAction();
         // Repeat political phase
         gameState.startPoliticalPhase();
     }
@@ -704,7 +708,7 @@ public class PlayerState {
             if (leader == Cards.HAMMURABI && leaderSpecialActionAvailable && availableMilitaryActions > 0) {
                 availableCivilActions++;
                 availableMilitaryActions--;
-                leaderSpecialActionAvailable = false;
+                disableLeaderSpecialAction();
             }
             else {
                 throw new UnsupportedOperationException("Spent more civil actions than available");
@@ -810,6 +814,7 @@ public class PlayerState {
 
     private void produceResources() {
         // TODO produce resources
+        resources += resourceProduction;
     }
 
     private void consumeFood() {
@@ -877,25 +882,30 @@ public class PlayerState {
 
                             while (currentUrban != null) {
 
-                                BuildingChainElement currentTheater = theaterChainTop;
+                                if (currentUrban.qty > 0) {
 
-                                while (currentTheater != null) {
-                                    if (currentTheater.getAge() < currentUrban.getAge())
-                                        break;
+                                    BuildingChainElement currentTheater = theaterChainTop;
 
-                                    // Calculate cost
+                                    while (currentTheater != null) {
+                                        if (currentTheater.getAge() < currentUrban.getAge())
+                                            break;
 
-                                    int cost = currentTheater.getNominalCost() - currentUrban.getNominalCost();
+                                        // Calculate cost
 
-                                    if (cost < 0)  cost = 0;
+                                        int cost = currentTheater.getNominalCost() - currentUrban.getNominalCost();
 
-                                    if (cost <= resources)
-                                        gameState.addChoice(new UpgradeChoice(currentUrban.buildingCard, currentTheater.buildingCard, cost));
+                                        if (cost < 0)  cost = 0;
 
-                                    currentTheater = currentTheater.prev;
+                                        if (cost <= resources)
+                                            gameState.addChoice(new UpgradeChoice(currentUrban.buildingCard, currentTheater.buildingCard, cost));
+
+                                        currentTheater = currentTheater.prev;
+                                    }
+
                                 }
 
                                 currentUrban = currentUrban.prev;
+
                             }
 
                         }
@@ -1366,6 +1376,14 @@ public class PlayerState {
 
     public void debugSetResources(int value) {
         resources = value;
+    }
+
+    public int getResources() {
+        return resources;
+    }
+
+    public void disableLeaderSpecialAction() {
+        leaderSpecialActionAvailable = false;
     }
 
     @FunctionalInterface

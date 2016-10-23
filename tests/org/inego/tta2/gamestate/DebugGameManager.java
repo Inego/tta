@@ -36,8 +36,6 @@ public class DebugGameManager {
         return run();
     }
 
-
-
     public boolean run() {
 
         int choice;
@@ -65,6 +63,13 @@ public class DebugGameManager {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void rebuildChoices() {
+
+        gameState.getChoices().clear();
+        next();
+
     }
 
     /**
