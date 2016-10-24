@@ -3,9 +3,6 @@ package org.inego.tta2.cards.civil.theater;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
 
-/**
- *
- */
 public class DramaCard extends TheaterCard {
     @Override
     public int getAge() {
@@ -33,8 +30,7 @@ public class DramaCard extends TheaterCard {
     }
 
     @Override
-    public void assignWorker(int sign, PlayerState playerState) {
-        super.assignWorker(sign, playerState);
-        playerState.modifyCultureProductionSource(sign, TheaterCultureProductionSource.DRAMA);
+    public TheaterCultureProductionSource getCultureProductionSource() {
+        return TheaterCultureProductionSource.DRAMA;
     }
 }

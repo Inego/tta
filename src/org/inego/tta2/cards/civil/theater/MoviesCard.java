@@ -33,8 +33,7 @@ public class MoviesCard extends TheaterCard {
     }
 
     @Override
-    public void assignWorker(int sign, PlayerState playerState) {
-        super.assignWorker(sign, playerState);
-        playerState.modifyCultureProductionSource(sign, TheaterCultureProductionSource.MOVIES);
+    public TheaterCultureProductionSource getCultureProductionSource() {
+        return TheaterCultureProductionSource.MOVIES;
     }
 }

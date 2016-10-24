@@ -16,6 +16,7 @@ import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
 import org.inego.tta2.cards.civil.tech.military.MilitaryTechCard;
+import org.inego.tta2.cards.civil.theater.TheaterCard;
 import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.unit.UnitType;
 import org.inego.tta2.cards.civil.upgrade.BuildingChainElement;
@@ -310,6 +311,16 @@ public class PlayerState {
             // 1 culture / each theater
             iterateBuildings(CivilCardKind.THEATER, el -> cultureProduction += el.qty);
         }
+        else if (leader == Cards.CHARLIE_CHAPLIN) {
+            // Best theater produces an additional amount of culture
+            BuildingChainElement element;
+            for (element = buildingChains.get(CivilCardKind.THEATER); element != null; element = element.prev) {
+                if (element.qty > 0) {
+                    cultureProduction += ((TheaterCard)element.buildingCard).getCultureProductionSource().getValue();
+                    break;
+                }
+            }
+        }
 
         recalcCultureProduction = false;
     }
@@ -363,7 +374,7 @@ public class PlayerState {
             scienceProduction += entry.getValue() * entry.getKey().getScienceProductionValue();
         }
 
-        if (leader == Cards.LEONARDO_DA_VINCI) {
+        if (leader == Cards.LEONARDO_DA_VINCI || leader == Cards.ISAAC_NEWTON || leader == Cards.ALBERT_EINSTEIN) {
             int bestLevel = 0;
             for (IScienceProductionSource scienceProductionSource : scienceProductionSources.keySet()) {
                 if (scienceProductionSource instanceof LibraryCard || scienceProductionSource instanceof LabCard) {
@@ -1179,6 +1190,10 @@ public class PlayerState {
 
         if (leader == Cards.LEONARDO_DA_VINCI)
             gainResources(1);
+        else if (leader == Cards.ISAAC_NEWTON)
+            availableCivilActions++;
+        else if (leader == Cards.ALBERT_EINSTEIN)
+            culturePoints += 3;
     }
 
     /**

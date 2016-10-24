@@ -228,6 +228,28 @@ public class PlayerStateTest {
 
     }
 
+    @Test
+    public void testCharlieChaplinCultureProductionBonus() {
+
+        assertEquals(0, playerState.getCultureProduction());
+
+        build(Cards.DRAMA);
+        assertEquals(2, playerState.getCultureProduction());
+
+        build(Cards.OPERA); // +3
+        assertEquals(5, playerState.getCultureProduction());
+
+        playerState.electLeader(Cards.CHARLIE_CHAPLIN); // +3
+        assertEquals(8, playerState.getCultureProduction());
+
+        build(Cards.MOVIES); // +4, +1 (3->4)
+        assertEquals(13, playerState.getCultureProduction());
+
+        build(Cards.MOVIES); // +4
+        assertEquals(17, playerState.getCultureProduction());
+
+    }
+
     // Discover (if needed) and build
     private void build(BuildingCard buildingCard) {
         if (!playerState.hasDiscovered(buildingCard))

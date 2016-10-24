@@ -33,8 +33,7 @@ public class OperaCard extends TheaterCard {
     }
 
     @Override
-    public void assignWorker(int sign, PlayerState playerState) {
-        super.assignWorker(sign, playerState);
-        playerState.modifyCultureProductionSource(sign, TheaterCultureProductionSource.OPERA);
+    public TheaterCultureProductionSource getCultureProductionSource() {
+        return TheaterCultureProductionSource.OPERA;
     }
 }

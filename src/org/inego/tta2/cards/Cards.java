@@ -107,6 +107,9 @@ public class Cards {
     public static final LeaderCard NAPOLEON_BONAPARTE = new NapoleonBonaparteCard();
     public static final LeaderCard MAXIMILIEN_ROBESPIERRE = new MaximilienRobespierreCard();
     public static final LeaderCard JS_BACH = new JsBachCard();
+    public static final LeaderCard ISAAC_NEWTON = new IsaacNewtonCard();
+    public static final LeaderCard ALBERT_EINSTEIN = new AlbertEinsteinCard();
+    public static final LeaderCard CHARLIE_CHAPLIN = new CharlieChaplinCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();
