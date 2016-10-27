@@ -15,9 +15,6 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-/**
- *
- */
 public class PlayerStateTest {
 
     private GameState gameState;
@@ -343,6 +340,24 @@ public class PlayerStateTest {
                 upg(Cards.SWORDSMEN, Cards.MODERN_INFANTRY),
                 upg(Cards.WARRIORS, Cards.MODERN_INFANTRY)
         );
+
+    }
+
+    @Test
+    public void testSidMeier() {
+
+        build(Cards.SCIENTIFIC_METHOD);
+        build(Cards.SCIENTIFIC_METHOD);
+        build(Cards.COMPUTERS);
+        build(Cards.MULTIMEDIA);
+
+        assertEquals(15, playerState.getScienceProduction());
+        assertEquals(3, playerState.getCultureProduction());
+
+        playerState.electLeader(Cards.SID_MEIER);
+
+        assertEquals(11, playerState.getScienceProduction());
+        assertEquals(10, playerState.getCultureProduction());
 
     }
 

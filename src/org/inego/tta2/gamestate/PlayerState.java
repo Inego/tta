@@ -195,6 +195,8 @@ public class PlayerState {
         discoverBuilding(Cards.PHILOSOPHY).qty = 1;
         discoverBuilding(Cards.RELIGION);
 
+        scienceProductionSources.put(Cards.PHILOSOPHY, 1);
+
     }
 
     public int getFoodProduction() {
@@ -321,6 +323,9 @@ public class PlayerState {
                 }
             }
         }
+        else if (leader == Cards.SID_MEIER) {
+            iterateBuildings(CivilCardKind.LAB, e -> cultureProduction += e.getAge() * e.qty);
+        }
 
         recalcCultureProduction = false;
     }
@@ -383,6 +388,11 @@ public class PlayerState {
                 }
             }
             scienceProduction += bestLevel;
+        }
+        else if (leader == Cards.SID_MEIER) {
+            scienceProductionSources.entrySet().stream()
+                    .filter(e -> e.getKey() instanceof LabCard)
+                    .forEach(e -> scienceProduction -= e.getValue());
         }
 
         recalcScienceProduction = false;
@@ -1167,6 +1177,7 @@ public class PlayerState {
 
     public void modifyScienceProductionSource(int sign, IScienceProductionSource scienceProductionSource) {
         scienceProductionSources.delta(scienceProductionSource, sign);
+        setRecalcScienceProduction();
     }
 
     public void addScienceProductionSource(IScienceProductionSource scienceProductionSource) {
