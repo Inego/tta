@@ -112,6 +112,7 @@ public class Cards {
     public static final LeaderCard CHARLIE_CHAPLIN = new CharlieChaplinCard();
     public static final LeaderCard MAHATMA_GANDHI = new MahatmaGandhiCard();
     public static final LeaderCard SID_MEIER = new SidMeierCard();
+    public static final LeaderCard BILL_GATES = new BillGatesCard();
 
     public static final TacticCard FIGHTING_BAND = new FightingBandCard();
     public static final TacticCard ENTRENCHMENTS = new EntrenchmentsCard();

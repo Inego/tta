@@ -213,4 +213,15 @@ public class GameState implements IGameState {
     public int getIndex(PlayerState playerState) {
         return playerStates.indexOf(playerState);
     }
+
+    public void onEndGame() {
+
+        for (PlayerState playerState : playerStates) {
+            playerState.onEndGame();
+        }
+
+        // TODO other endgame actions
+
+        getPointStack().clear();
+    }
 }

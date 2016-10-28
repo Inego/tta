@@ -112,12 +112,12 @@ public class PlayerState {
     private boolean recalcMilitary;
     private boolean recalcScienceProduction;
 
-    private int resourceProduction;
     private LeaderCard leader;
-
     private boolean leaderSpecialActionAvailable;
 
     private int food;
+
+    private int resourceProduction;
     private int resources;
 
     private int spentCivilActions;
@@ -467,7 +467,7 @@ public class PlayerState {
         }
     }
 
-    private void iterateBuildings(CivilCardKind kind, Consumer<BuildingChainElement> consumer)
+    public void iterateBuildings(CivilCardKind kind, Consumer<BuildingChainElement> consumer)
     {
         Iterator<BuildingChainElement> chainIterator = getChainIterator(kind);
         while (chainIterator.hasNext()) {
@@ -1410,6 +1410,19 @@ public class PlayerState {
 
     public void disableLeaderSpecialAction() {
         leaderSpecialActionAvailable = false;
+    }
+
+    public void gainBillGatesCulture() {
+        iterateBuildings(CivilCardKind.LAB, e -> {
+            gainCulturePoints(e.getAge() * e.qty);
+        });
+    }
+
+    public void onEndGame() {
+
+        if (leader == Cards.BILL_GATES)
+            gainBillGatesCulture();
+
     }
 
     @FunctionalInterface
