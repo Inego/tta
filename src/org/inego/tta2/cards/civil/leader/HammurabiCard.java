@@ -2,9 +2,6 @@ package org.inego.tta2.cards.civil.leader;
 
 import org.inego.tta2.gamestate.PlayerState;
 
-/**
- *
- */
 public class HammurabiCard extends LeaderCard {
     @Override
     public int getAge() {

@@ -51,7 +51,7 @@ public class FrederickBarbarossaCard extends LeaderCard {
         protected void apply(GameState gameState, PlayerState playerState) {
             super.apply(gameState, playerState);
             playerState.payFood(foodCost);
-            playerState.payResources(buildingCost);
+            playerState.payResourcesForMilitary(buildingCost);
             playerState.build(unitCard);
         }
     }

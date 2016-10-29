@@ -4,9 +4,6 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.choice.Choice;
 
-/**
- *
- */
 public abstract class ActionPhaseChoice extends Choice {
 
     public abstract int getCivilActionCost();

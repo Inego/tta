@@ -23,9 +23,10 @@ public class StartTurn extends GamePoint {
         playerState.resolveWar();
         playerState.makeCurrentTacticsAvailable();
 
-        // Hammurabi restores his special action every turn
+        // Some leaders restore their special action every turn
         if (playerState.getLeader() == Cards.HAMMURABI
-                || playerState.getLeader() == Cards.JS_BACH) {
+                || playerState.getLeader() == Cards.JS_BACH
+                || playerState.getLeader() == Cards.WINSTON_CHURCHILL) {
             playerState.enableLeaderSpecialAction();
         }
 

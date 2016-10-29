@@ -3,6 +3,7 @@ package org.inego.tta2.gamestate.choice.action;
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.theater.TheaterCard;
+import org.inego.tta2.cards.civil.unit.UnitCard;
 import org.inego.tta2.cards.civil.upgrade.UpgradeDescription;
 import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
@@ -44,7 +45,7 @@ public class UpgradeChoice extends ActionPhaseChoice {
         super.apply(gameState, playerState);
         playerState.disband(from);
         playerState.build(to);
-        playerState.payResources(cost);
+        playerState.payResources(cost, to instanceof UnitCard);
 
         if (playerState.getLeader() == Cards.JS_BACH
                 && to instanceof TheaterCard

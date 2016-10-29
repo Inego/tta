@@ -11,6 +11,7 @@ import org.inego.tta2.cards.civil.lab.LabCard;
 import org.inego.tta2.cards.civil.leader.FrederickBarbarossaCard;
 import org.inego.tta2.cards.civil.leader.HomerCard;
 import org.inego.tta2.cards.civil.leader.LeaderCard;
+import org.inego.tta2.cards.civil.leader.WinstonChurchillCard;
 import org.inego.tta2.cards.civil.library.LibraryCard;
 import org.inego.tta2.cards.civil.mine.MineCard;
 import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
@@ -62,7 +63,6 @@ public class PlayerState {
 
     private GameState gameState;
 
-    private int foodProduction;
     private int cultureProduction;
     private int scienceProduction;
 
@@ -103,6 +103,9 @@ public class PlayerState {
     private int obsoleteArmies;
 
     private int culturePoints;
+
+    // TODO use remainingMilitarySciencePoints for military discovery availability + paying
+    private int remainingMilitarySciencePoints;
     private int sciencePoints;
 
     private int colonizationBonus;
@@ -116,6 +119,7 @@ public class PlayerState {
     private LeaderCard leader;
     private boolean leaderSpecialActionAvailable;
 
+    private int foodProduction;
     private int food;
 
     private int resourceProduction;
@@ -123,8 +127,7 @@ public class PlayerState {
 
     private int spentCivilActions;
     private int availableCivilActions;
-    private int militaryProductionBonus;
-    private int leaderMilitaryProductionBonus;
+    private int remainingMilitaryProductionBonus;
     private int availableMilitaryActions;
 
     private int waitingTurns;
@@ -137,14 +140,13 @@ public class PlayerState {
     /**
      * A map of building chains. Building chains are represented by the <b>latest</b> discovered card of its kind,
      * in order to make ordered inserts fastest (since incremental age discoveries are the most common case).
-     * Because of that, building chains must be iterated backwards (by using {@link BuildingChainElement#prev} property.
+     * Because of that, building chains must be iterated backwards (by using {@link BuildingChainElement#prev} property).
      */
     private Map<CivilCardKind, BuildingChainElement> buildingChains;
 
     private Map<BuildingCard, BuildingChainElement> discoveredBuildings;
 
     private LinkedList<ColonyCard> colonies = new LinkedList<>();
-
 
     public PlayerState(GameState gameState, int index) {
 
@@ -156,8 +158,7 @@ public class PlayerState {
         militaryStrengthBase = 1;
         militaryStrength = 1;
 
-        militaryProductionBonus = 0;
-        leaderMilitaryProductionBonus = 0;
+        remainingMilitaryProductionBonus = 0;
 
         yellowBank = 18;
         recalcHappiness = false;
@@ -210,6 +211,11 @@ public class PlayerState {
         return resourceProduction;
     }
 
+    public int getAvailableMilitaryProductionBonus() {
+
+        return remainingMilitaryProductionBonus
+                + (leader == Cards.HOMER && leaderSpecialActionAvailable ? 1 : 0);
+    }
 
     public void modifyFoodProduction(int delta)
     {
@@ -768,14 +774,6 @@ public class PlayerState {
         availableMilitaryActions = value;
     }
 
-    public void modifyMilitaryProductionBonus(int delta) {
-        militaryProductionBonus += delta;
-    }
-
-    public void setLeaderMilitaryProductionBonus(int value) {
-        leaderMilitaryProductionBonus = value;
-    }
-
 
     public void resolveWar() {
         // TODO resolve war
@@ -787,8 +785,14 @@ public class PlayerState {
 
     public void endTurn() {
 
+        remainingMilitaryProductionBonus = 0;
+        remainingMilitarySciencePoints = 0;
+
         if (leader == Cards.GENGHIS_KHAN) {
             checkGenghisCultureBonus();
+        }
+        else if (leader == Cards.WINSTON_CHURCHILL && leaderSpecialActionAvailable) {
+            culturePoints += 3;
         }
 
         discardExcessMilitaryCards();
@@ -904,12 +908,19 @@ public class PlayerState {
 
         if (gameState.getAge() > 0) {
 
+            int commonResources = getResources();
+            int militaryResources = commonResources + getAvailableMilitaryProductionBonus();
+
+            if (leader == Cards.WINSTON_CHURCHILL && leaderSpecialActionAvailable) {
+                gameState.addChoice(WinstonChurchillCard.MILITARY_CHOICE);
+            }
+
             // Upgrades
 
             if (availableCivilActions > 0) {
 
                 for (UpgradeDescription availableUpgrade : availableUpgrades) {
-                    if (availableUpgrade.delta > resources)
+                    if (availableUpgrade.delta > (availableUpgrade.destination instanceof UnitCard ? militaryResources : commonResources))
                         break;
                     gameState.addChoice(new UpgradeChoice(availableUpgrade));
                 }
@@ -1001,7 +1012,7 @@ public class PlayerState {
                     if (foodCost <= food) {
                         iterateBuildingChains(UnitCard.ALL_KINDS, element -> {
                             int buildingCost = ((UnitCard) element.buildingCard).getBuildingCost(this) - 1;
-                            if (buildingCost <= resources) {
+                            if (buildingCost <= militaryResources) {
                                 gameState.addChoice(new FrederickBarbarossaCard.BuildUnitChoice((UnitCard) element.buildingCard, foodCost, buildingCost));
                             }
                         });
@@ -1338,6 +1349,27 @@ public class PlayerState {
 
     public void payResources(int value) {
         // TODO pay resources
+        resources -= value;
+    }
+
+    public void payResourcesForMilitary(int value) {
+        int left = value;
+
+        if (leader == Cards.HOMER && leaderSpecialActionAvailable) {
+            left--;
+            disableLeaderSpecialAction();
+        }
+
+        int toSpendFromMPB = Math.min(left, remainingMilitaryProductionBonus);
+
+        if (toSpendFromMPB > 0) {
+            left -= toSpendFromMPB;
+            remainingMilitaryProductionBonus -= toSpendFromMPB;
+        }
+
+        if (left > 0) {
+            payResources(left);
+        }
     }
 
     public boolean hasTheaters() {
@@ -1461,6 +1493,21 @@ public class PlayerState {
         if (!hasDiscovered(buildingCard))
             discover(buildingCard);
         build(buildingCard);
+    }
+
+    public void payResources(int cost, boolean military) {
+        if (military)
+            payResourcesForMilitary(cost);
+        else
+            payResources(cost);
+    }
+
+    public void gainMilitaryProductionBonus(int value) {
+        remainingMilitaryProductionBonus += value;
+    }
+
+    public void gainMilitaryScienceBonus(int value) {
+        remainingMilitarySciencePoints += value;
     }
 
     @FunctionalInterface

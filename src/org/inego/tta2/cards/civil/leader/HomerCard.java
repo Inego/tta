@@ -35,8 +35,8 @@ public class HomerCard extends LeaderCard {
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         playerState.modifyHappinessSource(HappinessSource.HOMER, sign);
 
-        // When Homer is gone, his unused military production bonus is gone with him
-        // see https://boardgamegeek.com/article/23613349#23613349
-        playerState.setLeaderMilitaryProductionBonus(sign == 1 ? 1 : 0);
+        if (sign == 1) {
+            playerState.enableLeaderSpecialAction();
+        }
     }
 }

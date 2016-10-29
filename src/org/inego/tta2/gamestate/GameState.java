@@ -100,6 +100,11 @@ public class GameState implements IGameState {
         proceedTo(gamePoint);
     }
 
+    public void makeSubChoices(GamePoint gamePoint, Choice... choices) {
+        currentChoices = Arrays.asList(choices);
+        gamePoints.push(gamePoint);
+    }
+
     public void startPlayerTurn() {
         // TODO attach startPlayerTurn to something useful or move to PlayerState
         if (currentAge == 0)
