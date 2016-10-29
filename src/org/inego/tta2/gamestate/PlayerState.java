@@ -12,6 +12,7 @@ import org.inego.tta2.cards.civil.leader.FrederickBarbarossaCard;
 import org.inego.tta2.cards.civil.leader.HomerCard;
 import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.cards.civil.library.LibraryCard;
+import org.inego.tta2.cards.civil.mine.MineCard;
 import org.inego.tta2.cards.civil.tech.civil.CivilTechCard;
 import org.inego.tta2.cards.civil.tech.colonization.ColonizationTechCard;
 import org.inego.tta2.cards.civil.tech.construction.ConstructionTechCard;
@@ -205,7 +206,7 @@ public class PlayerState {
 
     public int getResourceProduction() {
         if (recalcResourceProduction)
-            recalculateResourceProduction();
+            calculateResourceProduction();
         return resourceProduction;
     }
 
@@ -235,16 +236,34 @@ public class PlayerState {
         recalcHappiness = false;
     }
 
-    private void recalculateResourceProduction() {
-        // TODO calculate resource production
-        // TODO best mine bonus from Transcontinental RR
+    private void calculateResourceProduction() {
+
+        resourceProduction = 0;
+
+        iterateBuildings(CivilCardKind.MINE,
+                e -> resourceProduction += e.qty * ((MineCard)e.buildingCard).getProductionYield());
+
+        if (wonders.contains(Cards.TRANSCONTINENTAL_RR)) {
+            // TODO Transcontinental RR test
+            // Get best mine
+            Iterator<BuildingChainElement> mineIterator = getChainIterator(CivilCardKind.MINE);
+            while (mineIterator.hasNext()) {
+                BuildingChainElement element = mineIterator.next();
+                if (element.qty > 0) {
+                    resourceProduction += ((MineCard)element.buildingCard).getProductionYield();
+                    break;
+                }
+            }
+        }
+
+        if (leader == Cards.BILL_GATES) {
+            iterateBuildings(CivilCardKind.LAB, e -> resourceProduction += e.qty * e.getAge());
+        }
+
     }
 
     public void changeFood(int delta) {
         // TODO change food?
-    }
-
-    public void modifyResourceProduction(int delta) {
     }
 
     public void setRecalcCultureProduction() {
@@ -499,6 +518,12 @@ public class PlayerState {
 
     }
 
+    /**
+     * Returns a building chain iterator in age descending order.
+     *
+     * @param kind Civil card kind
+     * @return Building chain iterator
+     */
     public Iterator<BuildingChainElement> getChainIterator(CivilCardKind kind) {
 
         return new Iterator<BuildingChainElement>() {
@@ -699,6 +724,7 @@ public class PlayerState {
     }
 
     public void removeCurrentLeader() {
+        // TODO refactor to electLeader(null)
         leader.onElect(-1, this, null);
         leader = null;
     }
@@ -835,7 +861,7 @@ public class PlayerState {
 
     private void produceResources() {
         // TODO produce resources
-        resources += resourceProduction;
+        resources += getResourceProduction();
     }
 
     private void consumeFood() {
@@ -1423,6 +1449,18 @@ public class PlayerState {
         if (leader == Cards.BILL_GATES)
             gainBillGatesCulture();
 
+    }
+
+    /**
+     * Builds a given {@link BuildingCard}, discovering it if required.
+     * <br>The method is intended to be used only for debugging and testing.
+     *
+     * @param buildingCard Building card
+     */
+    public void debugBuild(BuildingCard buildingCard) {
+        if (!hasDiscovered(buildingCard))
+            discover(buildingCard);
+        build(buildingCard);
     }
 
     @FunctionalInterface

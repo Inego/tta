@@ -5,6 +5,7 @@ import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 import org.inego.tta2.gamestate.choice.action.UpgradeChoice;
 import org.inego.tta2.gamestate.point.ActionPhase;
+import org.inego.tta2.gamestate.point.EndGame;
 import org.inego.tta2.player.MockPlayer;
 import org.junit.Before;
 import org.junit.Test;
@@ -167,6 +168,26 @@ public class IntegrationTest {
         found = getUpgradeChoice(Cards.JOURNALISM, Cards.OPERA);
         assertNull(found); // Urban building limit reached
 
+    }
+
+    @Test
+    public void testBillGatesEndOfGame() {
+
+        GameState gameState = m.gameState;
+
+        gameState.proceedTo(EndGame.INSTANCE);
+
+        PlayerState p = gameState.getCurrentPlayerState();
+
+        p.electLeader(Cards.BILL_GATES);
+
+        p.debugBuild(Cards.SCIENTIFIC_METHOD);
+        p.debugBuild(Cards.COMPUTERS);
+        p.debugBuild(Cards.COMPUTERS);
+
+        m.next();
+
+        assertEquals(8, p.getCulturePoints());
     }
 
     private UpgradeChoice getUpgradeChoice(BuildingCard from, BuildingCard to) {

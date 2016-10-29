@@ -5,6 +5,8 @@ import org.inego.tta2.gamestate.PlayerState;
 
 public class EndGame extends GamePoint {
 
+    public static final org.inego.tta2.gamestate.point.GamePoint INSTANCE = new EndGame();
+
     @Override
     public void apply(GameState gameState, PlayerState playerState) {
 

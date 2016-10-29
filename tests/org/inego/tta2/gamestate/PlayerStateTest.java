@@ -249,9 +249,7 @@ public class PlayerStateTest {
 
     // Discover (if needed) and build
     private void build(BuildingCard buildingCard) {
-        if (!playerState.hasDiscovered(buildingCard))
-            playerState.discover(buildingCard);
-        playerState.build(buildingCard);
+        playerState.debugBuild(buildingCard);
     }
 
     @Test
@@ -358,6 +356,36 @@ public class PlayerStateTest {
 
         assertEquals(11, playerState.getScienceProduction());
         assertEquals(10, playerState.getCultureProduction());
+
+    }
+
+    @Test
+    public void testBillGates() {
+
+        assertEquals(2, playerState.getResourceProduction());
+        assertEquals(1, playerState.getScienceProduction());
+
+        build(Cards.IRON); // +2
+        build(Cards.IRON); // +2
+        build(Cards.COAL); // +3
+
+        build(Cards.SCIENTIFIC_METHOD); // +3
+        build(Cards.SCIENTIFIC_METHOD); // +3
+        build(Cards.COMPUTERS);         // +5
+
+        assertEquals(9, playerState.getResourceProduction());
+        assertEquals(12, playerState.getScienceProduction());
+
+        playerState.electLeader(Cards.BILL_GATES);
+
+        assertEquals(16, playerState.getResourceProduction());
+        assertEquals(12, playerState.getScienceProduction());
+
+        assertEquals(0, playerState.getCulturePoints());
+
+        playerState.removeCurrentLeader();
+
+        assertEquals(7, playerState.getCulturePoints());
 
     }
 

@@ -20,9 +20,8 @@ public class BillGatesCard extends LeaderCard {
     @Override
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
 
-        playerState.iterateBuildings(CivilCardKind.LAB, e -> {
-            playerState.modifyResourceProduction(sign * e.getAge() * e.qty);
-        });
+        playerState.setRecalcResourceProduction();
+        playerState.setRecalcScienceProduction();
 
         if (sign == -1) {
             playerState.gainBillGatesCulture();

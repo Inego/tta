@@ -23,7 +23,7 @@ public abstract class LabCard extends BuildingCard implements IScienceProduction
         if (playerState.getLeader() == Cards.SID_MEIER)
             playerState.setRecalcCultureProduction();
         else if (playerState.getLeader() == Cards.BILL_GATES) {
-            playerState.modifyResourceProduction(sign * getAge());
+            playerState.setRecalcResourceProduction();
         }
     }
 
