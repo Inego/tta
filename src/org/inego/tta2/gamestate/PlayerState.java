@@ -127,7 +127,7 @@ public class PlayerState {
 
     private int spentCivilActions;
     private int availableCivilActions;
-    private int remainingMilitaryProductionBonus;
+    private int remainingMilitaryProductionBonus; // TODO test remainingMilitaryProductionBonus
     private int availableMilitaryActions;
 
     private int waitingTurns;

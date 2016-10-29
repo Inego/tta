@@ -2,6 +2,7 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.leader.WinstonChurchillCard;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 import org.inego.tta2.gamestate.choice.action.UpgradeChoice;
 import org.inego.tta2.gamestate.point.ActionPhase;
@@ -188,6 +189,57 @@ public class IntegrationTest {
         m.next();
 
         assertEquals(8, p.getCulturePoints());
+    }
+
+    @Test
+    public void testChurchillEndTurnCultureGain() {
+
+        GameState gameState = m.getGameState();
+
+        m.runTo(g -> g.getPointStack().peek() instanceof ActionPhase
+                && g.getAge() == 1);
+
+        m.next(); // To get choices
+
+        PlayerState p = gameState.getCurrentPlayerState();
+
+        assertNull(getChurchillChoice());
+
+        endActionPhaseChoice();
+
+        assertEquals(0, p.getCulturePoints());
+
+        m.runTo(g -> g.getCurrentPlayer() == 0 && g.getPointStack().peek() instanceof ActionPhase);
+
+        p.electLeader(Cards.WINSTON_CHURCHILL);
+
+        m.next();
+
+        assertNotNull(getChurchillChoice());
+
+        endActionPhaseChoice();
+
+        assertEquals(3, p.getCulturePoints());
+
+        m.runTo(g -> g.getCurrentPlayer() == 0 && g.getPointStack().peek() instanceof ActionPhase);
+        m.next();
+
+        ActionPhaseChoice churchillChoice = getChurchillChoice();
+
+        assertNotNull(churchillChoice);
+
+        p1.mock(churchillChoice);
+
+        m.waitPoints(2);
+
+        assertNull(getChurchillChoice());
+
+    }
+
+    private ActionPhaseChoice getChurchillChoice() {
+        if (m.gameState.getChoices().contains(WinstonChurchillCard.MILITARY_CHOICE))
+            return WinstonChurchillCard.MILITARY_CHOICE;
+        return null;
     }
 
     private UpgradeChoice getUpgradeChoice(BuildingCard from, BuildingCard to) {

@@ -27,6 +27,7 @@ public class WinstonChurchillCard extends LeaderCard {
             super.apply(gameState, playerState);
             playerState.gainMilitaryProductionBonus(3);
             playerState.gainMilitaryScienceBonus(3);
+            playerState.disableLeaderSpecialAction();
         }
     };
 
@@ -44,5 +45,11 @@ public class WinstonChurchillCard extends LeaderCard {
     public void onElect(int sign, PlayerState playerState, LeaderCard other) {
         if (sign == 1)
             playerState.enableLeaderSpecialAction();
+        else {
+            // If Winston is gone and didn't use his special action this turn,
+            // gain his 3 culture points.
+            if (playerState.isLeaderSpecialActionAvailable())
+                playerState.gainCulturePoints(3);
+        }
     }
 }
