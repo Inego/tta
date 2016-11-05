@@ -401,7 +401,7 @@ public class PlayerStateTest {
     }
 
     private void instaBuild(WonderCard wonderCard) {
-        playerState.takeCard(wonderCard);
+        playerState.addCardToHand(wonderCard);
         playerState.buildWonderStages(wonderCard.getStages().length);
     }
 

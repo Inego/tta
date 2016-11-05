@@ -1,6 +1,7 @@
 package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.civil.CivilCard;
+import org.inego.tta2.cards.civil.action.ActionCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.comparison.TopNumber;
@@ -13,13 +14,15 @@ import java.util.*;
  */
 public class GameState implements IGameState {
 
+    public static final int CARD_ROW_LENGTH = 13;
+
     private int numberOfPlayers;
     private int currentPlayer;
 
     private List<PlayerState> playerStates;
     private Stack<GamePoint> gamePoints;
     private List<Choice> currentChoices = new ArrayList<>();
-    private List<CivilCard> cardRow = new ArrayList<>();
+    private CivilCard[] cardRow = new CivilCard[CARD_ROW_LENGTH];
 
     private int currentAge;
 
@@ -172,14 +175,14 @@ public class GameState implements IGameState {
 
 
     public CivilCard peekCardRow(int idx) {
-        return cardRow.get(idx);
+        return cardRow[idx];
     }
 
     public CivilCard getCardFromRow(int idx) {
-        CivilCard card = cardRow.get(idx);
+        CivilCard card = cardRow[idx];
         if (card == null)
             throw new UnsupportedOperationException("Card already taken from specified idx");
-        cardRow.set(idx, null);
+        cardRow[idx] = null;
         return card;
     }
 
@@ -228,5 +231,21 @@ public class GameState implements IGameState {
         // TODO other endgame actions
 
         getPointStack().clear();
+    }
+
+    /**
+     * Adds a given civil card to the card row.
+     * <br><strong>Note. </strong>This method should only be used for testing purposes.
+     *
+     * @param civilCard The card to add
+     */
+    public void debugAddCardToRow(CivilCard civilCard) {
+        for (int i = 0; i < CARD_ROW_LENGTH; i++) {
+            if (cardRow[i] == null) {
+                cardRow[i] = civilCard;
+                return;
+            }
+        }
+        throw new RuntimeException("The row is full while trying to debug add a card");
     }
 }

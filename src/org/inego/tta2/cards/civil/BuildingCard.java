@@ -42,7 +42,7 @@ public abstract class BuildingCard extends CivilCard implements ITechnologyCard 
         protected void apply(GameState gameState, PlayerState playerState) {
             super.apply(gameState, playerState);
             playerState.payResources(buildingCost);
-            playerState.build(getCardToPlay());
+            playerState.build(getCard());
         }
     }
 }

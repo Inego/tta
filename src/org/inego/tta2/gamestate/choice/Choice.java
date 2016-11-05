@@ -4,9 +4,6 @@ import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.IChoice;
 import org.inego.tta2.gamestate.PlayerState;
 
-/**
- *
- */
 public abstract class Choice implements IChoice<GameState> {
 
     @Override

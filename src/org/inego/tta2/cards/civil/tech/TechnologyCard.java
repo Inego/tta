@@ -1,5 +1,6 @@
 package org.inego.tta2.cards.civil.tech;
 
+import org.inego.tta2.cards.civil.CardInHand;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.gamestate.GameState;
@@ -24,8 +25,8 @@ public abstract class TechnologyCard extends CivilCard implements ITechnologyCar
 
         private final int researchCost;
 
-        public DiscoverTechnologyChoice(TechnologyCard cardToPlay, int researchCost) {
-            super(cardToPlay);
+        public DiscoverTechnologyChoice(TechnologyCard technologyCard, int researchCost) {
+            super(technologyCard);
             this.researchCost = researchCost;
         }
 
@@ -33,7 +34,7 @@ public abstract class TechnologyCard extends CivilCard implements ITechnologyCar
         protected void apply(GameState gameState, PlayerState playerState) {
             super.apply(gameState, playerState);
             playerState.paySciencePoints(researchCost);
-            playerState.discover(getCardToPlay());
+            playerState.discover(getCard());
         }
     }
 }

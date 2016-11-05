@@ -1,5 +1,6 @@
 package org.inego.tta2.gamestate.choice.action;
 
+import org.inego.tta2.cards.civil.CardInHand;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
@@ -7,13 +8,12 @@ import org.inego.tta2.gamestate.PlayerState;
 /**
  * Peaceful change of government
  */
-public class ChangeGovernmentChoice extends ActionPhaseChoice {
+public class ChangeGovernmentChoice extends PlayCardFromHandChoice<GovernmentCard> {
 
-    private GovernmentCard card;
     private int scienceCost;
 
-    public ChangeGovernmentChoice(GovernmentCard card, int scienceCost) {
-        this.card = card;
+    public ChangeGovernmentChoice(GovernmentCard cardInHand, int scienceCost) {
+        super(cardInHand);
         this.scienceCost = scienceCost;
     }
 
@@ -30,7 +30,7 @@ public class ChangeGovernmentChoice extends ActionPhaseChoice {
     @Override
     protected void apply(GameState gameState, PlayerState playerState) {
         super.apply(gameState, playerState);
-        playerState.discoverGovernment(card, scienceCost);
+        playerState.discoverGovernment(getCard(), scienceCost);
     }
 
 }

@@ -1,6 +1,7 @@
 package org.inego.tta2.cards.civil.leader;
 
 import org.inego.tta2.cards.Cards;
+import org.inego.tta2.cards.civil.CardInHand;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.PlayerState;

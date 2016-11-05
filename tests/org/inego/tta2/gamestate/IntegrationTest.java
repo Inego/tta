@@ -2,8 +2,10 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.BuildingCard;
+import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.leader.WinstonChurchillCard;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
+import org.inego.tta2.gamestate.choice.action.TakeCardChoice;
 import org.inego.tta2.gamestate.choice.action.UpgradeChoice;
 import org.inego.tta2.gamestate.point.ActionPhase;
 import org.inego.tta2.gamestate.point.EndGame;
@@ -12,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.inego.tta2.cards.civil.action.SimpleActionCard.SimpleActionCardChoice;
 
 /**
  * Created by Inego on 15.10.2016.
@@ -174,7 +177,7 @@ public class IntegrationTest {
     @Test
     public void testBillGatesEndOfGame() {
 
-        GameState gameState = m.gameState;
+        GameState gameState = m.getGameState();
 
         gameState.proceedTo(EndGame.INSTANCE);
 
@@ -236,14 +239,105 @@ public class IntegrationTest {
 
     }
 
+
+    @Test
+    public void testSimpleAction() {
+
+        GameState gameState = m.getGameState();
+
+        PlayerState ps = gameState.getCurrentPlayerState();
+
+        m.runTo(g -> g.getPointStack().peek() instanceof ActionPhase
+                && g.getAge() == 1);
+
+        assertEquals(4, ps.getAvailableCivilActions());
+
+        assertNull(getTakeCardChoice(Cards.CULTURAL_HERITAGE_A));
+        assertNull(getCulturalHeritageAChoice());
+
+        gameState.debugAddCardToRow(Cards.CULTURAL_HERITAGE_A);
+
+        m.rebuildChoices();
+
+
+        TakeCardChoice takeCardChoice = getTakeCardChoice(Cards.CULTURAL_HERITAGE_A);
+        assertNotNull(takeCardChoice);
+        p1.mock(takeCardChoice);
+
+        assertNull(getCulturalHeritageAChoice());
+
+
+        m.waitPoints(2);
+
+        assertEquals(3, ps.getAvailableCivilActions());
+
+        assertNull(getTakeCardChoice(Cards.CULTURAL_HERITAGE_A));
+
+        assertNull(getCulturalHeritageAChoice()); // Can't be played since it was taken this turn
+
+        endActionPhaseChoice();
+
+        m.runTo(g -> g.getPointStack().peek() instanceof ActionPhase
+                && g.getCurrentPlayer() == 0);
+
+        assertEquals(4, ps.getAvailableCivilActions());
+
+        m.next();
+
+        SimpleActionCardChoice culturalHeritageAChoice = getCulturalHeritageAChoice();
+        assertNotNull(culturalHeritageAChoice);
+
+        assertEquals(2, ps.getSciencePoints());
+        assertEquals(0, ps.getCulturePoints());
+
+        p1.mock(culturalHeritageAChoice);
+
+        m.next();
+
+        assertEquals(3, ps.getAvailableCivilActions());
+
+        assertEquals(3, ps.getSciencePoints());
+        assertEquals(4, ps.getCulturePoints());
+
+        m.next();
+
+        assertNull(getCulturalHeritageAChoice()); // Can't be played since it has already been used
+
+    }
+
+    private TakeCardChoice getTakeCardChoice(CivilCard civilCard) {
+
+        for (IChoice choice : m.getGameState().getChoices()) {
+            if (choice instanceof TakeCardChoice) {
+                TakeCardChoice takeCardChoice = (TakeCardChoice) choice;
+                if (m.getGameState().peekCardRow(takeCardChoice.getIdx()) == civilCard)
+                    return takeCardChoice;
+            }
+        }
+        return null;
+    }
+
+    private SimpleActionCardChoice getCulturalHeritageAChoice() {
+        for (IChoice choice : m.getGameState().getChoices()) {
+            if (choice instanceof SimpleActionCardChoice) {
+                SimpleActionCardChoice simpleActionCardChoice = (SimpleActionCardChoice) choice;
+                if (simpleActionCardChoice.getCard() == Cards.CULTURAL_HERITAGE_A) {
+                    return simpleActionCardChoice;
+                }
+            }
+        }
+        return null;
+    }
+
+
     private ActionPhaseChoice getChurchillChoice() {
-        if (m.gameState.getChoices().contains(WinstonChurchillCard.MILITARY_CHOICE))
+        if (m.getGameState().getChoices().contains(WinstonChurchillCard.MILITARY_CHOICE))
             return WinstonChurchillCard.MILITARY_CHOICE;
         return null;
     }
 
     private UpgradeChoice getUpgradeChoice(BuildingCard from, BuildingCard to) {
-        for (IChoice choice : m.gameState.getChoices()) {
+        for (IChoice choice : m.getGameState().getChoices()) {
             if (choice instanceof UpgradeChoice) {
                 UpgradeChoice upgradeChoice = (UpgradeChoice) choice;
                 if (upgradeChoice.from == from && upgradeChoice.to == to) {
@@ -255,7 +349,7 @@ public class IntegrationTest {
     }
 
     private MockPlayer getCurrentMockPlayer() {
-        switch (m.gameState.getCurrentPlayer()) {
+        switch (m.getGameState().getCurrentPlayer()) {
             case 0:
                 return p1;
             case 1:
@@ -267,7 +361,7 @@ public class IntegrationTest {
     }
 
     private void endActionPhaseChoice() {
-        if (!m.gameState.getChoices().contains(ActionPhaseChoice.END))
+        if (!m.getGameState().getChoices().contains(ActionPhaseChoice.END))
             fail("Couldn't find End Action Phase choice");
         getCurrentMockPlayer().mock(ActionPhaseChoice.END);
         m.next();

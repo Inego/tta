@@ -10,19 +10,9 @@ public class TakeCardChoice extends ActionPhaseChoice {
 
     private int apCost;
 
-    public TakeCardChoice(GameState gameState, PlayerState playerState, int idx) {
+    public TakeCardChoice(int idx, int apCost) {
         this.idx = idx;
-
-        if (idx < 5)
-            apCost = 1;
-        else if (idx < 8)
-            apCost = 2;
-        else apCost = 3;
-
-        CivilCard civilCard = gameState.peekCardRow(idx);
-
-        apCost = civilCard.getTakingCost(apCost, playerState);
-
+        this.apCost = apCost;
     }
 
     @Override
@@ -40,5 +30,9 @@ public class TakeCardChoice extends ActionPhaseChoice {
         super.apply(gameState, playerState);
         CivilCard takenCard = gameState.getCardFromRow(idx);
         takenCard.onTake(playerState);
+    }
+
+    public int getIdx() {
+        return idx;
     }
 }

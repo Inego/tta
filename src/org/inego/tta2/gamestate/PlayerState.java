@@ -2,10 +2,8 @@ package org.inego.tta2.gamestate;
 
 import org.inego.tta2.QuantityHashMap;
 import org.inego.tta2.cards.Cards;
-import org.inego.tta2.cards.civil.BuildingCard;
-import org.inego.tta2.cards.civil.CivilCard;
-import org.inego.tta2.cards.civil.CivilCardKind;
-import org.inego.tta2.cards.civil.ITechnologyCard;
+import org.inego.tta2.cards.civil.*;
+import org.inego.tta2.cards.civil.action.ActionCard;
 import org.inego.tta2.cards.civil.government.GovernmentCard;
 import org.inego.tta2.cards.civil.lab.LabCard;
 import org.inego.tta2.cards.civil.leader.FrederickBarbarossaCard;
@@ -135,7 +133,7 @@ public class PlayerState {
 
     private int waitingTurns;
 
-    private LinkedList<CivilCard> civilHand;
+    private LinkedList<CardInHand> civilHand;
     private LinkedList<MilitaryCard> militaryHand;
 
     private SortedSet<UpgradeDescription> availableUpgrades;
@@ -804,6 +802,14 @@ public class PlayerState {
         }
         drawMilitaryCards();
         resetActions();
+
+        // Clear takenThisTurn flag in civilHand
+        for (CardInHand cardInHand : civilHand) {
+            if (cardInHand.takenThisTurn)
+                cardInHand.takenThisTurn = false;
+        }
+
+
         gameState.endPlayerTurn();
     }
 
@@ -909,6 +915,25 @@ public class PlayerState {
 
         // TODO add action phase choices
 
+        // Taking card choices
+        if (civilHand.size() < getCivilHandSize()) {
+            int apCost;
+            for (int i = 0; i < GameState.CARD_ROW_LENGTH; i++) {
+                CivilCard card = gameState.peekCardRow(i);
+                if (card != null) {
+                    if (i < 5)
+                        apCost = 1;
+                    else if (i < 8)
+                        apCost = 2;
+                    else apCost = 3;
+                    apCost = card.getTakingCost(apCost, this);
+                    if (apCost <= availableCivilActions) {
+                        addChoice(new TakeCardChoice(i, apCost));
+                    }
+                }
+            }
+        }
+
         if (gameState.getAge() > 0) {
 
             int commonResources = getResources();
@@ -957,7 +982,7 @@ public class PlayerState {
 
                                         if (cost < 0)  cost = 0;
 
-                                        if (cost <= resources)
+                                        if (cost <= commonResources)
                                             gameState.addChoice(new UpgradeChoice(currentUrban.buildingCard, currentTheater.buildingCard, cost));
 
                                         currentTheater = currentTheater.prev;
@@ -977,15 +1002,19 @@ public class PlayerState {
 
                 int populationProductionCost = getPopulationProductionCost();
 
-                if (populationProductionCost <= resources) {
+                if (populationProductionCost <= commonResources) {
                     gameState.addChoice(new IncreasePopulationChoice(populationProductionCost));
                 }
 
             }
 
+
+
             // Choices for playing cards from hand
-            for (CivilCard civilCard : civilHand) {
-                civilCard.generateChoices(this);
+            for (CardInHand cardInHand : civilHand) {
+                if (cardInHand.card instanceof ActionCard && cardInHand.takenThisTurn)
+                    continue;
+                cardInHand.card.generateChoices(this);
             }
 
             // TODO Barbarossa unit test
@@ -1002,8 +1031,6 @@ public class PlayerState {
                     }
                 }
             }
-
-            // TODO take cards from row
         }
 
         gameState.addChoice(ActionPhaseChoice.END);
@@ -1081,7 +1108,14 @@ public class PlayerState {
     }
 
     public void addCardToHand(CivilCard takenCard) {
+
         // TODO add card to hand
+
+        if (takenCard instanceof WonderCard) {
+            currentWonder = (WonderCard) takenCard;
+        }
+        else
+            civilHand.add(new CardInHand(takenCard));
 
         if (leader == Cards.ARISTOTLE && takenCard instanceof ITechnologyCard) {
             sciencePoints++;
@@ -1142,15 +1176,6 @@ public class PlayerState {
     public void setMilitaryTactic(TacticCard tactic) {
         this.tactic = tactic;
         formArmies();
-    }
-
-    public void takeCard(CivilCard card) {
-
-        // TODO take card
-
-        if (card instanceof WonderCard) {
-            currentWonder = (WonderCard) card;
-        }
     }
 
     public WonderCard getCurrentWonder() {
@@ -1431,10 +1456,6 @@ public class PlayerState {
         food += value;
     }
 
-    public void loseCivilCard(CivilCard card) {
-        civilHand.remove(card);
-    }
-
     public void paySciencePoints(int cost) {
         sciencePoints -= cost;
     }
@@ -1450,7 +1471,6 @@ public class PlayerState {
     public void discoverGovernment(GovernmentCard government, int scienceCost) {
         paySciencePoints(scienceCost);
         setGovernment(government);
-        loseCivilCard(government);
     }
 
     public boolean hasDiscovered(BuildingCard buildingCard) {
@@ -1518,7 +1538,18 @@ public class PlayerState {
     }
 
     public void removeFromHand(CivilCard card) {
-        civilHand.remove(card);
+
+        Iterator<CardInHand> iterator = civilHand.iterator();
+
+        while (iterator.hasNext()) {
+            CardInHand cardInHand = iterator.next();
+            if (cardInHand.card instanceof ActionCard && cardInHand.takenThisTurn)
+                continue;
+            if (cardInHand.card == card) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     public void addChoice(Choice choice) {

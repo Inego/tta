@@ -8,7 +8,7 @@ import org.inego.tta2.gamestate.choice.action.PlayCardFromHandChoice;
 public abstract class CivilCard extends AbstractCard {
 
     @Override
-    public CardType getCardType() {
+    public final CardType getCardType() {
         return CardType.CIVIL;
     }
 

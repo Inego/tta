@@ -10,7 +10,7 @@ import java.util.function.Predicate;
  */
 public class DebugGameManager {
 
-    GameState gameState;
+    private GameState gameState;
 
     Predicate<GameState> pauseCondition;
 

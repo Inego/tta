@@ -2,6 +2,7 @@ package org.inego.tta2.cards;
 
 import org.inego.tta2.cards.civil.BuildingCard;
 import org.inego.tta2.cards.civil.ITechnologyCard;
+import org.inego.tta2.cards.civil.action.ActionCard;
 import org.inego.tta2.cards.civil.agriculture.*;
 import org.inego.tta2.cards.civil.arena.ArenaCard;
 import org.inego.tta2.cards.civil.arena.BreadNCircusesCard;
@@ -133,5 +134,7 @@ public class Cards {
     public static final ColonyCard VAST_TERRITORY_II = new VastTerritory2Card();
     public static final ColonyCard WEALTHY_TERRITORY_I = new WealthyTerritory1Card();
     public static final ColonyCard WEALTHY_TERRITORY_II = new WealthyTerritory2Card();
+
+    public static final ActionCard CULTURAL_HERITAGE_A = new CulturalHeritageACard();
 
 }
