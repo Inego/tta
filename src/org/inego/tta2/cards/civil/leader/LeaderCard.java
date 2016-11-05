@@ -4,11 +4,10 @@ import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.choice.action.ElectLeaderChoice;
 
-/**
- *
- */
 public abstract class LeaderCard extends CivilCard {
+
     @Override
     public CivilCardKind getKind() {
         return CivilCardKind.LEADER;
@@ -29,4 +28,11 @@ public abstract class LeaderCard extends CivilCard {
         }
         return takingCost;
     }
+
+    @Override
+    public void generateChoices(PlayerState playerState) {
+        if (playerState.getAvailableCivilActions() > 0)
+            playerState.addChoice(new ElectLeaderChoice(this));
+    }
+
 }

@@ -1,8 +1,5 @@
 package org.inego.tta2.cards.civil.mine;
 
-/**
- *
- */
 public class IronCard extends MineCard {
     @Override
     public int getAge() {

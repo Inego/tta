@@ -2,9 +2,6 @@ package org.inego.tta2.cards.civil.wonder;
 
 import org.inego.tta2.gamestate.PlayerState;
 
-/**
- *
- */
 public class TranscontinentalRailroadCard extends WonderCard {
     private static final int[] STAGES = {3, 3, 3, 3};
 

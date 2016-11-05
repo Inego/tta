@@ -3,9 +3,6 @@ package org.inego.tta2.cards.civil.government;
 import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.science.IScienceProductionSource;
 
-/**
- *
- */
 public class FundamentalismCard extends GovernmentCard implements IScienceProductionSource {
     @Override
     public int getAge() {

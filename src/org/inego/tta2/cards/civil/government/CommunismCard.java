@@ -49,6 +49,6 @@ public class CommunismCard extends GovernmentCard {
 
     @Override
     public void apply(int sign, PlayerState playerState) {
-        playerState.addHappinessSource(GovernmentHappinessSource.COMMUNISM);
+        playerState.modifyHappinessSource(GovernmentHappinessSource.COMMUNISM, sign);
     }
 }

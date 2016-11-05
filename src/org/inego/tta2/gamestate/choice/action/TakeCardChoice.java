@@ -4,9 +4,6 @@ import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
 
-/**
- *
- */
 public class TakeCardChoice extends ActionPhaseChoice {
 
     private final int idx;
@@ -42,6 +39,6 @@ public class TakeCardChoice extends ActionPhaseChoice {
     protected void apply(GameState gameState, PlayerState playerState) {
         super.apply(gameState, playerState);
         CivilCard takenCard = gameState.getCardFromRow(idx);
-        playerState.addCardToHand(takenCard);
+        takenCard.onTake(playerState);
     }
 }

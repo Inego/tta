@@ -6,11 +6,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 
-/**
- *
- */
 public class HomerCard extends LeaderCard {
-
 
     public static final Choice ATTACH_HAPPY_FACE = new Choice() {
         @Override

@@ -1,14 +1,15 @@
-package org.inego.tta2.gamestate.choice;
+package org.inego.tta2.gamestate.choice.action;
 
 import org.inego.tta2.cards.civil.leader.LeaderCard;
 import org.inego.tta2.gamestate.GameState;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 
 /**
  *
  */
-public class ElectLeaderChoice extends ActionPhaseChoice {
+public class ElectLeaderChoice extends PlayCardFromHandChoice<LeaderCard> {
 
     public static final Choice GET_BACK_AP = new Choice() {
         @Override
@@ -17,11 +18,8 @@ public class ElectLeaderChoice extends ActionPhaseChoice {
         }
     };
 
-    private LeaderCard leader;
-
-    public ElectLeaderChoice(LeaderCard leader) {
-
-        this.leader = leader;
+    public ElectLeaderChoice(LeaderCard cardToPlay) {
+        super(cardToPlay);
     }
 
     @Override
@@ -37,6 +35,6 @@ public class ElectLeaderChoice extends ActionPhaseChoice {
     @Override
     protected void apply(GameState gameState, PlayerState playerState) {
         super.apply(gameState, playerState);
-        playerState.electLeader(leader);
+        playerState.electLeader(getCardToPlay());
     }
 }

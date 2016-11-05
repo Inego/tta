@@ -1,8 +1,5 @@
 package org.inego.tta2.cards.civil.tech.construction;
 
-/**
- *
- */
 public class ArchitectureCard extends ConstructionTechCard {
     @Override
     public int getAge() {

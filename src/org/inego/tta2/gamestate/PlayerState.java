@@ -28,18 +28,21 @@ import org.inego.tta2.cards.civil.wonder.WonderCard;
 import org.inego.tta2.cards.military.MilitaryCard;
 import org.inego.tta2.cards.military.colony.ColonyCard;
 import org.inego.tta2.cards.military.tactic.TacticCard;
-import org.inego.tta2.gamestate.choice.ElectLeaderChoice;
+import org.inego.tta2.gamestate.choice.Choice;
 import org.inego.tta2.gamestate.choice.action.*;
+import org.inego.tta2.gamestate.choice.leader.ColumbusColonizationChoice;
 import org.inego.tta2.gamestate.comparison.PlayerComparison;
 import org.inego.tta2.gamestate.comparison.TopNumber;
-import org.inego.tta2.gamestate.choice.leader.ColumbusColonizationChoice;
-import org.inego.tta2.gamestate.culture.*;
+import org.inego.tta2.gamestate.culture.BuildingCultureProductionSource;
+import org.inego.tta2.gamestate.culture.CultureProductionSource;
+import org.inego.tta2.gamestate.culture.LibraryCultureProductionSource;
+import org.inego.tta2.gamestate.culture.TheaterCultureProductionSource;
 import org.inego.tta2.gamestate.happiness.GovernmentHappinessSource;
 import org.inego.tta2.gamestate.happiness.HappinessSource;
 import org.inego.tta2.gamestate.happiness.TempleHappinessSource;
 import org.inego.tta2.gamestate.happiness.WonderHappinessSource;
 import org.inego.tta2.gamestate.point.HomerReplaced;
-import org.inego.tta2.gamestate.science.*;
+import org.inego.tta2.gamestate.science.IScienceProductionSource;
 import org.inego.tta2.gamestate.tactics.Composition;
 import org.inego.tta2.gamestate.tactics.Utils;
 
@@ -980,29 +983,9 @@ public class PlayerState {
 
             }
 
+            // Choices for playing cards from hand
             for (CivilCard civilCard : civilHand) {
-                if (civilCard instanceof GovernmentCard) {
-                    GovernmentCard governmentCard = (GovernmentCard) civilCard;
-                    // Peaceful discover
-                    int researchCost = governmentCard.getResearchCost(this);
-                    if (sciencePoints >= researchCost && availableCivilActions > 0) {
-                        gameState.addChoice(new ChangeGovernmentChoice(governmentCard, researchCost));
-                    }
-                    // Revolution
-                    researchCost = governmentCard.getRevolutionCost();
-                    if (researchCost >= sciencePoints) {
-                        if (leader == Cards.MAXIMILIEN_ROBESPIERRE) {
-                            int militaryActionsTotal = getMilitaryActionsTotal();
-                            if (availableMilitaryActions >= militaryActionsTotal)
-                                gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, militaryActionsTotal, true));
-                        } else {
-                            // Standard revolution, spend all civil actions
-                            int civilActionsTotal = getCivilActionsTotal();
-                            if (getAvailableCivilActions() >= civilActionsTotal)
-                                gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, civilActionsTotal, false));
-                        }
-                    }
-                }
+                civilCard.generateChoices(this);
             }
 
             // TODO Barbarossa unit test
@@ -1019,10 +1002,34 @@ public class PlayerState {
                     }
                 }
             }
+
+            // TODO take cards from row
         }
 
         gameState.addChoice(ActionPhaseChoice.END);
 
+    }
+
+    public void addGovernmentChoices(GovernmentCard governmentCard) {
+        // Peaceful discover
+        int researchCost = governmentCard.getResearchCost(this);
+        if (sciencePoints >= researchCost && availableCivilActions > 0) {
+            gameState.addChoice(new ChangeGovernmentChoice(governmentCard, researchCost));
+        }
+        // Revolution
+        researchCost = governmentCard.getRevolutionCost();
+        if (researchCost >= sciencePoints) {
+            if (leader == Cards.MAXIMILIEN_ROBESPIERRE) {
+                int militaryActionsTotal = getMilitaryActionsTotal();
+                if (availableMilitaryActions >= militaryActionsTotal)
+                    gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, militaryActionsTotal, true));
+            } else {
+                // Standard revolution, spend all civil actions
+                int civilActionsTotal = getCivilActionsTotal();
+                if (getAvailableCivilActions() >= civilActionsTotal)
+                    gameState.addChoice(new RevolutionChoice(governmentCard, researchCost, civilActionsTotal, false));
+            }
+        }
     }
 
     private static int getChainTotalQty(BuildingChainElement chainElement) {
@@ -1508,6 +1515,18 @@ public class PlayerState {
 
     public void gainMilitaryScienceBonus(int value) {
         remainingMilitarySciencePoints += value;
+    }
+
+    public void removeFromHand(CivilCard card) {
+        civilHand.remove(card);
+    }
+
+    public void addChoice(Choice choice) {
+        gameState.addChoice(choice);
+    }
+
+    public int getSciencePoints() {
+        return sciencePoints;
     }
 
     @FunctionalInterface

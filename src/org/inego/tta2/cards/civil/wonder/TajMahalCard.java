@@ -33,9 +33,13 @@ public class TajMahalCard extends WonderCard {
 
     @Override
     public int getTakingCost(int baseCost, PlayerState playerState) {
-        int result = baseCost;
+        int result = super.getTakingCost(baseCost, playerState);
+        if (result == -1)
+            return result;
+
         if (playerState.wasLeaderReplaced()) result -= 2;
         if (result < 0) result = 0;
+
         return result;
     }
 }

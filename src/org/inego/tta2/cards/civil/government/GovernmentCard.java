@@ -1,13 +1,13 @@
 package org.inego.tta2.cards.civil.government;
 
+import org.inego.tta2.cards.Cards;
 import org.inego.tta2.cards.civil.CivilCard;
 import org.inego.tta2.cards.civil.CivilCardKind;
 import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.gamestate.PlayerState;
+import org.inego.tta2.gamestate.choice.action.ChangeGovernmentChoice;
+import org.inego.tta2.gamestate.choice.action.RevolutionChoice;
 
-/**
- *
- */
 public abstract class GovernmentCard extends CivilCard implements ITechnologyCard {
     @Override
     public CivilCardKind getKind() {
@@ -23,4 +23,8 @@ public abstract class GovernmentCard extends CivilCard implements ITechnologyCar
         // Default: do nothing
     }
 
+    @Override
+    public void generateChoices(PlayerState playerState) {
+        playerState.addGovernmentChoices(this);
+    }
 }

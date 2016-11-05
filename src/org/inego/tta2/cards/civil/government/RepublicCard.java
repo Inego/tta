@@ -1,8 +1,5 @@
 package org.inego.tta2.cards.civil.government;
 
-/**
- *
- */
 public class RepublicCard extends GovernmentCard {
     @Override
     public int getAge() {
