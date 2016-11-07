@@ -1560,6 +1560,10 @@ public class PlayerState {
         return sciencePoints;
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
     @FunctionalInterface
     interface IHappinessSourceHandler {
         void handle(HappinessSource happinessSource, int value, int qty);

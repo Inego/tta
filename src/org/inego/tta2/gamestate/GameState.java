@@ -248,4 +248,8 @@ public class GameState implements IGameState {
         }
         throw new RuntimeException("The row is full while trying to debug add a card");
     }
+
+    public List<PlayerState> getPlayerStates() {
+        return playerStates;
+    }
 }
