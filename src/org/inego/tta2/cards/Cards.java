@@ -1,7 +1,5 @@
 package org.inego.tta2.cards;
 
-import org.inego.tta2.cards.civil.BuildingCard;
-import org.inego.tta2.cards.civil.ITechnologyCard;
 import org.inego.tta2.cards.civil.action.*;
 import org.inego.tta2.cards.civil.agriculture.*;
 import org.inego.tta2.cards.civil.arena.ArenaCard;
@@ -29,10 +27,8 @@ import org.inego.tta2.cards.civil.unit.*;
 import org.inego.tta2.cards.civil.wonder.*;
 import org.inego.tta2.cards.military.colony.*;
 import org.inego.tta2.cards.military.tactic.*;
+import org.inego.tta2.gamestate.choice.action.ActionPhaseChoice;
 
-/**
- *
- */
 public class Cards {
 
     public static final GovernmentCard DESPOTISM = new DespotismCard();
@@ -140,5 +136,7 @@ public class Cards {
     public static final ActionCard ENDOWMENT_FOR_ARTS = new EndowmentForArtsCard();
     public static final ActionCard MILITARY_BUILD_UP = new MilitaryBuildUpCard();
     public static final ActionCard WAVE_OF_NATIONALISM = new WaveOfNationalismCard();
+    public static final ActionCard STOCKPILE = new StockpileCard();
+
 
 }

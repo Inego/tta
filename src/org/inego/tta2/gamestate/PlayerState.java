@@ -1468,6 +1468,10 @@ public class PlayerState {
         availableMilitaryActions -= cost;
     }
 
+    public void gainMilitaryActions(int value) {
+        additionalMilitaryActions += value;
+    }
+
     public void discoverGovernment(GovernmentCard government, int scienceCost) {
         paySciencePoints(scienceCost);
         setGovernment(government);

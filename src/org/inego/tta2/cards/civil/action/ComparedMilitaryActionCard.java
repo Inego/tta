@@ -23,7 +23,7 @@ public abstract class ComparedMilitaryActionCard extends SimpleActionCard {
 
         if (number > 0) {
             int multiplier = getBoost()[gameState.getNumberOfPlayers() - 2];
-            playerState.gainCulturePoints(number * multiplier);
+            playerState.gainMilitaryProductionBonus(number * multiplier);
         }
 
     }

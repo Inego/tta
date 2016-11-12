@@ -5,7 +5,7 @@ import org.inego.tta2.gamestate.PlayerState;
 import org.inego.tta2.gamestate.choice.action.PlayCardFromHandChoice;
 
 /**
- * A trivial action with one choice
+ * A trivial action with one choice.
  */
 public abstract class SimpleActionCard extends ActionCard {
 
